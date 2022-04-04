@@ -2,11 +2,11 @@
 </script>
 
   <template>
-  <router-link to="/login" active-class="router-style">登陆</router-link>
+  <router-link to="/login" active-class="router-style">切换到其他</router-link>
   <br />
-  <router-link to="/home" active-class="router-style">回家了</router-link>
+  <router-link to="/test" active-class="router-style">搜索歌曲</router-link>
   <router-view></router-view>
-  <el-card class="box-card">
+  <!-- <el-card class="box-card">
     <template #header>
       <div class="card-header">
         <span>Card name</span>
@@ -14,7 +14,7 @@
       </div>
     </template>
     <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
-  </el-card>
+  </el-card>-->
 </template>
 
 

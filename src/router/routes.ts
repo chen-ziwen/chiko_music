@@ -12,21 +12,21 @@ const loginRouter = {
 const mainRouter = {
     path: '/',
     redirect: {
-        name: 'home'
+        name: 'test'
     },
     meta: {
         title: '首页',
         keepAlive: true
     },
-    component: () => import('../views/hello.vue'),
+    component: () => import('../views/test.vue'),
     children: [
         {
-            path: 'home',
-            name: 'home',
+            path: 'test',
+            name: 'test',
             meta: {
                 title: '首页',
             },
-            component: () => import('../views/hello.vue'),
+            component: () => import('../views/test.vue'),
         }
     ]
 }
