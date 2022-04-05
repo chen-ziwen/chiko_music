@@ -4,7 +4,8 @@ const loginRouter = {
     name: 'login',
     meta: {
         title: '登陆chikoMusic',
-        isLogin: true
+        isLogin: true,
+        keepAlive: false
     },
     component: () => import('../views/login.vue'),
 }
@@ -25,6 +26,7 @@ const mainRouter = {
             name: 'test',
             meta: {
                 title: '首页',
+                keepAlive: true
             },
             component: () => import('../views/test.vue'),
         }

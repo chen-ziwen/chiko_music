@@ -48,7 +48,7 @@ instance.interceptors.response.use(
 );
 
 const http: API = {
-    get(url, params) {
+    get: function (url, params) {
         return new Promise((resolve, reject) => {
             instance.get(url, { params: params }).then(res => {
                 resolve(res.data)
@@ -57,7 +57,7 @@ const http: API = {
             })
         })
     },
-    post(url, params) {
+    post: function (url, params) {
         return new Promise((resolve, reject) => {
             instance.post(url, params).then(res => {
                 resolve(res.data)

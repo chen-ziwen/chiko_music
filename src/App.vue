@@ -1,11 +1,26 @@
 <script setup lang="ts">
 </script>
 
-  <template>
+<template>
   <router-link to="/login" active-class="router-style">切换到其他</router-link>
   <br />
+
   <router-link to="/test" active-class="router-style">搜索歌曲</router-link>
-  <router-view></router-view>
+
+  <!-- activate：是在被包裹组建被激活的状态下使用的生命周期钩子
+  deactivated：在被包裹组件停止使用时调用-->
+  <!-- <keep-alive>
+    <router-view></router-view>
+  </keep-alive>-->
+
+  <router-view v-slot="{ Component }">
+    <!-- <transition> -->
+    <keep-alive>
+      <component :is="Component" v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <component :is="Component" v-if="!$route.meta.keepAlive" />
+  </router-view>
+
   <!-- <el-card class="box-card">
     <template #header>
       <div class="card-header">

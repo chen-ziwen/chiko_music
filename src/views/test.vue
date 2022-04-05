@@ -22,7 +22,7 @@
 </template>
   
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, computed } from 'vue';
 import {
     getSearchHotDetail,
     getSearchSong,
@@ -66,6 +66,7 @@ function songsList2() {
         })
     })
 }
+
 // (async function getToplist() {
 //     let { list } = await getToplistDetail()
 //     console.log('获取歌手排行榜', list)
@@ -148,8 +149,8 @@ async function displaySong() {
 .uls {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-content: flex-start;
+    /* justify-content: center; */
+    align-items: flex-start;
 }
 .uls li {
     text-align: end;
