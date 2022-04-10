@@ -4,9 +4,11 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ElButton: typeof import('element-plus/es')['ElButton']
-    ElCard: typeof import('element-plus/es')['ElCard']
-    ElRow: typeof import('element-plus/es')['ElRow']
+    CFooter: typeof import('./src/components/c-footer/CFooter.vue')['default']
+    CMain: typeof import('./src/components/c-main/CMain.vue')['default']
+    CNav: typeof import('./src/components/c-nav/CNav.vue')['default']
+    PlayMusic: typeof import('./src/components/play-music/PlayMusic.vue')['default']
+    RankList: typeof import('./src/components/rank-list/RankList.vue')['default']
   }
 }
 

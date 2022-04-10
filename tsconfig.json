@@ -17,7 +17,7 @@
     "baseUrl": "./",
     "paths": {
       "@/*": [
-        "./src*"
+        "./src/*"
         //   @/路径会直接指定到src文件夹
       ]
     }
@@ -26,7 +26,8 @@
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "components.d.ts", //添加这一行，不然这个文件会报错
   ],
   "references": [
     {

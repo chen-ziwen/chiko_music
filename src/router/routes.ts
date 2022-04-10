@@ -1,4 +1,7 @@
 //登陆路由 和页面到主要路由 ，路由组件全部放在view中
+import home from '@/views/home-page/HomePage.vue';
+// import { defineAsyncComponent } from 'vue';
+
 const loginRouter = {
     path: '/login',
     name: 'login',
@@ -10,27 +13,79 @@ const loginRouter = {
     component: () => import('../views/login.vue'),
 }
 
-const mainRouter = {
-    path: '/',
-    redirect: {
-        name: 'test'
-    },
-    meta: {
-        title: '首页',
-        keepAlive: true
-    },
-    component: () => import('../views/test.vue'),
-    children: [
-        {
-            path: 'test',
-            name: 'test',
-            meta: {
-                title: '首页',
-                keepAlive: true
+const mainRouter = [
+    // 路由的最佳写法
+    {
+        path: '/',
+        name: 'home',
+        redirect: { name: 'singer' },
+        meta: {
+            title: '首页',
+            keepAlive: true
+        },
+        component: home,
+        children: [
+            {
+                path: 'singer',
+                name: 'singer',
+                meta: {
+                    title: '歌手',
+                    keepAlive: true
+                },
+                component: () => import('@/views/singer/Singer.vue')
             },
-            component: () => import('../views/test.vue'),
-        }
-    ]
-}
+            {
+                path: 'songsheet',
+                name: 'songsheet',
+                meta: {
+                    title: '歌单',
+                    keepAlive: true
+                },
+                component: () => import('@/views/song-sheet/SongSheet.vue')
 
-export const routes = [loginRouter, mainRouter];
+            },
+            {
+                path: 'ranklist',
+                name: 'ranklist',
+                meta: {
+                    title: '排行版',
+                    keepAlive: true
+                },
+                component: () => import('@/views/rank-list/RankList.vue')
+
+            },
+            {
+                path: 'mv',
+                name: 'mv',
+                meta: {
+                    title: 'mv',
+                    keepAlive: true
+                },
+                component: () => import('@/views/mv/Mv.vue')
+
+            },
+            {
+                path: 'newdisc',
+                name: 'newdisc',
+                meta: {
+                    title: '新碟',
+                    keepAlive: true
+                },
+                component: () => import('@/views/new-disc/NewDisc.vue')
+
+            },
+            {
+                path: 'test',
+                name: 'test',
+                meta: {
+                    title: '测试',
+                    keepAlive: true
+                },
+                component: () => import('@/views/test/Test.vue')
+            }
+        ]
+    },
+
+]
+
+export const routes = [loginRouter, ...mainRouter];

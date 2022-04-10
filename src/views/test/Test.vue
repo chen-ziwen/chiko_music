@@ -1,26 +1,29 @@
 <template>
-    <div class="test">
-        <!-- 我感觉非常好 路由配置成功
+    <div class="music-singer">
+        我是测试页面
+        <div class="test">
+            <!-- 我感觉非常好 路由配置成功
         <button @click="songsList">点击获取信息</button>
         <button @click="searchSongs">点击获取歌曲信息</button>
         <button @click="recommend">推荐列表</button>
-        <button @click="SearchSuggest">搜索建议</button>-->
+            <button @click="SearchSuggest">搜索建议</button>-->
 
-        <div class="songbtn">
-            <button @click="getMv">获取mv</button>
-            <button @click="displaySong">播放歌曲</button>
-            <input type="text" v-model="mvName" />
+            <div class="songbtn">
+                <button @click="getMv">获取mv</button>
+                <button @click="displaySong">播放歌曲</button>
+                <input type="text" v-model="mvName" />
+            </div>
+            <!-- <div v-for="(a, index) in getS" :key="index">{{ a.songs[index].name }}</div> -->
+
+            <audio v-show="songsUrl" controls autoplay :src="songsUrl" class="audio"></audio>
+            <video v-show="videoUrl" :src="videoUrl" width="520" height="400" controls autoplay class="video"></video>
+            <ul class="uls">
+                <li v-for="talk, index in musicTalk.hot" :key="index" :style="{ listStyle: 'none' }">{{ talk.content }}</li>
+            </ul>
         </div>
-        <!-- <div v-for="(a, index) in getS" :key="index">{{ a.songs[index].name }}</div> -->
-
-        <audio v-show="songsUrl" controls autoplay :src="songsUrl" class="audio"></audio>
-        <video v-show="videoUrl" :src="videoUrl" width="520" height="400" controls autoplay class="video"></video>
-        <ul class="uls">
-            <li v-for="talk, index in musicTalk.hot" :key="index" :style="{ listStyle: 'none' }">{{ talk.content }}</li>
-        </ul>
     </div>
 </template>
-  
+
 <script lang="ts" setup>
 import { onMounted, reactive, ref, computed } from 'vue';
 import {
@@ -36,8 +39,10 @@ import {
     getSongUrl,
     getMvUrl,
     getCommentMusic
-} from '../api/http/api';
-import type { SearchHotDetail, RecommendList } from '../models/detail';
+} from '../../api/http/api';
+
+import type { SearchHotDetail, RecommendList } from '../../models/detail';
+
 const getR = ref<SearchHotDetail[]>();
 const getS = ref<any>();
 const getRecommend = ref<RecommendList[]>()
@@ -116,59 +121,12 @@ async function displaySong() {
     }
 
 }
-const arr = [1, 2, 3, 5, 5, 4, 4, 8, 8, 9, 8, 7, 7, 6, 6]
-const aa = [3, 2, 1]
-// const newArr = [...new Set(arr)].sort((a, b) => a - b)
-//冒泡排序
-let change = 0
-for (let i = 0; i < arr.length; i++) {
-    for (let j = 0; j < arr.length; j++) {
-        if (arr[j] > arr[j + 1]) {
-            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]] //这样写可以直接互换，等同于下面的写法
-            // change = arr[j]
-            // arr[j] = arr[j + 1]
-            // arr[j + 1] = change
-        }
-    }
-}
-console.log('数组是我', arr)
-
 </script>
 
-<style scoped>
-.test {
-    position: relative;
-    width: 800px;
-    height: 600px;
-    /* border-radius: 250px; */
-    background-image: linear-gradient(-45deg, lightblue, pink);
-}
-.audio {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -20px);
-    bottom: 0px;
-    width: 400px;
-}
-.songbtn {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 30px);
-    z-index: 5;
-}
-.video {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -20px);
-    bottom: 100px;
-}
-.uls {
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: flex-start;
-}
-.uls li {
-    text-align: end;
+<style lang="scss" scoped>
+.music-singer {
+    background-color: blue;
+    width: 100%;
+    height: 800px;
 }
 </style>

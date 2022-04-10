@@ -9,8 +9,8 @@
 
 <style scoped>
 .test {
-    background-color: blue;
-    width: 500px;
-    height: 500px;
+    background-color: yellowgreen;
+    width: 100vw;
+    height: 100vh;
 }
 </style>
