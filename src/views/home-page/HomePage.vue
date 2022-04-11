@@ -1,9 +1,9 @@
 <template>
-    <main class="main-music">
-        <CNav></CNav>
-        <CMain></CMain>
-        <CFooter></CFooter>
-    </main>
+  <main class="main-music">
+    <CNav></CNav>
+    <CMain></CMain>
+    <CFooter></CFooter>
+  </main>
 </template>
 
 <script lang="ts" setup>
@@ -14,7 +14,4 @@
 </script>
 
 <style lang="scss" scoped>
-.main-music {
-    background-image: linear-gradient(45deg, lightblue, pink);
-}
 </style>

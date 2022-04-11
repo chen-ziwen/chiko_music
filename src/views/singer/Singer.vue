@@ -1,5 +1,8 @@
 <template>
-    <div class="music-singer">我是歌手页面</div>
+    <div class="music-singer container">
+        我是歌手页面
+        <div class="hh"></div>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -9,7 +12,6 @@
 <style lang="scss" scoped>
 .music-singer {
     background-color: pink;
-    width: 500px;
-    height: 500px;
+    margin: 0 auto;
 }
 </style>
