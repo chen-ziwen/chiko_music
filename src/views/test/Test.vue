@@ -2,11 +2,11 @@
   <div class="music-singer container">
     我是测试页面
     <div class="test">
-      <!-- 我感觉非常好 路由配置成功
-        <button @click="songsList">点击获取信息</button>
-        <button @click="searchSongs">点击获取歌曲信息</button>
-        <button @click="recommend">推荐列表</button>
-      <button @click="SearchSuggest">搜索建议</button>-->
+      <!-- 我感觉非常好 路由配置成功 -->
+      <!-- <button @click="songsList">点击获取信息</button> -->
+      <!-- <button @click="searchSongs">点击获取歌曲信息</button> -->
+      <button @click="recommend">推荐列表</button>
+      <!-- <button @click="SearchSuggest">搜索建议</button> -->
 
       <div class="songbtn">
         <button @click="getMv">获取mv</button>
@@ -39,6 +39,7 @@ import {
   getSongUrl,
   getMvUrl,
   getCommentMusic,
+  getTopPlaylist
 } from "../../api/http/api";
 
 import type { SearchHotDetail, RecommendList } from "../../models/detail";
@@ -89,8 +90,10 @@ async function searchSongs() {
 }
 
 async function recommend() {
-  let { result } = await getRecommendList(30);
-  let recommend = result;
+  let { result } = await getTopArtists(30); //推荐歌单
+  let { artists } = await getTopArtists(); //推荐歌手
+  let a = await getTopPlaylist('hot', '华语')
+  let recommend = a;
   getRecommend.value = recommend;
   // console.log(songs.songs[0].name)
   console.log("推荐列表", getRecommend.value);

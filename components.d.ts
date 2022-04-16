@@ -4,12 +4,16 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    CFooter: typeof import('./src/components/c-footer/CFooter.vue')['default']
-    CMain: typeof import('./src/components/c-main/CMain.vue')['default']
-    CNav: typeof import('./src/components/c-nav/CNav.vue')['default']
     ElIcon: typeof import('element-plus/es')['ElIcon']
-    PlayMusic: typeof import('./src/components/play-music/PlayMusic.vue')['default']
-    RankList: typeof import('./src/components/rank-list/RankList.vue')['default']
+    ElImage: typeof import('element-plus/es')['ElImage']
+    MyFooter: typeof import('./src/components/my-footer/MyFooter.vue')['default']
+    MyMain: typeof import('./src/components/my-main/MyMain.vue')['default']
+    MyNav: typeof import('./src/components/my-nav/MyNav.vue')['default']
+    PlayMusic: typeof import('./src/components/my-play/PlayMusic.vue')['default']
+    RankList: typeof import('./src/components/my-rank/RankList.vue')['default']
+    RecommedNew: typeof import('./src/components/my-discover/RecommedNew.vue')['default']
+    RecommendSheet: typeof import('./src/components/my-discover/RecommendSheet.vue')['default']
+    RecommendSinger: typeof import('./src/components/my-discover/RecommendSinger.vue')['default']
   }
 }
 

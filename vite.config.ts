@@ -24,6 +24,14 @@ export default defineConfig({
       '@': resolve(__dirname, './src')  //vite 的相对路径的重新配置
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/assets/scss/main.scss";',
+      },
+    },
+  },
+
   server: {
     open: true   //编译成功自动打开浏览器
   }

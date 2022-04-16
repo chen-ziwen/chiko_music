@@ -11,7 +11,7 @@
 
 <style lang="scss" scoped>
 .music-singer {
-    background-color: pink;
+    background-color: $color;
     margin: 0 auto;
 }
 </style>

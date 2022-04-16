@@ -31,10 +31,10 @@ export function getSearchHotDetail() {
 }
 
 /**
- * @function 获取推荐列表
- * @param limit 请求的数量
+ * @function 获取推荐歌单
+ * @param limit 取出数量,默认为30(不支持 offset)
  */
-export function getRecommendList(limit: number) {
+export function getRecommendList(limit?: number) {
     return http.get<{ result: RecommendList[] }>('/personalized', { limit })
 }
 
@@ -78,9 +78,10 @@ export function getArtistDesc(id: number) {
 
 /**
  * @function 所有榜单内容摘要(调用此接口,可获取所有榜单内容摘要)
+ * @param type 1:华语 2.欧美 3.韩国 4.日本
  */
-export function getToplistDetail() {
-    return http.get<any>('/toplist/detail')
+export function getToplistDetail(type?: number) {
+    return http.get<any>('/toplist/detail', { type })
 }
 
 /**
@@ -155,7 +156,13 @@ export function getMvDetail(mvid: number) {
 export function getMvUrl(id: number) {
     return http.get<any>('/mv/url', { id })
 }
-
+/**
+ * @function mv排行(调用此接口,可获取mv排行)
+ * @param limit 取出数量,默认为30
+ */
+export function getTopMv(limit?: number) {
+    return http.get<any>('/top/mv', { limit })
+}
 /**
  * @function 获取相似歌手(调用此接口,传入歌手id,可获得相似歌手)
  * @param id 歌手id
@@ -212,4 +219,37 @@ export function getLike(id: number, like?: boolean) {
  */
 export function getLikeList(uid: number) {
     return http.get<any>('likelist', { uid })
+}
+
+/**
+ * @function 推荐新音乐(调用此接口,可获取推荐新音乐)
+ * @param limit 取出数量,默认为10(不支持offset)
+ */
+export function getPersonalizedNewsong(limit?: number) {
+    return http.get<any>('/personalized/newsong', { limit })
+}
+/**
+ * @function 相关歌单推荐
+ */
+
+/**
+ * @function 歌单(网友精选碟)
+ * @param order 可选值为'new'和'hot',分别对应最新和最热,默认为'hot' 
+ * @param cat tag,比如 "华语 "、"古风 " 、"欧美 "、"流行 ",默认为"全部",可从歌单分类接口获取(/playlist/catlist)
+ * @param limit 取出歌单数量 , 默认为 50
+ * @param offset 偏移数量,用于分页,如 :( 评论页数 -1)\*50,其中50为limit的值
+ */
+export function getTopPlaylist(order?: string, cat?: string, limit?: number, offset?: number) {
+    return http.get<any>('/playlist/hot', { order, cat, limit, offset })
+}
+
+/**
+ * @function 获取歌手视频
+ * @param id 歌手id
+ * @param size 返回数量,默认为10
+ * @param cursor 返回数据的cursor,默认为0,传入上一次返回结果的cursor,将会返回下一页的数据
+ * @param order 排序方法,0表示按时间排序,1表示按热度排序,默认为0
+ */
+export function getArtistVideo(id: number, size?: number, cursor?: number, order?: number) {
+    return http.get<any>('/artist/video', { id, size, cursor, order })
 }

@@ -1,20 +1,26 @@
 <template>
     <nav class="music-nav">
         <div class="container flex-start">
-            <div class="music-logo"><a href="#javascript"><img src="@/assets/image/logo2.png" class="music-logo-i"></a></div>
+            <div class="music-logo">
+                <a href="#javascript">
+                    <img src="@/assets/image/logo2.png" class="music-logo-i" />
+                </a>
+            </div>
             <ul class="music-nav-ul">
                 <li>
-                    <router-link :to="{ name: 'singer' }" active-class="router-style">发现音乐</router-link>
-                    
+                    <router-link :to="{ name: 'discover' }" active-class="router-style">发现音乐</router-link>
                 </li>
-                 <li>
-                    <router-link :to="{ name: 'test' }" active-class="router-style">搜索歌曲</router-link>
-                </li>
+
                 <li>
                     <router-link :to="{ name: 'ranklist' }" active-class="router-style">排行榜</router-link>
                 </li>
+
                 <li>
                     <router-link :to="{ name: 'songsheet' }" active-class="router-style">歌单</router-link>
+                </li>
+
+                <li>
+                    <router-link :to="{ name: 'singer' }" active-class="router-style">歌手</router-link>
                 </li>
                 <li>
                     <router-link :to="{ name: 'mv' }" active-class="router-style">MV</router-link>
@@ -22,9 +28,13 @@
                 <li>
                     <router-link :to="{ name: 'newdisc' }" active-class="router-style">新碟</router-link>
                 </li>
+
+                <li>
+                    <router-link :to="{ name: 'test' }" active-class="router-style">测试</router-link>
+                </li>
             </ul>
             <div class="nav-right">
-                <el-icon :size="28" class="el-search" :color="searchColor" @mouseenter="searchColor='#ff0000'" @mouseleave="searchColor='#ffffff'">
+                <el-icon :size="28" class="el-search" :color="searchColor" @mouseenter="searchColor = '#ff0000'" @mouseleave="searchColor = '#ffffff'">
                     <search />
                 </el-icon>
                 <span class="nav-login">登陆</span>
@@ -43,35 +53,29 @@ const searchColor = ref<string>('#ffffff');
 <style lang="scss" scoped>
 .music-logo {
     height: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .music-logo-i {
-     height: 65px;
+    @include _flex(center, center);
+    &-i {
+        height: 65px;
     }
 }
 .music-nav {
-    background-color: rgb(8,15,49);
+    background-color: rgb(8, 15, 49);
     width: 100%; // div宽度占满整个窗口;
     height: 80px;
-    min-width: 1240px; //div的最小宽度要和里面的内容一样大，因为content的宽度就是1024px;
+    min-width: $width; //div的最小宽度要和里面的内容一样大，因为content的宽度就是1024px;
     &-ul {
-        display: flex;
         flex-grow: 1;
-        justify-content: flex-start;
-        align-items: center;
+        @include _flex(flex-start, center);
         height: 80px;
 
-        li {
+        > li {
             height: 80px;
             display: inline-block;
-            list-style: none;
             &:nth-of-type(1) {
                 margin-left: 30px;
             }
-            a {
+            > a {
                 display: inline-block;
-                text-decoration: none;
                 padding: 0 20px;
                 height: 80px;
                 line-height: 80px;
@@ -80,9 +84,7 @@ const searchColor = ref<string>('#ffffff');
         }
     }
     .nav-right {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include _flex(center, center);
         .el-search {
             display: inline-block;
             cursor: pointer;
@@ -97,5 +99,5 @@ const searchColor = ref<string>('#ffffff');
             color: white;
         }
     }
-    }
+}
 </style>

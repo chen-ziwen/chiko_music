@@ -18,13 +18,22 @@ const mainRouter = [
     {
         path: '/',
         name: 'home',
-        redirect: { name: 'singer' },
+        redirect: { name: 'discover' },
         meta: {
             title: '首页',
             keepAlive: true
         },
         component: home,
         children: [
+            {
+                path: 'discover',
+                name: 'discover',
+                meta: {
+                    title: '发现音乐'
+                },
+                component: () => import('@/views/discover-music/DiscoverMusic.vue')
+
+            },
             {
                 path: 'singer',
                 name: 'singer',

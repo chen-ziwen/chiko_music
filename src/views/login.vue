@@ -11,7 +11,7 @@
 
 <style lang="scss" scoped>
 .test {
-    background-color: pink;
+    background-color: $color;
     width: 100vw;
     height: 100vh;
     .hello {

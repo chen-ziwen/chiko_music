@@ -26,3 +26,12 @@ export interface RecommendList {
     type: number,
 
 }
+
+export interface TopArtists {
+    name: string,
+    alias: string[],
+    id: number,
+    picUrl: string,
+    img1v1Url: string,
+    musicSize: number
+}

@@ -1,0 +1,26 @@
+$width: 1240px;
+$color:white;
+$margin_I: 25px 0px 25px 15px ;
+
+@mixin _flex($justify,$align) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+
+}
+
+
+/* el-image样式 */
+@mixin _imgslot($width,$height,$size) {
+  display: flex;
+  justify-content: center;
+  min-width: $width;
+  min-height: $height;
+  align-items: center;
+  background: var(--el-fill-color-light);
+  color: var(--el-text-color-secondary);
+  font-size: $size;
+  
+}
+/* el-image样式 */
+

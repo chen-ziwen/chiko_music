@@ -18,6 +18,6 @@
 
 
 <style lang="scss">
-@import "@/assets/css/mian.css";
+@import "@/assets/css/main.css";
 @import "@/assets/css/router.css";
 </style>
