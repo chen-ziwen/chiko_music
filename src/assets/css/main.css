@@ -34,3 +34,9 @@ a {
 li {
     list-style: none;
 }
+
+/* 解决打开拟态框,关闭拟态框的抖动问题。 */
+body {
+    overflow-y: auto !important;
+    padding-right: 0 !important;
+}

@@ -4,6 +4,10 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElCarousel: typeof import('element-plus/es')['ElCarousel']
+    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     MyFooter: typeof import('./src/components/my-footer/MyFooter.vue')['default']
@@ -11,7 +15,9 @@ declare module 'vue' {
     MyNav: typeof import('./src/components/my-nav/MyNav.vue')['default']
     PlayMusic: typeof import('./src/components/my-play/PlayMusic.vue')['default']
     RankList: typeof import('./src/components/my-rank/RankList.vue')['default']
-    RecommedNew: typeof import('./src/components/my-discover/RecommedNew.vue')['default']
+    RecommendMv: typeof import('./src/components/my-discover/RecommendMv.vue')['default']
+    RecommendNew: typeof import('./src/components/my-discover/RecommendNew.vue')['default']
+    RecommendScroll: typeof import('./src/components/my-discover/RecommendScroll.vue')['default']
     RecommendSheet: typeof import('./src/components/my-discover/RecommendSheet.vue')['default']
     RecommendSinger: typeof import('./src/components/my-discover/RecommendSinger.vue')['default']
   }

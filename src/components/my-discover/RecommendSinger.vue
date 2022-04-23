@@ -7,7 +7,7 @@
             <ul>
                 <li v-for="data in artist" :key="data.id" class="recommend-singer-show-li">
                     <div class="singer-message">
-                        <el-image :style="{ width: 80 + 'px', height: 80 + 'px', borderRadius: 40 + 'px' }" :src="data.picUrl + '?param=80y80'" lazy>
+                        <el-image :style="{ width: 80 + 'px', height: 80 + 'px', borderRadius: 40 + 'px' }" :src="data?.picUrl + '?param=200y200'">
                             <template #placeholder>
                                 <div class="image-slot">
                                     <el-icon>
@@ -18,7 +18,7 @@
                         </el-image>
                         <span>{{ data.name }}</span>
                         <span>
-                            单曲数量:
+                            单曲数量
                             <span>{{ data.musicSize }}</span>
                         </span>
                     </div>

@@ -91,6 +91,16 @@ const mainRouter = [
                     keepAlive: true
                 },
                 component: () => import('@/views/test/Test.vue')
+            },
+            {
+                path: 'sheetlist',
+                name: 'sheetlist',
+                meta: {
+                    title: '歌单详情',
+                    keepAlive: false,
+                },
+                component: () => import('@/views/sheet-list/SheetList.vue')
+
             }
         ]
     },

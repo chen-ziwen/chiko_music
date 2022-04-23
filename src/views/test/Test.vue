@@ -38,6 +38,8 @@ import {
   getMvDetail,
   getSongUrl,
   getMvUrl,
+  getPersonalizedMv,
+  getBanner,
   getCommentMusic,
   getTopPlaylist
 } from "../../api/http/api";
@@ -92,11 +94,13 @@ async function searchSongs() {
 async function recommend() {
   let { result } = await getTopArtists(30); //推荐歌单
   let { artists } = await getTopArtists(); //推荐歌手
+  let { banners } = await getBanner()// 获取轮播图
+  let RMV = await getPersonalizedMv(); //推荐mv
   let a = await getTopPlaylist('hot', '华语')
-  let recommend = a;
+  let recommend = banners;
   getRecommend.value = recommend;
   // console.log(songs.songs[0].name)
-  console.log("推荐列表", getRecommend.value);
+  console.log("轮播图", getRecommend.value);
 }
 
 async function SearchSuggest() {

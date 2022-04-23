@@ -1,17 +1,16 @@
 import axios, { type AxiosRequestConfig } from "axios";
 // import { ElMessage } from 'element-plus';
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 interface API {
     // Promise的泛型T代表promise变成成功态之后resolve的值，也就是请求到的数据的类型.
     //get函数<T>的这个T 类似于声明有一个泛型，必须写.
     get<T>(url: string, params?: any): Promise<T> //<T> 表示promise请求到的数据类型.
     post<T>(url: string, params?: any): Promise<T>
 }
-const router = useRouter();
+// const router = useRouter();
 const instance = axios.create({
     baseURL: 'http://localhost:3000', //默认地址
     timeout: 5000, //请求超时五秒
-    // maxBodyLength: 5 * 1024 * 1024,
 });
 
 instance.interceptors.request.use(
@@ -34,7 +33,7 @@ instance.interceptors.response.use(
             //     message: '请登陆账号，再进行后续操作',
             //     type: 'warning',
             // });
-            router.replace({ path: 'login' })
+            // router.replace({ path: 'login' })
         }
         else if (response.status >= 400) {
             // ElMessage.error({ message: '请求失败，请确认网络连接是否正常！' })

@@ -3,6 +3,13 @@ import type { SearchHotDetail, RecommendList } from '../../models/detail'
 
 //获取到的参数先用any表示,后续在去给她们添加类型。
 // 不需要登陆的接口
+
+
+//   注：关于`offset`，你可以这样理解，假设你当前的歌单有100首歌
+// 你传入limit=10&offset=0等价于limit=10，你会得到第1-10首歌曲
+// 你传入limit=10&offset=1，你会得到第2-11首歌曲
+// 如果你设置limit=10&offset=2，你就会得到第3-12首歌曲
+
 /**
  * @function 搜索歌曲
  * @param keywords 歌名关键字,可以多个
@@ -28,14 +35,6 @@ export function getSearchHotDetail() {
     //{ data: SearchHotDetail[] } 在定义的| get<T>():promise<T> |泛型中 它是promise的reslove(参数)中的参数
     //async的返回值为promise 
     //await 返回值是promise,调用reslove函数时,reslove函数的参数
-}
-
-/**
- * @function 获取推荐歌单
- * @param limit 取出数量,默认为30(不支持 offset)
- */
-export function getRecommendList(limit?: number) {
-    return http.get<{ result: RecommendList[] }>('/personalized', { limit })
 }
 
 /**
@@ -97,7 +96,6 @@ export function getToplistArtist(type?: number) {
  * @param  limit 取出数量,默认为 50
  * @param offset 偏移数量,用于分页,如 :( 页数 -1)\*50, 其中50为limit的值,默认为0
  */
-
 export function getTopArtists(limit?: number, offset?: number) {
     return http.get<any>('/top/artists', { limit, offset })
 }
@@ -164,6 +162,14 @@ export function getTopMv(limit?: number) {
     return http.get<any>('/top/mv', { limit })
 }
 /**
+ * @function 推荐Mv
+ * 
+ */
+
+export function getPersonalizedMv() {
+    return http.get<any>('/personalized/mv')
+}
+/**
  * @function 获取相似歌手(调用此接口,传入歌手id,可获得相似歌手)
  * @param id 歌手id
  */
@@ -228,9 +234,14 @@ export function getLikeList(uid: number) {
 export function getPersonalizedNewsong(limit?: number) {
     return http.get<any>('/personalized/newsong', { limit })
 }
+
 /**
- * @function 相关歌单推荐
+ * @function 获取推荐歌单
+ * @param limit 取出数量,默认为30(不支持 offset)
  */
+export function getRecommendList(limit?: number) {
+    return http.get<{ result: RecommendList[] }>('/personalized', { limit })
+}
 
 /**
  * @function 歌单(网友精选碟)
@@ -252,4 +263,103 @@ export function getTopPlaylist(order?: string, cat?: string, limit?: number, off
  */
 export function getArtistVideo(id: number, size?: number, cursor?: number, order?: number) {
     return http.get<any>('/artist/video', { id, size, cursor, order })
+}
+
+/**
+ * @function 获取轮播图
+ * @param type 默认0对应PC端
+ */
+export function getBanner(type?: number) {
+    return http.get<any>('/banner', { type })
+}
+
+/**歌单能看到歌单名字, 但看不到具体歌单内容 , 调用此接口 , 传入歌单 id, 可
+ *以获取对应歌单内的所有的音乐(未登录状态只能获取不完整的歌单,登录后是完整的)，
+ *但是返回的 trackIds 是完整的，tracks 则是不完整的，可拿全部trackIds请求一次
+  `song/detail` 接口获取所有歌曲的详情.
+
+ * @function 获取歌单详情
+ * @param id 歌单id
+ * @param s 歌单最近的“s”个收藏者，默认为8
+ * @param nowtime 时间戳
+ */
+
+export function getPlaylistDetail(id: number, s?: number, nowtime?: number) {
+    return http.get<any>('/playlist/detail', { id, s, nowtime })
+}
+
+/**
+ * 调用此接口,可获取歌单分类,包含 category 信息
+ * @function 获取歌单分类
+ */
+export function getPlaylistCatlist() {
+    return http.get<any>('/playlist/catlist')
+}
+/**
+ * 调用此接口,可获取热门歌单分类,包含 category 信息
+ * @function 热门歌单分类
+ */
+export function getPlaylistHot() {
+    return http.get<any>('/playlist/hot')
+}
+
+/**
+ * 调用此接口 , 可获取精品歌单
+ * @function 获取精品歌单
+ * @param cat `cat`: tag, 比如 " 华语 "、" 古风 " 、" 欧美 "、" 流行 ", 默认为"全部",可从精品歌单标签列表接口获取(`/playlist/highquality/tags`)
+ * @param limit 取出歌单数量
+ * @param before 分页参数,取上一页最后一个歌单的 `updateTime` 获取下一页数据
+ */
+export function getHighquality(cat?: string, limit?: number, before?: string) {
+    return http.get<any>('/top/playlist/highquality', { cat, limit, before })
+}
+
+/**
+ * 调用此接口,传入歌单 id 可获取相关歌单
+ * @function 相关歌单推荐
+ * @param id 歌单id
+ */
+export function getRelatedPlaylist(id: number) {
+    return http.get<any>('/related/playlist', { id })
+}
+
+/**
+ * 由于网易云接口限制，歌单详情只会提供 10 首歌，通过调用此接口，传入对应的歌单`id`，即可获得对应的所有歌曲
+ * @function 获取歌单全部歌曲
+ * @param id 歌单id
+ * @param {numer} limit 限制获取歌曲的数量，默认值为当前歌单的歌曲
+ * @param {number} offset 默认值为0
+ */
+export function getPlaylistTrackAll(id: number, limit?: number, offset?: number, nowtime?: number) {
+    return http.get<any>('/playlist/track/all', { id, limit, offset, nowtime })
+}
+
+/**
+ * 调用后可获取歌单详情动态部分,如评论数,是否收藏,播放数
+ * @function 歌单详情动态 
+ * @param id 歌单id
+ */
+export function getDetailDynamic(id: number) {
+    return http.get<any>('/playlist/detail/dynamic', { id })
+}
+
+/**
+ * 说明 : 调用此接口 , 传入音乐 id(支持多个 id, 用 `,` 隔开), 可获得歌曲详情(dt为歌曲时长)
+ * 
+ * @function 获取歌曲详情
+ * @param ids 音乐 id, 如 `ids=347230`
+ */
+export function getSongDetail(ids: string) {
+    return http.get<any>('/song/detail', { ids })
+}
+
+/**
+ * @function 获取歌单评论
+ * @param id 歌单id
+ * @param limit 默认20
+ * @param offset 分页
+ * @param before 评论数超过5000有用
+ */
+export function getCommentPlaylist(id: number, limit?: number, offset?: number, before?: number) {
+    return http.get<any>('/comment/playlist', { id, limit, offset, before })
 }

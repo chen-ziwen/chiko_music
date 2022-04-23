@@ -35,3 +35,13 @@ export interface TopArtists {
     img1v1Url: string,
     musicSize: number
 }
+
+export interface Newsong {
+    id: number,
+    name: string,
+    picUrl: string,
+    song: {
+        artists: [];
+        duration: number
+    },
+}
