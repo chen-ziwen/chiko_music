@@ -1,31 +1,41 @@
 <template>
     <div class="music-singer">
-        <div class="music-singer-left">
-            <div class="music-singer-left-all">
-                <img :src="sheetDetail.detail?.coverImgUrl + '? param = 200y200'" />
+        <div class="music-singer-left" ref="singer">
+            <div class="music-singer-left-head">
+                <div class="music-player">
+                    <img :src="imgurl(sheetDetail.detail.coverImgUrl)"/>
+                </div>
                 <div class="content-box">
                     <ul class="content-box-ul">
                         <li>
-                            <h1 v-html="sheetDetail.detail?.name"></h1>
+                            <h1 v-html="sheetDetail.detail.name"></h1>
                         </li>
                         <li>
-                            <img :src="sheetDetail.creator?.avatarUrl" />
-                            <span>{{ sheetDetail.creator?.nickname }}</span>
-                            <span>创建于&nbsp;{{ dayjs(sheetDetail.detail?.createTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
+                            <img :src="imgurl(sheetDetail.creator.avatarUrl)" />
+                            <span>{{ sheetDetail.creator.nickname }}</span>
+                            <span>创建于&nbsp;{{ dayjs(sheetDetail.detail.createTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
                         </li>
                         <li>
-                            <span>标签&nbsp;:</span>
-                            <span v-for="tag, index in sheetDetail.detail?.tags" :key="index">{{ tag }}</span>
+                            <span v-show="sheetDetail.detail.tags.length">标签&nbsp;:</span>
+                            <span v-for="tag, index in sheetDetail.detail.tags" :key="index">{{ tag }}</span>
                         </li>
                         <li>
-                            <span v-html="sheetDetail.detail?.description" @click="centerDialog = true"></span>
-
-                            <el-dialog v-model="centerDialog" :title="sheetDetail.detail?.name" width="30%" center class="diglog">
-                                <span v-html="sheetDetail.detail?.description"></span>
+                            <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
+                            <el-dialog v-model="centerDialog" :title="sheetDetail.detail.name" width="30%" center>
+                                <span v-html="sheetDetail.detail.description"></span>
                             </el-dialog>
+                        </li>
+                        <li>
+                            <span>播放全部</span>
                         </li>
                     </ul>
                 </div>
+            </div>
+            <template v-if="sheetDetail.partsheet">
+                <sheet :sheetList="sheetDetail.partsheet"></sheet>
+            </template>
+            <div v-if="sheetDetail.partsheet.length" class="pagination">
+                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="32" @current-change="choose" />
             </div>
         </div>
         <div class="music-singer-right">
@@ -43,35 +53,68 @@ import {
     getSongDetail,
     getCommentPlaylist
 } from '@/api/http/api';
-import { useRoute } from 'vue-router';
-import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { onMounted, reactive, ref, watch, toRefs, toRaw } from 'vue';
+import sheet from '@/components/common/sheet.vue';
 import dayjs from 'dayjs';
-const centerDialog = ref(false)
+const route = useRoute();
+const router = useRouter();
+const sheetId = route.query.id as unknown as number;
+let timer :NodeJS.Timer|undefined= undefined;
+console.log('hhahahah', router, route)
+
+const centerDialog = ref(false);
+const singer = ref<HTMLDivElement>();
+
 interface sheetAbout {
-    comments?: Record<string, any>,
-    sheetMsg?: Record<string, number | boolean | null>
-    aboutList?: any[],
+    comments?: Record<string, any>;
+    sheetMsg?: Record<string, number | boolean | null>;
+    aboutList?: any[];
 };
 interface sheetDetail {
-    detail?: Record<string, any>,
-    trackIds?: number[],
-    creator?: Record<string, any>
+    detail: Record<string, any>;
+    creator: Record<string, string>;
+    sheetList: Record<string, any>[];
+    partsheet: any;
 }
 const sheetAbout = reactive<sheetAbout>({});
-const sheetDetail = reactive<sheetDetail>({});
-const route = useRoute();
-let sheetId = route.query.id as unknown as number;
+const sheetDetail = reactive<sheetDetail>({
+    //初始化，不想初始化就必须使用可选链或&&
+    detail: { coverImgUrl: '', name: '', createTime: 0, tags: [], description: '' },
+    creator: { avatarUrl: '', nickname: '' },
+    sheetList: [],
+    partsheet: [],
+});
+
+function imgurl(url:string) {
+   if(!url) {
+    return '/assets/images/ava.jpeg';
+   }
+   return url + '? param = 100y100';
+}
+
 async function playlistDetail() {
     let nowTime = new Date().getTime();
+    let i = 0;
     const { playlist, privileges } = await getPlaylistDetail(sheetId, 32, nowTime);
     if (playlist.description) {
         playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
     }
     sheetDetail.detail = playlist;
-    sheetDetail.trackIds = playlist.trackIds;
     sheetDetail.creator = playlist.creator;
-    console.log('lallala', playlist)
+    const { songs } = await getPlaylistTrackAll(sheetId, undefined, undefined, nowTime);
+    //给每一首歌添加一个顺序索引
+    while (i < songs.length) {
+        songs[i].index = i + 1;
+        i++
+    }
+    //将大数组切割成指定大小的小数组集合
+    for (let i = 0; i < songs.length; i += 32) {
+        sheetDetail.sheetList.push(songs.slice(i, i + 32))
+    }
+    sheetDetail.partsheet = sheetDetail?.sheetList[0] || [];
 }
+
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论数，相关歌单，歌单的详细数据
 function startSheet(msg: number) {
     try {
@@ -83,10 +126,10 @@ function startSheet(msg: number) {
                 sheetAbout.comments = comments;
                 sheetAbout.sheetMsg = sheetMsg;
                 sheetAbout.aboutList = playlists;
-                console.log('我是多个api的结合', sheetAbout)
+                // console.log('我是多个api的结合', sheetAbout)
             })
             .catch(error => {
-                throw error
+                console.log(error)
             });
     }
     catch (error) {
@@ -94,12 +137,33 @@ function startSheet(msg: number) {
     };
 
 }
-function showAll() {
-    alert('你好我爱你')
+//控制分页功能
+async function choose(val: number) {
+    if (!sheetDetail.sheetList) return;
+    sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
+    //生效
+    scrollTop(15)
+    // document.documentElement.scrollTop = 0;
+    // window.pageYOffset = 0;
+}
+
+// 滚动动画 
+function scrollTop(delay:number) {
+    if(timer) {
+       clearInterval(timer); 
+    }
+    timer = setInterval(()=>{
+        document.documentElement.scrollTop -= 35;
+        if(document.documentElement.scrollTop <= 0) {
+        document.documentElement.scrollTop = 0;
+        clearInterval(timer as NodeJS.Timer);
+    }
+    },delay)
+    
 }
 onMounted(() => {
     startSheet(sheetId);
-    playlistDetail()
+    playlistDetail();
 
 })
 
@@ -110,75 +174,149 @@ onMounted(() => {
     width: $width;
     margin: 0 auto;
     box-sizing: border-box;
-    @include _flex(center, center);
+    display: flex;
+
     &-left {
-        display: inline-block;
         width: 70%;
-        background-color: white;
-        height: 800px;
         padding: 15px;
-        &-all {
+        overflow: hidden;
+        background-color: white;
+
+        .pagination {
+            width: 100%;
             @include _flex(center, center);
-            background-color: $color;
-            > img {
-                width: 200px;
-                height: 200px;
+            margin-top: 15px;
+        }
+
+        .music-player {
+            position: relative;
+            width: 200px;
+            height: 200px;
+
+            &::before {
+                position: absolute;
+                content: "";
+                display: inline-block;
+                width: 190px;
+                height: 190px;
+                border-radius: 10px;
+                background-color: rgba(0, 0, 0, 0.25);
+                left: 16px;
+                top: 16px;
+                z-index: 0;
+            }
+
+            >img {
+                position: relative;
+                width: 100%;
+                height: 100%;
                 border-radius: 10px;
             }
+        }
+
+        &-head {
+            @include _flex(center, center);
+            // background-color: #fcfcfc;
+
             .content-box {
                 flex: 1;
-                padding-left: 20px;
-                height: 200px;
+                padding-left: 40px;
+
                 &-ul {
-                    height: 200px;
                     @include _flex(center, flex-start);
                     flex-direction: column;
                     overflow: hidden;
+
                     li {
                         flex: 1;
                         height: 50px;
-                        padding: 5px 0px;
+                        padding-top: 10px;
+                        font-family: Arial;
+
+                        &:nth-child(1) {
+                            h1 {
+                                display: inline;
+                                color: #4a4a4a;
+                            }
+                        }
+
                         &:nth-child(2) {
                             @include _flex(center, center);
                             font-size: 18px;
-                            > span:first-of-type {
+
+                            >span:first-of-type {
                                 margin-left: 10px;
+                                color: #545454;
                             }
-                            > span:last-of-type {
+
+                            >span:last-of-type {
                                 margin-left: 30px;
+                                color: #808080;
                             }
                         }
-                        > img {
+
+                        >img {
                             width: 35px;
                             height: 35px;
                             border-radius: 50%;
                         }
+
                         &:nth-child(3) {
                             @include _flex(center, center);
-                            > span:first-of-type {
+
+                            >span:first-of-type {
                                 font-size: 18px;
                                 font-weight: 700;
-                                font-style: italic;
                             }
-                            > span:not(:first-of-type) {
+
+                            >span:not(:first-of-type) {
                                 display: inline-block;
-                                background-color: red;
+                                padding: 2px 4px;
                                 margin: 0px 5px;
-                                padding: 3px 8px;
+                                font-size: 14px;
                                 color: white;
-                                border-radius: 20px;
+                                background-color: red;
+                                border-radius: 3px;
+                                opacity: 0.8;
+                                filter: invert(10%);
                                 cursor: pointer;
                             }
                         }
+
                         &:nth-child(4) {
                             display: -webkit-box;
                             overflow: hidden;
                             -webkit-line-clamp: 2;
                             line-clamp: 2;
                             -webkit-box-orient: vertical;
-                            > span {
+
+                            >span {
                                 display: block;
                                 cursor: pointer;
+                                transition: color 250ms ease-in-out;
+                                letter-spacing: 1px;
+
+                                &:hover {
+                                    color: rgb(250, 125, 144);
+                                }
+                            }
+                        }
+
+                        &:nth-child(5) {
+                            width: 100%;
+                            text-align: end;
+
+                            >span {
+                                display: inline-block;
+                                padding: 3px 8px;
+                                margin: 10px 15px 0px 0px;
+                                font-size: 18px;
+                                cursor: pointer;
+                                opacity: 0.85;
+                                filter: invert(5%);
+                                border-radius: 8px;
+                                color: white;
+                                background-color: red;
                             }
                         }
                     }
@@ -186,6 +324,7 @@ onMounted(() => {
             }
         }
     }
+
     &-right {
         display: inline-block;
         width: 30%;
@@ -193,11 +332,17 @@ onMounted(() => {
         padding: 15px;
         overflow: hidden;
         background-color: white;
+
         &-desc {
             overflow: hidden;
-            background-color: rgb(254, 236, 239);
+            background-color: #fcfcfc;
             height: 800px;
         }
     }
+}
+
+//分页标签的颜色
+:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
+    background-color: pink !important; //修改默认的背景色
 }
 </style>
