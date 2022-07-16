@@ -3,7 +3,7 @@
         <div class="music-singer-left" ref="singer">
             <div class="music-singer-left-head">
                 <div class="music-player">
-                    <img :src="imgurl(sheetDetail.detail.coverImgUrl)"/>
+                    <img :src="imgurl(sheetDetail.detail.coverImgUrl)" />
                 </div>
                 <div class="content-box">
                     <ul class="content-box-ul">
@@ -35,11 +35,37 @@
                 <sheet :sheetList="sheetDetail.partsheet"></sheet>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="32" @current-change="choose" />
+                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:current-page="page" />
             </div>
         </div>
         <div class="music-singer-right">
-            <div class="music-singer-right-desc" v-html="sheetDetail.detail?.description"></div>
+            <div class="common-style" v-show="sheetAbout.aboutList.length > 0">
+                <ListModule head="歌单推荐" gap-color="red">
+                    <div class="sheet-commond" v-for="item in sheetAbout.aboutList" :key="item.id" @click="turnSheet(item.id)">
+                        <img class="sheet-img" :src="item.coverImgUrl">
+                        <span class="sheet-name">{{ item.name }}</span>
+                    </div>
+                </ListModule>
+            </div>
+            <div class="common-style" v-show="sheetAbout.subscribers.length > 0">
+                <ListModule head="歌单收藏者" gap-color="blue">
+                    <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId" :title="item.nickname">
+                        <img class="user-avatar" :src="item.avatarUrl">
+                    </div>
+                </ListModule>
+            </div>
+            <div class="common-style" v-show="sheetAbout.comments.length > 0">
+                <ListModule head="精彩评论" gap-color="green">
+                    <div class="talk-box-list" v-for="item in sheetAbout.comments" :key="item.commentId">
+                        <div class="user-box">
+                            <img class="talk-user-avatar" :src="item.user.avatarUrl" :title="item.user.nickname" />
+                            <span class="talk-user-name">{{ item.user.nickname }}</span>
+                            <span class="talk-time">{{ item.timeStr }}</span>
+                        </div>
+                        <p class="talk-list">{{ item.content }}</p>
+                    </div>
+                </ListModule>
+            </div>
         </div>
     </div>
 </template>
@@ -49,31 +75,29 @@ import {
     getPlaylistDetail,
     getRelatedPlaylist,
     getPlaylistTrackAll,
-    getDetailDynamic,
-    getSongDetail,
-    getCommentPlaylist
+    getCommentPlaylist,
+    getPlaylistSubscribers,
 } from '@/api/http/api';
-import { scrollTop,ScrollTop } from '@/utils/ways';
+import { ScrollTop } from '@/utils/ways';
 
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive, ref, watch, toRefs, toRaw } from 'vue';
 import sheet from '@/components/common/sheet.vue';
 import dayjs from 'dayjs';
+import ListModule from '@/components/common/listmodule.vue';
 const route = useRoute();
 const router = useRouter();
-const sheetId = route.query.id as unknown as number;
-// const scroll = scrollTop();
-const scroll = new ScrollTop().scroll;
 
-console.log('hhahahah', router, route)
+const scroll = new ScrollTop().scroll;
 
 const centerDialog = ref(false);
 const singer = ref<HTMLDivElement>();
+const page = ref<number>(1);
 
 interface sheetAbout {
-    comments?: Record<string, any>;
-    sheetMsg?: Record<string, number | boolean | null>;
-    aboutList?: any[];
+    subscribers: Record<string, any>[];
+    comments: Record<string, any>[];
+    aboutList: Record<string, any>[];
 };
 interface sheetDetail {
     detail: Record<string, any>;
@@ -81,7 +105,11 @@ interface sheetDetail {
     sheetList: Record<string, any>[];
     partsheet: any;
 }
-const sheetAbout = reactive<sheetAbout>({});
+const sheetAbout = reactive<sheetAbout>({
+    subscribers: [],
+    aboutList: [],
+    comments: []
+});
 const sheetDetail = reactive<sheetDetail>({
     //初始化，不想初始化就必须使用可选链或&&
     detail: { coverImgUrl: '', name: '', createTime: 0, tags: [], description: '' },
@@ -90,47 +118,51 @@ const sheetDetail = reactive<sheetDetail>({
     partsheet: [],
 });
 
-function imgurl(url:string) {
-   if(!url) {
-    return '/assets/images/ava.jpeg';
-   }
-   return url + '? param = 100y100';
+function imgurl(url: string) {
+    if (!url) {
+        return '/assets/images/ava.jpeg';
+    }
+    return url + '? param = 100y100';
 }
 
-async function playlistDetail() {
+async function playlistDetail(id: number) {
     let nowTime = new Date().getTime();
     let i = 0;
-    const { playlist, privileges } = await getPlaylistDetail(sheetId, 32, nowTime);
+    const { playlist } = await getPlaylistDetail(id, 50, nowTime);
     if (playlist.description) {
         playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
     }
     sheetDetail.detail = playlist;
     sheetDetail.creator = playlist.creator;
-    const { songs } = await getPlaylistTrackAll(sheetId, undefined, undefined, nowTime);
+    const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
     //给每一首歌添加一个顺序索引
     while (i < songs.length) {
         songs[i].index = i + 1;
         i++
     }
     //将大数组切割成指定大小的小数组集合
-    for (let i = 0; i < songs.length; i += 32) {
-        sheetDetail.sheetList.push(songs.slice(i, i + 32))
+    for (let i = 0; i < songs.length; i += 50) {
+        sheetDetail.sheetList.push(songs.slice(i, i + 50))
     }
     sheetDetail.partsheet = sheetDetail?.sheetList[0] || [];
 }
 
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论数，相关歌单，歌单的详细数据
-function startSheet(msg: number) {
+function startSheet(id: number) {
     try {
-        Promise.all([getCommentPlaylist(msg, 50), getDetailDynamic(msg), getRelatedPlaylist(msg)])
+        Promise.all([getPlaylistSubscribers(id, 30), getCommentPlaylist(id, 10), getRelatedPlaylist(id)])
             .then(res => {
-                const { comments } = res[0]; // 歌单评论
-                const sheetMsg = res[1]; //歌单信息
+                const { subscribers } = res[0]; // 歌单评论
+                const { comments, hotComments } = res[1]; //歌单信息
                 const { playlists } = res[2]; //相关歌单
-                sheetAbout.comments = comments;
-                sheetAbout.sheetMsg = sheetMsg;
-                sheetAbout.aboutList = playlists;
-                // console.log('我是多个api的结合', sheetAbout)
+                sheetAbout.subscribers = subscribers;  // 歌单收藏
+                if (hotComments.length > 0) {
+                    sheetAbout.comments = hotComments;
+                } else {
+                    sheetAbout.comments = comments;
+                }
+                sheetAbout.aboutList = playlists;  //相关歌单
+                console.log('我是多个api的结合', sheetAbout, res[2])
             })
             .catch(error => {
                 console.log(error)
@@ -142,18 +174,33 @@ function startSheet(msg: number) {
 
 }
 //控制分页功能
-async function choose(val: number) {
+function choose(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
-    //生效 切换分页时 屏幕回到顶部
+    // 切换分页时 屏幕回到顶部
     scroll();
 }
 
-onMounted(() => {
-    startSheet(sheetId);
-    playlistDetail();
+// 点击跳转歌单
+function turnSheet(id: number) {
+    router.push({
+        name: 'sheetlist',
+        query: {
+            id,
+        }
+    })
+}
+// 初始话界面
+function originContent(id: number) {
+    startSheet(id);
+    playlistDetail(id);
+}
 
-})
+watch(() => route.query.id, () => {
+    let sheetId = route.query.id;
+    originContent(sheetId as unknown as number);
+
+}, { immediate: true })
 
 </script>
 
@@ -316,15 +363,89 @@ onMounted(() => {
     &-right {
         display: inline-block;
         width: 30%;
-        height: 800px;
         padding: 15px;
         overflow: hidden;
-        background-color: white;
 
-        &-desc {
-            overflow: hidden;
-            background-color: #fcfcfc;
-            height: 800px;
+        .box-list {
+            display: inline-block;
+            width: 20%;
+            text-align: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+            }
+        }
+
+        .talk-box-list {
+            display: flex;
+            flex-direction: column;
+            padding: 5px 0px;
+
+            .user-box {
+                display: flex;
+                align-items: center;
+
+                .talk-user-avatar {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                }
+
+                .talk-user-name {
+                    width: 0;
+                    flex-grow: 1;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    margin-left: 6px;
+                }
+
+                .talk-time {
+                    color: rgb(100, 99, 99);
+                }
+            }
+
+            .talk-list {
+                padding: 5px;
+                margin: 5px 0px 0px 35px;
+                border: 3px dashed pink;
+                font-size: 14px;
+                color: rgb(76, 73, 73);
+                letter-spacing: 1px;
+            }
+
+
+
+        }
+
+        .sheet-commond {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            cursor: pointer;
+
+            .sheet-img {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                margin-right: 10px;
+            }
+
+            .sheet-name {
+                display: inline-block;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+        }
+
+        .common-style {
+            margin-bottom: 15px;
         }
     }
 }
@@ -332,5 +453,6 @@ onMounted(() => {
 //分页标签的颜色
 :deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
     background-color: pink !important; //修改默认的背景色
+    cursor: pointer;
 }
 </style>

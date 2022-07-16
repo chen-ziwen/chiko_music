@@ -53,10 +53,10 @@ export function scrollTop() {
 // 将屏幕滚动到顶部 类写法
 export class ScrollTop {
     private timer: NodeJS.Timer | undefined;
-    public readonly scroll: () => void;
+    public readonly scroll: (delay?: number, step?: number) => void;
     constructor() {
         this.timer = undefined;
-        this.scroll = (delay: number = 15, step: number = 35) => {
+        this.scroll = (delay = 15, step = 35) => {
             if (this.timer) {
                 clearInterval(this.timer)
             }

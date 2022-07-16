@@ -23,9 +23,15 @@ import { Picture as IconPicture } from '@element-plus/icons-vue';
 const myBanner = ref<any>();
 const carousel = ref();
 async function banners() {
-    let { banners } = await getBanner();
-    myBanner.value = banners;
-    console.log('轮播图', banners)
+    try {
+        let { banners } = await getBanner();
+        myBanner.value = banners;
+    }
+    catch (e) {
+        console.log('banner获取失败');
+
+    }
+
 }
 onMounted(() => {
     banners();

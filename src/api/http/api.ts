@@ -363,3 +363,11 @@ export function getSongDetail(ids: string) {
 export function getCommentPlaylist(id: number, limit?: number, offset?: number, before?: number) {
     return http.get<any>('/comment/playlist', { id, limit, offset, before })
 }
+
+/**
+ * @function 歌单收藏者
+ * @returns 
+ */
+export function getPlaylistSubscribers(id: number, limit?: number, offset?: number) {
+    return http.get<any>('/playlist/subscribers', { id, limit, offset })
+}
