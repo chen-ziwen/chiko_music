@@ -53,6 +53,8 @@ import {
     getSongDetail,
     getCommentPlaylist
 } from '@/api/http/api';
+import { scrollTop,ScrollTop } from '@/utils/ways';
+
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive, ref, watch, toRefs, toRaw } from 'vue';
 import sheet from '@/components/common/sheet.vue';
@@ -60,7 +62,9 @@ import dayjs from 'dayjs';
 const route = useRoute();
 const router = useRouter();
 const sheetId = route.query.id as unknown as number;
-let timer :NodeJS.Timer|undefined= undefined;
+// const scroll = scrollTop();
+const scroll = new ScrollTop().scroll;
+
 console.log('hhahahah', router, route)
 
 const centerDialog = ref(false);
@@ -141,26 +145,10 @@ function startSheet(msg: number) {
 async function choose(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
-    //生效
-    scrollTop(15)
-    // document.documentElement.scrollTop = 0;
-    // window.pageYOffset = 0;
+    //生效 切换分页时 屏幕回到顶部
+    scroll();
 }
 
-// 滚动动画 
-function scrollTop(delay:number) {
-    if(timer) {
-       clearInterval(timer); 
-    }
-    timer = setInterval(()=>{
-        document.documentElement.scrollTop -= 35;
-        if(document.documentElement.scrollTop <= 0) {
-        document.documentElement.scrollTop = 0;
-        clearInterval(timer as NodeJS.Timer);
-    }
-    },delay)
-    
-}
 onMounted(() => {
     startSheet(sheetId);
     playlistDetail();
