@@ -78,7 +78,7 @@ import {
     getCommentPlaylist,
     getPlaylistSubscribers,
 } from '@/api/http/api';
-import { ScrollTop } from '@/utils/ways';
+import { ScrollTop, useStorage } from '@/hook';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive, ref, watch, toRefs, toRaw } from 'vue';
 import sheet from '@/components/common/sheet.vue';
@@ -99,6 +99,7 @@ interface sheetDetail {
 const route = useRoute();
 const router = useRouter();
 const scroll = new ScrollTop().scroll;
+const storage = new useStorage();
 const centerDialog = ref(false);
 const page = ref<number>(1);
 const sheetAbout = reactive<sheetAbout>({
@@ -146,30 +147,24 @@ async function playlistDetail(id: number) {
     sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
 }
 
-//把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论数，相关歌单，歌单的详细数据
+//把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论，相关歌单，歌单收藏
 function startSheet(id: number) {
-    try {
-        Promise.all([getPlaylistSubscribers(id, 30), getCommentPlaylist(id, 10), getRelatedPlaylist(id)])
-            .then(res => {
-                const { subscribers } = res[0]; // 歌单评论
-                const { comments, hotComments } = res[1]; //歌单信息
-                const { playlists } = res[2]; //相关歌单
-                sheetAbout.subscribers = subscribers;  // 歌单收藏
-                if (hotComments.length > 0) {
-                    sheetAbout.comments = hotComments;
-                } else {
-                    sheetAbout.comments = comments;
-                }
-                sheetAbout.aboutList = playlists;  //相关歌单
-            })
-            .catch(error => {
-                console.log(error)
-            });
-    }
-    catch (error) {
-        console.log(error)
-    };
-
+    Promise.all([getPlaylistSubscribers(id, 30), getCommentPlaylist(id, 10), getRelatedPlaylist(id)])
+        .then(res => {
+            const { subscribers } = res[0]; // 歌单收藏
+            const { comments, hotComments } = res[1]; //歌单评论
+            const { playlists } = res[2]; //相关歌单
+            sheetAbout.subscribers = subscribers;  // 歌单收藏
+            if (hotComments.length > 0) {
+                sheetAbout.comments = hotComments;
+            } else {
+                sheetAbout.comments = comments;
+            }
+            sheetAbout.aboutList = playlists;  //相关歌单
+        })
+        .catch(error => {
+            console.log('数据请求失败', error)
+        });
 }
 //控制分页功能
 function choose(val: number) {
@@ -202,7 +197,8 @@ watch(() => route.query.id, () => {
     // 跳转歌单时，将分页定位到第一页
     page.value = 1;
     let sheetId = route.query.id as unknown as number;
-    originContent(sheetId as unknown as number);
+    storage.set('idsss', sheetId)
+    originContent(sheetId);
 }, { immediate: true })
 
 </script>

@@ -34,7 +34,7 @@
 import { getPersonalizedNewsong } from '@/api/http/api';
 import { ref, onMounted } from 'vue';
 import type { Newsong } from '@/models/detail';
-import { changetime } from '@/utils/ways';
+import { changetime } from '@/hook';
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 const newsong = ref<Newsong[]>()
 function Personalized() {

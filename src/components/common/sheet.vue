@@ -26,14 +26,14 @@
 
 <script lang='ts' setup>
 import { ref, reactive, onMounted, watch } from 'vue';
-import { changetime } from '@/utils/ways'
+import { changetime } from '@/hook'
 
 interface sheetProps {
     sheetList: any[];
 }
 const props = defineProps<sheetProps>();
 function changeData(msg: any[]) {
-    let newData = msg.map(item =>  item.name)
+    let newData = msg.map(item => item.name)
     return newData.join(' / ')
 }
 
