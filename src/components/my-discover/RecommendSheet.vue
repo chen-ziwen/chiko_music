@@ -39,11 +39,13 @@ function detailSheet(data: RecommendList) {
     background-color: $color;
     width: $width;
     margin: 0 -15px;
+
     &-head {
-        > span {
+        >span {
             display: inline-block;
             text-align: start;
             margin: $margin_I;
+
             font: {
                 size: 26px;
                 weight: 700;
@@ -51,6 +53,7 @@ function detailSheet(data: RecommendList) {
             }
         }
     }
+
     &-show {
         ul {
             li {
@@ -59,8 +62,10 @@ function detailSheet(data: RecommendList) {
                 margin: 10px 15px 10px 15px;
                 vertical-align: top;
                 cursor: pointer;
+
                 span {
                     display: inline-block;
+
                     font: {
                         size: 16px;
                         weight: 700;
@@ -71,6 +76,7 @@ function detailSheet(data: RecommendList) {
         }
     }
 }
+
 .image-slot {
     @include _imgslot(125px, 125px, 30px);
 }

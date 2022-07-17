@@ -1,6 +1,6 @@
 <template>
     <div class="music-singer">
-        <div class="music-singer-left" ref="singer">
+        <div class="music-singer-left">
             <div class="music-singer-left-head">
                 <div class="music-player">
                     <img :src="imgurl(sheetDetail.detail.coverImgUrl)" />
@@ -35,7 +35,7 @@
                 <sheet :sheetList="sheetDetail.partsheet"></sheet>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:current-page="page" />
+                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:currentPage=page />
             </div>
         </div>
         <div class="music-singer-right">
@@ -79,20 +79,11 @@ import {
     getPlaylistSubscribers,
 } from '@/api/http/api';
 import { ScrollTop } from '@/utils/ways';
-
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive, ref, watch, toRefs, toRaw } from 'vue';
 import sheet from '@/components/common/sheet.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/listmodule.vue';
-const route = useRoute();
-const router = useRouter();
-
-const scroll = new ScrollTop().scroll;
-
-const centerDialog = ref(false);
-const singer = ref<HTMLDivElement>();
-const page = ref<number>(1);
 
 interface sheetAbout {
     subscribers: Record<string, any>[];
@@ -105,6 +96,11 @@ interface sheetDetail {
     sheetList: Record<string, any>[];
     partsheet: any;
 }
+const route = useRoute();
+const router = useRouter();
+const scroll = new ScrollTop().scroll;
+const centerDialog = ref(false);
+const page = ref<number>(1);
 const sheetAbout = reactive<sheetAbout>({
     subscribers: [],
     aboutList: [],
@@ -126,14 +122,17 @@ function imgurl(url: string) {
 }
 
 async function playlistDetail(id: number) {
+    // 先将歌单列表数组清空
+    sheetDetail.sheetList.length = 0;
+
     let nowTime = new Date().getTime();
     let i = 0;
     const { playlist } = await getPlaylistDetail(id, 50, nowTime);
-    if (playlist.description) {
+    if (playlist?.description) {
         playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
     }
     sheetDetail.detail = playlist;
-    sheetDetail.creator = playlist.creator;
+    sheetDetail.creator = playlist?.creator;
     const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
     //给每一首歌添加一个顺序索引
     while (i < songs.length) {
@@ -144,7 +143,7 @@ async function playlistDetail(id: number) {
     for (let i = 0; i < songs.length; i += 50) {
         sheetDetail.sheetList.push(songs.slice(i, i + 50))
     }
-    sheetDetail.partsheet = sheetDetail?.sheetList[0] || [];
+    sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
 }
 
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论数，相关歌单，歌单的详细数据
@@ -162,7 +161,6 @@ function startSheet(id: number) {
                     sheetAbout.comments = comments;
                 }
                 sheetAbout.aboutList = playlists;  //相关歌单
-                console.log('我是多个api的结合', sheetAbout, res[2])
             })
             .catch(error => {
                 console.log(error)
@@ -190,16 +188,21 @@ function turnSheet(id: number) {
         }
     })
 }
-// 初始话界面
+// 初始化界面
 function originContent(id: number) {
-    startSheet(id);
-    playlistDetail(id);
+    // 因为监听的是路由跳转的id，所以当从歌单跳转到发现音乐时，因为没传id，所以router.query.id为空会报错
+    // 如果id为空不执行
+    if (id) {
+        startSheet(id);
+        playlistDetail(id);
+    }
 }
 
 watch(() => route.query.id, () => {
-    let sheetId = route.query.id;
+    // 跳转歌单时，将分页定位到第一页
+    page.value = 1;
+    let sheetId = route.query.id as unknown as number;
     originContent(sheetId as unknown as number);
-
 }, { immediate: true })
 
 </script>

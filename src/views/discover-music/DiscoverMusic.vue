@@ -39,7 +39,6 @@ const sheetlist = ref<RecommendList[]>();
 async function getRecommend() {
     let { result } = await getRecommendList(32);
     sheetlist.value = result;
-    console.log('推荐歌单', sheetlist.value)
 }
 onMounted(() => { getRecommend() });
 </script>

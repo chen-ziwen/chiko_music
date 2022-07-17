@@ -40,7 +40,6 @@ const newsong = ref<Newsong[]>()
 function Personalized() {
     getPersonalizedNewsong(12).then(res => {
         newsong.value = res.result;
-        console.log('新歌首发', newsong.value)
     });
 
 }
@@ -58,11 +57,13 @@ function changeData(msg: { name: string }[]) {
     background-color: $color;
     width: $width;
     margin: 0 -15px;
+
     &-head {
-        > span {
+        >span {
             display: inline-block;
             text-align: start;
             margin: $margin_I;
+
             font: {
                 size: 26px;
                 weight: 700;
@@ -70,6 +71,7 @@ function changeData(msg: { name: string }[]) {
             }
         }
     }
+
     &-show {
         ul {
             li {
@@ -79,16 +81,20 @@ function changeData(msg: { name: string }[]) {
                 padding: 10px 15px 10px 15px;
                 // vertical-align: top;
                 cursor: pointer;
+
                 span {
                     display: inline-block;
+
                     font: {
                         size: 16px;
                         weight: 700;
                         family: Arial, Helvetica, sans-serif;
                     }
                 }
+
                 .newsong {
                     display: flex;
+
                     .newsong-text {
                         flex-grow: 1;
                         flex-direction: column;
@@ -96,10 +102,12 @@ function changeData(msg: { name: string }[]) {
                         flex-wrap: wrap;
                         margin-left: 25px;
                         white-space: pre-wrap; //允许换行
+
                         span {
                             &:nth-child(1) {
                                 padding-bottom: 20px;
                             }
+
                             &:nth-child(2) {
                                 padding-bottom: 5px;
                                 font-size: 16px;
@@ -107,6 +115,7 @@ function changeData(msg: { name: string }[]) {
                                 color: rgb(238, 109, 109);
                             }
                         }
+
                         &-time {
                             margin: auto 0;
                             color: rgb(125, 162, 197);
@@ -117,6 +126,7 @@ function changeData(msg: { name: string }[]) {
         }
     }
 }
+
 .image-slot {
     @include _imgslot(100px, 100px, 16px);
 }

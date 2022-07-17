@@ -54,43 +54,57 @@ const searchColor = ref<string>('#ffffff');
 .music-logo {
     height: 80px;
     @include _flex(center, center);
+
     &-i {
         height: 65px;
     }
 }
+
 .music-nav {
     background-color: rgb(8, 15, 49);
     width: 100%; // div宽度占满整个窗口;
     height: 80px;
     min-width: $width; //div的最小宽度要和里面的内容一样大，因为content的宽度就是1024px;
+
     &-ul {
         flex-grow: 1;
         @include _flex(flex-start, center);
         height: 80px;
 
-        > li {
+        >li {
             height: 80px;
             display: inline-block;
+
             &:nth-of-type(1) {
                 margin-left: 30px;
             }
-            > a {
+
+
+            >a {
                 display: inline-block;
                 padding: 0 20px;
                 height: 80px;
                 line-height: 80px;
                 color: white;
+                cursor: pointer;
+
+                &:hover {
+                    color: pink !important;
+                }
             }
         }
     }
+
     .nav-right {
         @include _flex(center, center);
+
         .el-search {
             display: inline-block;
             cursor: pointer;
             padding-right: 15px;
             border-right: 1px dotted rgb(180, 177, 177);
         }
+
         .nav-login {
             padding: 0px 25px 0px 15px;
             display: inline-block;

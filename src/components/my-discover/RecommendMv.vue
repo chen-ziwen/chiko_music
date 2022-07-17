@@ -40,7 +40,6 @@ async function Personalized() {
     let { result } = await getPersonalizedMv();
     recommendMv.value = result
     // newsong.value = recommendMv;
-    console.log('推荐MV', recommendMv.value)
 };
 
 onMounted(() => Personalized());

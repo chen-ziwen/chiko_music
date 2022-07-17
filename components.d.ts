@@ -4,12 +4,6 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
-    ElCarousel: typeof import('element-plus/es')['ElCarousel']
-    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
-    ElDialog: typeof import('element-plus/es')['ElDialog']
-    ElIcon: typeof import('element-plus/es')['ElIcon']
-    ElImage: typeof import('element-plus/es')['ElImage']
-    ElPagination: typeof import('element-plus/es')['ElPagination']
     Listmodule: typeof import('./src/components/common/listmodule.vue')['default']
     MyFooter: typeof import('./src/components/my-footer/MyFooter.vue')['default']
     MyMain: typeof import('./src/components/my-main/MyMain.vue')['default']

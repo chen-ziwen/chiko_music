@@ -36,7 +36,6 @@ import { getTopArtists } from '@/api/http/api';
 const artist = ref<TopArtists[]>();
 async function topArtists() {
     let { artists } = await getTopArtists(40);
-    console.log('推荐歌手', artists);
     artist.value = artists;
 }
 onMounted(() => topArtists())
