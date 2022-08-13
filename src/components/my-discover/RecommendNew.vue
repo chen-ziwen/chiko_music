@@ -44,10 +44,11 @@ function Personalized() {
 
 }
 onMounted(() => Personalized());
+// 最多显示三个歌手名
 function changeData(msg: { name: string }[]) {
     let newarr = msg.map(item => {
         return item.name;
-    }).join("\n");
+    }).slice(0, 3).join("\n");
     return newarr;
 }
 </script>

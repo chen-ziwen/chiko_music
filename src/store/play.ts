@@ -4,13 +4,18 @@ export const usePlay = defineStore({
     id: 'play',
     state: () => {
         return {
-            name: 'chiko',
-            age: 22,
+            userInfo: null,
+            singer: {},
+            //播放状态
+            playing: false,
+            name: '',
+            age: 0
         }
     },
     actions: {
         cName(name: string) {
-            this.name = name;
+            console.log(name);
+
         }
     },
     getters: {},

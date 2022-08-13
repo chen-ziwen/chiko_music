@@ -148,23 +148,23 @@ async function playlistDetail(id: number) {
 }
 
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论，相关歌单，歌单收藏
-function startSheet(id: number) {
-    Promise.all([getPlaylistSubscribers(id, 30), getCommentPlaylist(id, 10), getRelatedPlaylist(id)])
-        .then(res => {
-            const { subscribers } = res[0]; // 歌单收藏
-            const { comments, hotComments } = res[1]; //歌单评论
-            const { playlists } = res[2]; //相关歌单
-            sheetAbout.subscribers = subscribers;  // 歌单收藏
-            if (hotComments.length > 0) {
-                sheetAbout.comments = hotComments;
-            } else {
-                sheetAbout.comments = comments;
-            }
-            sheetAbout.aboutList = playlists;  //相关歌单
-        })
-        .catch(error => {
-            console.log('数据请求失败', error)
-        });
+async function startSheet(id: number) {
+    const { subscribers } = await getPlaylistSubscribers(id, 30);
+    const { playlists } = await getRelatedPlaylist(id);
+
+    sheetAbout.subscribers = subscribers;  // 歌单收藏
+    sheetAbout.aboutList = playlists;  //相关歌单
+
+    try {
+        const { comments, hotComments } = await getCommentPlaylist(id, 10);
+        if (hotComments.length > 0) {
+            sheetAbout.comments = hotComments;
+        } else {
+            sheetAbout.comments = comments;
+        }
+    } catch (e) {
+        // console.error('/comment/playlist,接口请求繁忙');
+    }
 }
 //控制分页功能
 function choose(val: number) {

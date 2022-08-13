@@ -1,43 +1,45 @@
 <template>
-    <nav class="music-nav">
-        <div class="container flex-start">
-            <div class="music-logo">
-                <a href="#javascript">
-                    <img src="@/assets/image/logo2.png" class="music-logo-i" />
-                </a>
-            </div>
-            <ul class="music-nav-ul">
-                <li>
-                    <router-link :to="{ name: 'discover' }" active-class="router-style">发现音乐</router-link>
-                </li>
+    <nav class="nav">
+        <div class="music-nav">
+            <div class="container flex-start">
+                <div class="music-logo">
+                    <a href="#javascript">
+                        <img src="@/assets/image/logo2.png" class="music-logo-i" />
+                    </a>
+                </div>
+                <ul class="music-nav-ul">
+                    <li>
+                        <router-link :to="{ name: 'discover' }" active-class="router-style">发现音乐</router-link>
+                    </li>
 
-                <li>
-                    <router-link :to="{ name: 'ranklist' }" active-class="router-style">排行榜</router-link>
-                </li>
+                    <li>
+                        <router-link :to="{ name: 'ranklist' }" active-class="router-style">排行榜</router-link>
+                    </li>
 
-                <li>
-                    <router-link :to="{ name: 'songsheet' }" active-class="router-style">歌单</router-link>
-                </li>
+                    <li>
+                        <router-link :to="{ name: 'songsheet' }" active-class="router-style">歌单</router-link>
+                    </li>
 
-                <li>
-                    <router-link :to="{ name: 'singer' }" active-class="router-style">歌手</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'mv' }" active-class="router-style">MV</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'newdisc' }" active-class="router-style">新碟</router-link>
-                </li>
+                    <li>
+                        <router-link :to="{ name: 'singer' }" active-class="router-style">歌手</router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'mv' }" active-class="router-style">MV</router-link>
+                    </li>
+                    <li>
+                        <router-link :to="{ name: 'newdisc' }" active-class="router-style">新碟</router-link>
+                    </li>
 
-                <li>
-                    <router-link :to="{ name: 'test' }" active-class="router-style">测试</router-link>
-                </li>
-            </ul>
-            <div class="nav-right">
-                <el-icon :size="28" class="el-search" :color="searchColor" @mouseenter="searchColor = '#ff0000'" @mouseleave="searchColor = '#ffffff'">
-                    <search />
-                </el-icon>
-                <span class="nav-login">登陆</span>
+                    <li>
+                        <router-link :to="{ name: 'test' }" active-class="router-style">测试</router-link>
+                    </li>
+                </ul>
+                <div class="nav-right">
+                    <el-icon :size="28" class="el-search" :color="searchColor" @mouseenter="searchColor = '#ff0000'" @mouseleave="searchColor = '#ffffff'">
+                        <search />
+                    </el-icon>
+                    <span class="nav-login">登陆</span>
+                </div>
             </div>
         </div>
     </nav>
@@ -60,7 +62,15 @@ const searchColor = ref<string>('#ffffff');
     }
 }
 
+.nav {
+    width: 100%;
+    height: 80px;
+}
+
 .music-nav {
+    z-index: 99;
+    position: fixed;
+    top: 0px;
     background-color: rgb(8, 15, 49);
     width: 100%; // div宽度占满整个窗口;
     height: 80px;
