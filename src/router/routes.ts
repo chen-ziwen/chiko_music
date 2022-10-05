@@ -29,7 +29,8 @@ const mainRouter = [
                 path: 'discover',
                 name: 'discover',
                 meta: {
-                    title: '发现音乐'
+                    title: '发现音乐',
+                    keepAlive: true,
                 },
                 component: () => import('@/views/discover-music/DiscoverMusic.vue')
 
@@ -97,7 +98,7 @@ const mainRouter = [
                 name: 'sheetlist',
                 meta: {
                     title: '歌单详情',
-                    keepAlive: false,
+                    keepAlive: true,
                 },
                 component: () => import('@/views/sheet-list/SheetList.vue')
 

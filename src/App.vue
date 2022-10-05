@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
@@ -10,7 +8,7 @@
 <style lang="scss">
 @import "@/assets/css/main.css";
 @import "@/assets/css/router.css";
-
 // @import '@/assets/CSS/fonticon/iconfont.css';
 @import '@/assets/CSS/fonts.css';
+
 </style>

@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 
-const playType = {
-    single: 0,
+export const playState = {
+    listloop: 0,
     loop: 1,
-    random: 2
+    random: 2,
 }
 export const usePlay = defineStore({
     id: 'playing',
@@ -20,8 +20,8 @@ export const usePlay = defineStore({
             singer: {},
             // 是否播放
             playing: false,
-            // 音乐三个模式:单曲，循环，随机
-            playType: playType.single,
+            // 音乐三个模式:列表循环，单曲循环，随机
+            playType: playState.listloop,
             // 音乐列表，随机有用，当点击列表时，会把音乐url都传进来
             playList: [] as any[],
             // 当前播放歌曲在列表中的索引值
@@ -41,4 +41,12 @@ export const usePlay = defineStore({
             return state.playList[state.currentindex] || {};
         }
     },
+
+    // dispath 可以同时修改多个，有做优化，同时可以更好区分哪个全局属性
+
+    /* state.$dispath({  
+      count: count+1,
+      name: '陈子文'
+    })
+    */
 })

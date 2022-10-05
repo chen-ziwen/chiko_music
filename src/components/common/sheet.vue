@@ -9,9 +9,9 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
-                <tr v-for="(item,i) in props.sheetList" :key="item.index">
-                    <td>{{ (item.index + '').padStart(2, '0') }}</td>
-                    <td @click="playSong(i)">
+                <tr v-for="item in props.sheetList" :key="item.index">
+                    <td>{{ (item.index + 1 + '').padStart(2, '0') }}</td>
+                    <td @click="playSong(item.index)">
                         <img :src="imgurl(item.image,'35')"><span>{{ item.name }}</span>
                     </td>
                     <td>{{ changeData(item.singer) }}</td>
@@ -24,14 +24,14 @@
 </template>
 
 <script lang='ts' setup>
-import { usePlay } from '@/store/play';
+
 import { formatSecondTime, imgurl } from '@/hook';
 
 interface sheetProps {
     sheetList: any[];
 }
 const props = defineProps<sheetProps>();
-const play = usePlay();
+const emits = defineEmits(['keeylist']);
 
 function changeData(msg: any) {
     if (!msg) {
@@ -40,10 +40,9 @@ function changeData(msg: any) {
     let newData = msg.map((item: any) => item.name)
     return newData.join(' / ')
 }
-// 将列表和当前索引存到仓库中
+// 将当前索引值传递到父组件
 const playSong = (index: number) => {
-    play.currentindex = index;
-    play.playList = props.sheetList;
+    emits("keeylist", index)
 }
 
 </script>

@@ -1,10 +1,10 @@
 <template>
-  <main class="main-music">
+  <div class="main-music">
     <MyNav></MyNav>
     <MyMain></MyMain>
     <MyFooter></MyFooter>
     <ProgressBar></ProgressBar>
-  </main>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -13,11 +13,15 @@ import MyNav from '@/components/my-nav/MyNav.vue';
 import MyMain from '@/components/my-main/MyMain.vue';
 import MyFooter from '@/components/my-footer/MyFooter.vue';
 import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
+import { storeToRefs } from 'pinia';
+import { usePlay } from '@/store/play';
+const { playing } = storeToRefs(usePlay()) // 不可播放歌曲时隐藏
 </script>
 
 <style lang="scss" scoped>
 .main-music {
   background-color: $color;
+
 }
 
 // ::-webkit-scrollbar 滚动条整体部分，可以设置宽度啥的
@@ -35,7 +39,7 @@ import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
 // ::-webkit-resizer 定义右下角拖动块的样式
 
 .main-music::-webkit-scrollbar {
-  width: 6px;
+  width: 0px;
 }
 
 .main-music::-webkit-scrollbar-track {

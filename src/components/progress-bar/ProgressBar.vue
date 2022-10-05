@@ -1,6 +1,6 @@
 <template>
     <div class="progress-bar" v-show="show">
-        <audio ref="audio" autoplay class="audio" :src="currentPlay?.url" @playing="onPlaying" @pause="audioPaused" @error="errorMsg" @timeupdate="timeupdate" :muted="isMuted"></audio>
+        <audio ref="audio" autoplay class="audio" :src="currentPlay?.url" @playing="onPlaying" @pause="audioPaused" @error="errorMsg" @ended="ended" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
                 <el-image class="picture" :src="currentPlay.image" fit="fill">
@@ -13,12 +13,10 @@
 
             <div class="flex-column flex-grow-2 flex-center">
                 <div class="play-btn flex-center">
-                    <i class="iconfont icon-danquxunhuan"></i>
-                    <!-- <i class="iconfont icon-liebiaoxunhuan"></i>
-                    <i class="iconfont icon-suiji"></i> -->
-                    <i class="iconfont icon-shangyiji"></i>
-                    <i class="iconfont play" :class="playing" @click="togglePlay"></i>
-                    <i class="iconfont icon-xiayiji"></i>
+                    <i class="iconfont" :class="[pattern.icon,randomStyle]" :title="pattern.name" @click="changeState"></i>
+                    <i class="iconfont icon-shangyiji" @click="preSong"></i>
+                    <i class="iconfont noshake play" :class="playing" @click="togglePlay"></i>
+                    <i class="iconfont icon-xiayiji" @click="nextSong"></i>
                     <i class="iconfont icon-geciweidianji"></i>
                 </div>
                 <div class="play-bar el-style flex-center flex-row">
@@ -30,17 +28,17 @@
             </div>
 
             <div class="right-box el-style flex-grow-1 flex-jcenter">
-                <i class="iconfont" :class="muted" @click="changeMuted"></i>
+                <i class="iconfont noshake" :class="muted" @click="changeMuted"></i>
                 <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"></el-slider>
             </div>
         </div>
     </div>
 </template>
 <script lang='ts' setup>
-import { ref, watch, computed, reactive, nextTick, onUnmounted } from 'vue';
-import { usePlay } from '@/store/play';
-import { formatSecondTime } from '@/hook';
-import { ElMessage, ElNotification } from 'element-plus';
+import { ref, watch, computed, reactive, nextTick, onUnmounted, onMounted } from 'vue';
+import { usePlay, playState } from '@/store/play';
+import { formatSecondTime, randomNum } from '@/hook';
+import { ElMessage } from 'element-plus';
 
 const play = usePlay();
 // 获取pinia中的存储的当前点击歌曲信息
@@ -63,6 +61,7 @@ const mutedAll = reactive({
 })
 // 音乐资源是能播放
 const noPlay = ref<boolean>(false);
+let timeout: number;
 
 // 获取当前播放的进度，计算出进度条的百分比
 const timeupdate = (e: any) => {
@@ -74,10 +73,50 @@ const timeupdate = (e: any) => {
 const playing = computed(() => play.playing ? "icon-bofang" : "icon-zanting");
 // 切换静音和非静音图标
 const muted = computed(() => isMuted.value ? "icon-jingyin" : "icon-shengyin");
+// 歌曲模式按钮
+const pattern = computed(() => {
+    switch (play.playType) {
+        case 0:
+            return {
+                icon: 'icon-liebiaoxunhuan',
+                name: '列表循环'
+            }
+        case 1:
+            return {
+                icon: 'icon-danquxunhuan',
+                name: '单曲循环'
+            }
+        case 2:
+            return {
+                icon: 'icon-suiji',
+                name: '随机播放'
+            }
+        default:
+            return {
+                icon: 'liebiaoxunhuan',
+                name: '列表循环'
+            }
+    }
+})
+// 切换歌曲播放状态
+const changeState = () => {
+    // 写一下 dispath函数形式的修改方式
+    play.$patch((state) => {
+        state.playType = (state.playType + 1) % 3;
+    });
+}
+
+const randomStyle = computed(() => {
+    if (play.playType == 2) {
+        return 'random'
+    }
+    return '';
+})
 
 // 歌曲能播放的处理
 const onPlaying = () => {
-    noPlay.value = false; // 
+    clearInterval(timeout);  // 关闭定时器
+    noPlay.value = false;
     play.playing = true; // 触发播放
 }
 // 歌曲不能播放时候的处理
@@ -85,13 +124,20 @@ const errorMsg = () => {
     noPlay.value = true;
     play.playing = false;
     // 不可播放的提示
-    ElNotification({
+    ElMessage({
         showClose: true,
-        message: '此歌曲为VIP专属歌曲，不可播放!!!',
+        message: '此歌曲为VIP专属歌曲，不可播放，5s后自动播放下一首!!!',
         type: "warning",
-        duration: 2500,
+        duration: 3500,
     })
+    clearInterval(timeout);
+    // 如果遇到不能播放的音乐，5秒后播放下一首
+    timeout = window.setTimeout(() => {
+        nextSong();
+    }, 5000)
+
 }
+
 // 将歌手姓名数组处理
 const changeData = (msg: any) => {
     if (!msg) {
@@ -101,16 +147,68 @@ const changeData = (msg: any) => {
     return newData.join(' / ')
 }
 
+// 当暂停的时候，将播放状态设置为false
+const audioPaused = () => {
+    play.playing = false; //当歌曲播放完成时也会执行
+}
+// 来回切换播放状态
+const togglePlay = () => {
+    if (noPlay.value) return;
+    play.playing = !play.playing;
+}
+
 // 上一首歌
-
-const preSong = () =>{
-
+const preSong = () => {
+    const len = play.playList.length - 1;
+    play.currentindex -= 1;
+    if (play.currentindex === -1) {
+        play.currentindex = len;
+    }
+    // 当播放状态为false时，让它播放
+    if (!play.playing) {
+        togglePlay();
+    }
 }
 
 // 下一首歌
-const nextSong = ()=>{
-    
+const nextSong = () => {
+    const len = play.playList.length;
+    play.currentindex += 1;
+    if (play.currentindex === len) {
+        play.currentindex = 0;
+    }
+    if (!play.playing) {
+        togglePlay();
+    }
 }
+// 单曲循环
+const loop = () => {
+    if (!audio.value) return;
+    audio.value.currentTime = 0; // 时间归0
+    audio.value.play(); // 重新开始播放
+}
+
+// 歌曲完成时，对当前的音乐状态进行判断
+const ended = () => {
+    const type = play.playType;
+    if (type === playState.loop) {
+        loop(); // 单曲循环直接从头开始播
+    } else if (type === playState.listloop) {
+        nextSong() // 列表循环直接放下一首
+    } else if (type === playState.random) {
+        // 这个随机播放可能会重复，无所谓了，反正也是自己用
+        play.currentindex = randomNum(0, play.playList.length)
+    }
+}
+
+// 拖动进度条触发
+const drapProgress = (val: number) => {
+    if (!audio.value) return;
+    if (noPlay.value) return;
+    audio.value.currentTime = (val / 100) * currentPlay.value.duration;
+    percent.value = val;
+}
+
 // 修改声音大小
 const mutedControl = (bol: boolean, num: number) => {
     if (!audio.value) return;
@@ -133,31 +231,13 @@ const changeVolume = (num: number) => {
     mutedAll.percent = num / 100;
     audio.value.volume = num / 100;
 }
-// 当暂停的时候，将播放状态设置为false
-const audioPaused = () => {
-    play.playing = false; //当歌曲播放完成时也会执行
-}
-// 来回切换播放状态
-const togglePlay = () => {
-    if (noPlay.value) return;
-    play.playing = !play.playing;
-}
 
-// 拖动进度条触发
-const drapProgress = (val: number) => {
-    if (!audio.value) return;
-    if (noPlay.value) return;
-    audio.value.currentTime = (val / 100) * currentPlay.value.duration;
-    percent.value = val;
-}
-// 当播放按钮为暂停时在播放歌曲，那么这个时候点击播放会导致歌曲重复播放
-// 监听播放状态,来切换图标
+// 监听播放状态，判断是否播放或暂停
 watch(() => play.playing, (isPlaying) => {
     if (audio.value) {
         isPlaying ? audio.value.play() : audio.value.pause();
     }
 }, { flush: "post", immediate: true })
-
 
 </script>
 <style lang='scss' scoped>
@@ -191,7 +271,7 @@ watch(() => play.playing, (isPlaying) => {
 
         .left-box {
             display: flex;
-            max-width: 250px;
+            width: 180px;
 
             .picture {
                 flex-shrink: 0;
@@ -233,6 +313,16 @@ watch(() => play.playing, (isPlaying) => {
     color: lightcoral;
     cursor: pointer;
     margin: 0px 16px;
+    transform: translate(0,0);
+    &:not(.noshake) {
+        &:active {
+            transition: all 0.25s;
+            transform: translate(2px,2px);
+        }
+    }
+}
+.random {
+    font-size: 20px;
 }
 
 .play {

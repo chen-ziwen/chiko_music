@@ -32,7 +32,7 @@
                 </div>
             </div>
             <template v-if="sheetDetail.partsheet.length">
-                <sheet :sheetList="sheetDetail.partsheet"></sheet>
+                <sheet :sheetList="sheetDetail.partsheet" @keeylist="keepsheet"></sheet>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
                 <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:currentPage=page />
@@ -84,6 +84,7 @@ import { onMounted, reactive, ref, watch, toRaw } from 'vue';
 import sheet from '@/components/common/sheet.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/listmodule.vue';
+import { usePlay } from '@/store/play';
 
 interface sheetAbout {
     subscribers: Record<string, any>[];
@@ -101,6 +102,7 @@ const router = useRouter();
 const scroll = new ScrollTop().scroll;
 const storage = new useStorage();
 const centerDialog = ref(false);
+const play = usePlay();
 const page = ref<number>(1);
 const sheetAbout = reactive<sheetAbout>({
     subscribers: [],
@@ -131,15 +133,16 @@ async function playlistDetail(id: number) {
     const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
     //给每一首歌添加一个顺序索引
     while (i < songs.length) {
-        songs[i].index = i + 1;
-        delSong.push(useSong(songs[i])) // 处理数据
+        songs[i].index = i;
+        delSong.push(useSong(songs[i])) // 将数据进行过滤和处理
         i++;
     }
 
-    //将大数组切割成指定大小的小数组集合
+    //将大数组切割成指定大小的数组集合
     for (let i = 0; i < delSong.length; i += 50) {
         sheetDetail.sheetList.push(delSong.slice(i, i + 50))
     }
+    // 分页的每一页歌曲
     sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
 }
 
@@ -147,10 +150,8 @@ async function playlistDetail(id: number) {
 async function startSheet(id: number) {
     const { subscribers } = await getPlaylistSubscribers(id, 30);
     const { playlists } = await getRelatedPlaylist(id);
-
     sheetAbout.subscribers = subscribers;  // 歌单收藏
     sheetAbout.aboutList = playlists;  //相关歌单
-
     try {
         const { comments, hotComments } = await getCommentPlaylist(id, 10);
         if (hotComments.length > 0) {
@@ -170,7 +171,7 @@ function choose(val: number) {
     scroll();
 }
 
-// 点击跳转歌单
+// 点击跳转歌单页面
 function turnSheet(id: number) {
     router.push({
         name: 'sheetlist',
@@ -187,6 +188,15 @@ function originContent(id: number) {
         startSheet(id);
         playlistDetail(id);
     }
+}
+// 将当前歌单列表和当前索引值保存到pinia中
+const keepsheet = (index: number) => {
+    // 这边delSong数组得深拷贝一下，不然会有关联，歌单id变化会一起变化
+    const songArr = JSON.parse(JSON.stringify(delSong));
+    play.$patch({
+        currentindex: index,
+        playList: songArr,
+    })
 }
 
 watch(() => route.query.id, () => {
