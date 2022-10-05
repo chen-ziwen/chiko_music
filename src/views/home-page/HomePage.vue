@@ -3,6 +3,7 @@
     <MyNav></MyNav>
     <MyMain></MyMain>
     <MyFooter></MyFooter>
+    <ProgressBar></ProgressBar>
   </main>
 </template>
 
@@ -11,6 +12,7 @@
 import MyNav from '@/components/my-nav/MyNav.vue';
 import MyMain from '@/components/my-main/MyMain.vue';
 import MyFooter from '@/components/my-footer/MyFooter.vue';
+import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
 </script>
 
 <style lang="scss" scoped>

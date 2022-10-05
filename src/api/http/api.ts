@@ -23,7 +23,7 @@ export function getSearchSong(keywords: string, limit?: number, offset?: number,
 /**
  * @function 获取歌曲的播放地址(重要)
  */
-export function getSongUrl(id: string, br?: number) {
+export function getSongUrl(id: number, br?: number) {
     return http.get<any>('/song/url', { id, br })
 }
 

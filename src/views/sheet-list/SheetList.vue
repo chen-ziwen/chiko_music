@@ -31,7 +31,7 @@
                     </ul>
                 </div>
             </div>
-            <template v-if="sheetDetail.partsheet">
+            <template v-if="sheetDetail.partsheet.length">
                 <sheet :sheetList="sheetDetail.partsheet"></sheet>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
@@ -78,9 +78,9 @@ import {
     getCommentPlaylist,
     getPlaylistSubscribers,
 } from '@/api/http/api';
-import { ScrollTop, useStorage } from '@/hook';
+import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
 import { useRoute, useRouter } from 'vue-router';
-import { onMounted, reactive, ref, watch, toRefs, toRaw } from 'vue';
+import { onMounted, reactive, ref, watch, toRaw } from 'vue';
 import sheet from '@/components/common/sheet.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/listmodule.vue';
@@ -114,18 +114,12 @@ const sheetDetail = reactive<sheetDetail>({
     sheetList: [],
     partsheet: [],
 });
-
-function imgurl(url: string) {
-    if (!url) {
-        return '/assets/images/ava.jpeg';
-    }
-    return url + '? param = 100y100';
-}
+const delSong = reactive<Record<string, any>[]>([]);
 
 async function playlistDetail(id: number) {
     // 先将歌单列表数组清空
     sheetDetail.sheetList.length = 0;
-
+    delSong.length = 0;
     let nowTime = new Date().getTime();
     let i = 0;
     const { playlist } = await getPlaylistDetail(id, 50, nowTime);
@@ -138,11 +132,13 @@ async function playlistDetail(id: number) {
     //给每一首歌添加一个顺序索引
     while (i < songs.length) {
         songs[i].index = i + 1;
-        i++
+        delSong.push(useSong(songs[i])) // 处理数据
+        i++;
     }
+
     //将大数组切割成指定大小的小数组集合
-    for (let i = 0; i < songs.length; i += 50) {
-        sheetDetail.sheetList.push(songs.slice(i, i + 50))
+    for (let i = 0; i < delSong.length; i += 50) {
+        sheetDetail.sheetList.push(delSong.slice(i, i + 50))
     }
     sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
 }
@@ -163,7 +159,7 @@ async function startSheet(id: number) {
             sheetAbout.comments = comments;
         }
     } catch (e) {
-        // console.error('/comment/playlist,接口请求繁忙');
+        console.error('请求繁忙', e);
     }
 }
 //控制分页功能

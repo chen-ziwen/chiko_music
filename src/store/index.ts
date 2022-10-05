@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 // 第一个参数：容器的id，将来Pinia会把所有的容器挂载到根容器
 //第二个参数：选项对象
 //返回值是一个函数，调用返回实例
-const useStore = defineStore('main', {
+export const useStore = defineStore('main', {
     /**
    * 1.必须是函数，这样是为了在服务端渲染时避免交叉请求导致数据状态污染
    * 2.必须是箭头函数，这样是为了更好的TS类型推导
@@ -38,6 +38,9 @@ const useStore = defineStore('main', {
             this.count += num
             this.use = '学会了吗'
         },
+        cName(name: string) {
+            this.name = name
+        }
     },
 })
 //2.使用容器中的state

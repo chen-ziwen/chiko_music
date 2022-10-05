@@ -3,8 +3,8 @@
 </template>
 
 <script lang="ts" setup>
-import { usePlay } from '@/store/play';
-const play = usePlay();
+import { useStore } from '@/store/index';
+const play = useStore();
 play.$patch({
     name: '陈孜孜',
     age: 25,

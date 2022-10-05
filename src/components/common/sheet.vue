@@ -9,32 +9,41 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
-                <tr v-for="item in props.sheetList" :key="item.index">
+                <tr v-for="(item,i) in props.sheetList" :key="item.index">
                     <td>{{ (item.index + '').padStart(2, '0') }}</td>
-                    <td>
-                        <img :src="item.al.picUrl + '?param=35y35'"><span>{{ item.name }}</span>
+                    <td @click="playSong(i)">
+                        <img :src="imgurl(item.image,'35')"><span>{{ item.name }}</span>
                     </td>
-                    <td>{{ changeData(item.ar) }}</td>
-                    <td>{{ item.al?.name }}</td>
-                    <td>{{ changetime(item.dt) }}</td>
+                    <td>{{ changeData(item.singer) }}</td>
+                    <td>{{ item.album }}</td>
+                    <td>{{ formatSecondTime(item.duration) }}</td>
                 </tr>
             </thead>
-            <!-- <tbody></tbody> -->
         </table>
     </div>
 </template>
 
 <script lang='ts' setup>
-import { ref, reactive, onMounted, watch } from 'vue';
-import { changetime } from '@/hook'
+import { usePlay } from '@/store/play';
+import { formatSecondTime, imgurl } from '@/hook';
 
 interface sheetProps {
     sheetList: any[];
 }
 const props = defineProps<sheetProps>();
-function changeData(msg: any[]) {
-    let newData = msg.map(item => item.name)
+const play = usePlay();
+
+function changeData(msg: any) {
+    if (!msg) {
+        return '暂无数据'
+    }
+    let newData = msg.map((item: any) => item.name)
     return newData.join(' / ')
+}
+// 将列表和当前索引存到仓库中
+const playSong = (index: number) => {
+    play.currentindex = index;
+    play.playList = props.sheetList;
 }
 
 </script>

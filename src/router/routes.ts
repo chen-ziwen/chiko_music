@@ -39,7 +39,7 @@ const mainRouter = [
                 name: 'singer',
                 meta: {
                     title: '歌手',
-                    keepAlive: true
+                    keepAlive: false
                 },
                 component: () => import('@/views/singer/Singer.vue')
             },
@@ -48,7 +48,7 @@ const mainRouter = [
                 name: 'songsheet',
                 meta: {
                     title: '歌单',
-                    keepAlive: true
+                    keepAlive: false
                 },
                 component: () => import('@/views/song-sheet/SongSheet.vue')
 
@@ -58,7 +58,7 @@ const mainRouter = [
                 name: 'ranklist',
                 meta: {
                     title: '排行版',
-                    keepAlive: true
+                    keepAlive: false
                 },
                 component: () => import('@/views/rank-list/RankList.vue')
 
@@ -68,7 +68,7 @@ const mainRouter = [
                 name: 'mv',
                 meta: {
                     title: 'mv',
-                    keepAlive: true
+                    keepAlive: false
                 },
                 component: () => import('@/views/mv/Mv.vue')
 
@@ -78,7 +78,7 @@ const mainRouter = [
                 name: 'newdisc',
                 meta: {
                     title: '新碟',
-                    keepAlive: true
+                    keepAlive: false
                 },
                 component: () => import('@/views/new-disc/NewDisc.vue')
 

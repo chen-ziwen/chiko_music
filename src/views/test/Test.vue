@@ -15,7 +15,7 @@
       </div>
       <!-- <div v-for="(a, index) in getS" :key="index">{{ a.songs[index].name }}</div> -->
 
-      <audio v-show="songsUrl" controls autoplay :src="songsUrl" class="audio"></audio>
+      <audio ref="audio" @timeupdate="updateTime" v-show="songsUrl" controls autoplay :src="songsUrl" class="audio"></audio>
       <video v-show="videoUrl" :src="videoUrl" width="520" height="400" controls autoplay class="video"></video>
       <ul class="uls">
         <li v-for="(talk, index) in musicTalk.hot" :key="index" :style="{ listStyle: 'none' }">{{ talk.content }}</li>
@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, computed } from "vue";
+import { watch, onMounted, reactive, ref, computed, onUnmounted } from "vue";
 import {
   getSearchHotDetail,
   getSearchSong,
@@ -52,9 +52,11 @@ const getRecommend = ref<RecommendList[]>();
 const mvName = ref<string>("");
 const songsUrl = ref<string>("");
 const videoUrl = ref<string>("");
+const audio = ref<HTMLAudioElement>();
 const musicTalk = reactive<{ hot: { content: string }[] }>({
   hot: [{ content: "" }],
 });
+const currentTime = ref<number>(0)
 async function songsList() {
   let { data } = await getSearchHotDetail(); //右边的式子的值等于promise成功状态下reslove(res) 中的res
   let abc = await [data, "我变得好奇怪"];
@@ -124,12 +126,23 @@ async function displaySong() {
   let srl = await getSongUrl(songsId);
   let { comments, hotComments } = await getCommentMusic(songsId);
   songsUrl.value = srl.data[0].url;
+  console.log('歌曲信息', srl.data, result, currentTime.value);
+
   console.log("你好我i你", songsUrl.value, comments, hotComments);
   musicTalk.hot = hotComments;
   if (!songsUrl.value) {
     alert("暂无该资源");
   }
 }
+
+//监听时间的变化
+function updateTime(e: any) {
+  console.log('time', e.target.currentTime, currentTime.value);
+}
+onUnmounted(() => {
+  console.log('666销毁了');
+
+})
 </script>
 
 <style lang="scss" scoped>

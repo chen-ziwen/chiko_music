@@ -7,9 +7,6 @@
       </keep-alive>
       <component :is="Component" :key="$route.name" v-if="!$route.meta.keepAlive" />
     </router-view>
-    <!-- <div class="chat">
-      <span>QQ/2452559902</span>
-    </div>-->
   </article>
 </template>
 
@@ -19,8 +16,10 @@
 <style lang="scss" scoped>
 .music-main {
   background-color: $color;
-  min-height: 1000px;
+  // 上下的盒子宽高各是80px，所以中间盒子的最小宽度设置为100vh - 160px 就能做到完美适应
+  min-height: calc(100vh - 160px);
 }
+
 .chat {
   position: fixed;
   left: 50px;
@@ -32,10 +31,12 @@
   width: 24px;
   height: 300px;
   background-color: pink;
+
   &:hover {
     background-color: lightblue;
     transition: all 1.5s ease-in-out;
   }
+
   span {
     display: block;
     width: 10px;
