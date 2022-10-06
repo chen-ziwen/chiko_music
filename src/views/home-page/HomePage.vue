@@ -3,7 +3,9 @@
     <MyNav></MyNav>
     <MyMain></MyMain>
     <MyFooter></MyFooter>
-    <ProgressBar></ProgressBar>
+    <Transition name="pop">
+      <ProgressBar v-show="barShow"></ProgressBar>
+    </Transition>
   </div>
 </template>
 
@@ -15,7 +17,18 @@ import MyFooter from '@/components/my-footer/MyFooter.vue';
 import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
 import { storeToRefs } from 'pinia';
 import { usePlay } from '@/store/play';
-const { playing } = storeToRefs(usePlay()) // 不可播放歌曲时隐藏
+import { watch } from 'vue';
+const { currentindex, barShow } = storeToRefs(usePlay()) // 不可播放歌曲时隐藏
+
+// 监听歌曲数据是否为空，为空的话，不显示音乐组件
+watch(() => currentindex.value, (num: number) => {
+  if (num >= 0) {
+    barShow.value = true;
+  } else {
+    barShow.value = false;
+  }
+}, { immediate: true })
+
 </script>
 
 <style lang="scss" scoped>
@@ -38,11 +51,14 @@ const { playing } = storeToRefs(usePlay()) // 不可播放歌曲时隐藏
 
 // ::-webkit-resizer 定义右下角拖动块的样式
 
-.main-music::-webkit-scrollbar {
-  width: 0px;
+//出现时弹出
+.pop-enter-active,
+.pop-leave-active {
+  transition: all 0.5s ease-in-out;
 }
 
-.main-music::-webkit-scrollbar-track {
-  background: red;
+.pop-enter-from,
+.pop-leave-to {
+  transform: translateY(80px);
 }
 </style>

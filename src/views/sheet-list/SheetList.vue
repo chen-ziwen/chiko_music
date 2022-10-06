@@ -26,13 +26,13 @@
                             </el-dialog>
                         </li>
                         <li>
-                            <span>播放全部</span>
+                            <span @click="playAll">播放全部</span>
                         </li>
                     </ul>
                 </div>
             </div>
             <template v-if="sheetDetail.partsheet.length">
-                <sheet :sheetList="sheetDetail.partsheet" @keeylist="keepsheet"></sheet>
+                <SongList :sheetList="sheetDetail.partsheet" @keeylist="keepsheet"></SongList>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
                 <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:currentPage=page />
@@ -81,10 +81,10 @@ import {
 import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
 import { useRoute, useRouter } from 'vue-router';
 import { onMounted, reactive, ref, watch, toRaw } from 'vue';
-import sheet from '@/components/common/sheet.vue';
+import SongList from '@/components/common/SongList.vue';
 import dayjs from 'dayjs';
-import ListModule from '@/components/common/listmodule.vue';
-import { usePlay } from '@/store/play';
+import ListModule from '@/components/common/ListModule.vue';
+import { usePlay, playState } from '@/store/play';
 
 interface sheetAbout {
     subscribers: Record<string, any>[];
@@ -196,6 +196,16 @@ const keepsheet = (index: number) => {
     play.$patch({
         currentindex: index,
         playList: songArr,
+    })
+}
+
+// 播放全部
+const playAll = () => {
+    const songArr = JSON.parse(JSON.stringify(delSong));
+    play.$patch({
+        currentindex: 0, // 从第一首开始放
+        playList: songArr,
+        playType: playState.listloop, // 列表循环
     })
 }
 
@@ -348,15 +358,18 @@ watch(() => route.query.id, () => {
 
                             >span {
                                 display: inline-block;
-                                padding: 3px 8px;
+                                padding: 6px 15px;
                                 margin: 10px 15px 0px 0px;
-                                font-size: 18px;
+                                font-size: 16px;
                                 cursor: pointer;
                                 opacity: 0.85;
                                 filter: invert(5%);
                                 border-radius: 8px;
                                 color: white;
                                 background-color: red;
+                                &:hover {
+                                    color: rgb(250, 125, 144);
+                                }
                             }
                         }
                     }

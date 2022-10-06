@@ -9,10 +9,14 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
-                <tr v-for="item in props.sheetList" :key="item.index">
-                    <td>{{ (item.index + 1 + '').padStart(2, '0') }}</td>
-                    <td @click="playSong(item.index)">
-                        <img :src="imgurl(item.image,'35')"><span>{{ item.name }}</span>
+                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index)" @click="playSong(item.index)">
+                    <td>
+                        <span class="sheet-index">{{ (item.index + 1 + '').padStart(2, '0') }}</span>
+                        <i class="iconfont icon-show" :class="playing(item.index)"></i>
+                    </td>
+                    <td>
+                        <img :src="imgurl(item.image,'35')">
+                        <span>{{ item.name }}</span>
                     </td>
                     <td>{{ changeData(item.singer) }}</td>
                     <td>{{ item.album }}</td>
@@ -24,14 +28,16 @@
 </template>
 
 <script lang='ts' setup>
-
 import { formatSecondTime, imgurl } from '@/hook';
+import { usePlay } from '@/store/play';
 
 interface sheetProps {
     sheetList: any[];
 }
 const props = defineProps<sheetProps>();
 const emits = defineEmits(['keeylist']);
+const play = usePlay();
+
 
 function changeData(msg: any) {
     if (!msg) {
@@ -40,10 +46,29 @@ function changeData(msg: any) {
     let newData = msg.map((item: any) => item.name)
     return newData.join(' / ')
 }
-// 将当前索引值传递到父组件
+
+const playing = (index: number) => {
+    if (index === play.currentindex && play.playing) {
+        return "icon-bofang"
+    }
+    return "icon-zanting"
+};
+
+const checked = (index: number) => {
+    if (index === play.currentindex) {
+        return 'checked'
+    }
+    return;
+}
+
+// 将当前索引值传递到父组件,当索引值相同时则反复切换
 const playSong = (index: number) => {
+    if (index === play.currentindex) {
+        play.playing = !play.playing;
+    }
     emits("keeylist", index)
 }
+
 
 </script>
 
@@ -62,7 +87,15 @@ const playSong = (index: number) => {
         thead {
             display: block;
             width: 100%;
-
+            // 移入时隐藏数字，显示图标
+           .sheet-list {
+            &:hover .sheet-index {
+                display: none;
+            }
+            &:hover .icon-show {
+                display: inline-block;
+            }
+           }
             tr {
                 display: flex;
                 width: 100%;
@@ -100,9 +133,17 @@ const playSong = (index: number) => {
                     &:first-child {
                         width: 8%;
                         text-align: center;
+                        .icon-show {
+                            display: none;
+                            font-size: 20px;
+                            color: #ef4b4b;
+                        }
+                        
                     }
 
                     &:nth-child(2) {
+                        display: flex;
+                        align-items: center;
                         text-align: start;
                         width: 35%;
 
@@ -112,6 +153,11 @@ const playSong = (index: number) => {
                             vertical-align: middle;
                             margin-right: 10px;
                             border-radius: 5px;
+                        }
+                        span {
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            overflow:hidden
                         }
 
                     }
@@ -161,5 +207,10 @@ const playSong = (index: number) => {
         }
     }
 
+}
+.checked {
+    >td {
+        color: red;
+    }
 }
 </style>

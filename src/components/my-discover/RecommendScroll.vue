@@ -44,7 +44,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 .recommend-scroll {
     margin-top: 25px;
-    // cursor: text;
 }
 
 .image-slot {

@@ -58,8 +58,8 @@ const mainRouter = [
                 path: 'ranklist',
                 name: 'ranklist',
                 meta: {
-                    title: '排行版',
-                    keepAlive: false
+                    title: '排行榜',
+                    keepAlive: true
                 },
                 component: () => import('@/views/rank-list/RankList.vue')
 

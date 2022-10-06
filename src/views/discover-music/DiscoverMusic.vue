@@ -6,41 +6,79 @@
         </div>
         <!-- 歌曲 -->
         <div class="song">
-            <RecommendNew></RecommendNew>
+            <Recommend title="新歌首发">
+                <template v-if="newsong&&newsong.length>0">
+                    <NewSongSheet :new-sheet="newsong"></NewSongSheet>
+                </template>
+            </Recommend>
         </div>
         <!-- 歌单 -->
         <div class="sheet" v-if="sheetlist">
-            <!-- 当sheet不为undefined时才渲染 -->
-            <RecommendSheet :sheetList="sheetlist" titlename="推荐歌单"></RecommendSheet>
+            <Recommend title="推荐歌单">
+                <template v-if="sheetlist&&sheetlist.length>0">
+                    <SongSheet :sheet="sheetlist"></SongSheet>
+                </template>
+            </Recommend>
         </div>
         <!-- 歌手 -->
         <div class="singer">
-            <RecommendSinger></RecommendSinger>
+            <Recommend title="推荐歌手">
+                <template v-if="artist&&artist.length>0">
+                    <SingerSheet :singer-list="artist"></SingerSheet>
+                </template>
+            </Recommend>
         </div>
         <!-- MV -->
         <div class="mv">
-            <RecommendMv></RecommendMv>
+            <Recommend title="推荐MV">
+                <template v-if="recommendMv&&recommendMv.length>0">
+                    <MvSheet :mv-sheet="recommendMv"></MvSheet>
+                </template>
+            </Recommend>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-//可以不导入 会自动导入 但是导入了比较好跳转
-import { onMounted, reactive, ref } from "vue";
-import RecommendNew from '@/components/my-discover/RecommendNew.vue';
-import RecommendSheet from '@/components/my-discover/RecommendSheet.vue';
-import RecommendSinger from '@/components/my-discover/RecommendSinger.vue';
-import RecommendMv from '@/components/my-discover/RecommendMv.vue';
+import { onMounted, ref } from "vue";
 import RecommendScroll from '@/components/my-discover/RecommendScroll.vue';
-import type { RecommendList } from "@/models/detail";
-import { getRecommendList } from '@/api/http/api';
+import Recommend from "@/components/my-discover/Recommend.vue";
+import SongSheet from "@/components/common/SongSheet.vue";
+import SingerSheet from "@/components/common/SingerSheet.vue";
+import NewSongSheet from "@/components/common/NewSongSheet.vue";
+import MvSheet from "@/components/common/MvSheet.vue";
+import { getRecommendList, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
+import type { RecommendList, TopArtists, Newsong } from "@/models/detail";
 
 const sheetlist = ref<RecommendList[]>();
+const artist = ref<TopArtists[]>();
+const newsong = ref<Newsong[]>();
+const recommendMv = ref<any>();
+
 async function getRecommend() {
     let { result } = await getRecommendList(32);
     sheetlist.value = result;
 }
-onMounted(() => { getRecommend() });
+async function topArtists() {
+    let { artists } = await getTopArtists(40);
+    artist.value = artists;
+}
+function Personalized() {
+    getPersonalizedNewsong(12).then(res => {
+        newsong.value = res.result;
+    });
+}
+async function PersonalizedMv() {
+    let { result } = await getPersonalizedMv();
+    recommendMv.value = result
+};
+
+onMounted(() => {
+    getRecommend();
+    topArtists();
+    Personalized();
+    PersonalizedMv();
+});
 </script>
 
 <style lang="scss" scoped>

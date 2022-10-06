@@ -12,3 +12,11 @@ export function randomNum(min: number, max: number) {
     return num;
 }
 
+// 最多显示三个歌手名
+export function changeData(msg: { name: string }[]) {
+    let newarr = msg.map(item => {
+        return item.name;
+    }).slice(0, 3).join("\n");
+    return newarr;
+}
+

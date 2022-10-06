@@ -76,6 +76,22 @@ export function getArtistDesc(id: number) {
 }
 
 /**
+ * @function 调用此接口,可获取所有榜单
+ */
+export function getToplist() {
+    return http.get<any>('/toplist')
+}
+
+// 榜单详情
+/**
+ * @function 请使用[歌单详情](#获取歌单详情)接口,传入排行榜 id 获取排行榜详情数据(排行榜也是歌单的一种)
+ * @param id 榜单id
+ */
+export function getToplistDetailAll(id: number) {
+    return http.get<any>('/top/list', { id })
+}
+
+/**
  * @function 所有榜单内容摘要(调用此接口,可获取所有榜单内容摘要)
  * @param type 1:华语 2.欧美 3.韩国 4.日本
  */

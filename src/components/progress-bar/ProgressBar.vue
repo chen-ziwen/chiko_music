@@ -1,5 +1,5 @@
 <template>
-    <div class="progress-bar" v-show="show">
+    <div class="progress-bar" v-if="Object.keys(currentPlay).length > 0">
         <audio ref="audio" autoplay class="audio" :src="currentPlay?.url" @playing="onPlaying" @pause="audioPaused" @error="errorMsg" @ended="ended" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
@@ -12,7 +12,7 @@
             </div>
 
             <div class="flex-column flex-grow-2 flex-center">
-                <div class="play-btn flex-center">
+                <div class="play-btn flex-acenter">
                     <i class="iconfont" :class="[pattern.icon,randomStyle]" :title="pattern.name" @click="changeState"></i>
                     <i class="iconfont icon-shangyiji" @click="preSong"></i>
                     <i class="iconfont noshake play" :class="playing" @click="togglePlay"></i>
@@ -29,7 +29,7 @@
 
             <div class="right-box el-style flex-grow-1 flex-jcenter">
                 <i class="iconfont noshake" :class="muted" @click="changeMuted"></i>
-                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"></el-slider>
+                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="true" size="small"></el-slider>
             </div>
         </div>
     </div>
@@ -46,7 +46,6 @@ const currentPlay = computed(() => {
     return play.currentPlay;
 })
 
-const show = ref<boolean>(true);
 // audio 元素
 const audio = ref<HTMLAudioElement>();
 // 当前时间和进度条百分比
@@ -59,7 +58,7 @@ const mutedAll = reactive({
     percent: 0.3,
     volume: 30,
 })
-// 音乐资源是能播放
+// 音乐资源是否能播放
 const noPlay = ref<boolean>(false);
 let timeout: number;
 
@@ -256,7 +255,9 @@ watch(() => play.playing, (isPlaying) => {
         margin: 0 auto;
 
         .play-btn {
-            padding: 8px;
+            padding: 6px 6px 10px 6px;
+            width:360px;
+            box-sizing: border-box;
         }
 
         .play-bar {
@@ -271,7 +272,7 @@ watch(() => play.playing, (isPlaying) => {
 
         .left-box {
             display: flex;
-            width: 180px;
+            width: 130px;
 
             .picture {
                 flex-shrink: 0;
@@ -309,10 +310,11 @@ watch(() => play.playing, (isPlaying) => {
 }
 
 .iconfont {
+    width: 20%;
     font-size: 24px;
     color: lightcoral;
     cursor: pointer;
-    margin: 0px 16px;
+   text-align: center;
     transform: translate(0,0);
     &:not(.noshake) {
         &:active {

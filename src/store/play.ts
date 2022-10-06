@@ -26,8 +26,7 @@ export const usePlay = defineStore({
             playList: [] as any[],
             // 当前播放歌曲在列表中的索引值
             currentindex: -1,
-
-
+            // 歌曲插件是否显示
         }
     },
     // action类似于methods action可以传递参数，去修改state的值，同时可以进行异步的操作
