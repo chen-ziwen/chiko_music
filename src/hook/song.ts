@@ -3,10 +3,10 @@ import { formatSecond, imgurl } from '@/hook';
 
 interface SongList {
     id: number;
-    singer: string;
+    singer: any[];
     name: string;
     album: string;
-    duration: number | string;
+    duration: number;
     image: string;
     url: string;
     playCount: string | number;

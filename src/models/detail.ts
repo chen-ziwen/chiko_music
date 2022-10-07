@@ -9,8 +9,17 @@ export interface SearchHotDetail {
     url: string;
 }
 
-export interface SearchSong {
-
+export interface SongList {
+    id: number;
+    singer: any[];
+    name: string;
+    album: string;
+    duration: number;
+    image: string;
+    url: string;
+    playCount: string | number;
+    score: string | number;
+    index: number;
 }
 
 export interface RecommendList {
@@ -23,8 +32,10 @@ export interface RecommendList {
     coverImgUrl: string;
     playCount: number;
     trackCount: number;
+    songList: SongList[];
     trackNumberUpdateTime: number;
     type: number;
+    // [x: string]: any;
 
 }
 

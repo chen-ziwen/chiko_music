@@ -9,7 +9,7 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
-                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index)" @click="playSong(item.index)">
+                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index,item.id)" @click="playSong(item.index)">
                     <td>
                         <span class="sheet-index">{{ (item.index + 1 + '').padStart(2, '0') }}</span>
                         <i class="iconfont icon-show" :class="playing(item.index)"></i>
@@ -29,10 +29,11 @@
 
 <script lang='ts' setup>
 import { formatSecondTime, imgurl } from '@/hook';
+import type { SongList } from "@/models/detail"
 import { usePlay } from '@/store/play';
 
 interface sheetProps {
-    sheetList: any[];
+    sheetList: SongList[];
 }
 const props = defineProps<sheetProps>();
 const emits = defineEmits(['keeylist']);
@@ -54,8 +55,8 @@ const playing = (index: number) => {
     return "icon-zanting"
 };
 
-const checked = (index: number) => {
-    if (index === play.currentindex) {
+const checked = (index: number, id: number) => {
+    if (index === play.currentindex && id === play.currentPlay.id) {
         return 'checked'
     }
     return;

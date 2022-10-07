@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
+import type { SongList } from "@/models/detail";
 
 export const playState = {
     listloop: 0,
     loop: 1,
     random: 2,
 }
+
 export const usePlay = defineStore({
     id: 'playing',
     state: () => {
@@ -23,7 +25,7 @@ export const usePlay = defineStore({
             // 音乐三个模式:列表循环，单曲循环，随机
             playType: playState.listloop,
             // 音乐列表，随机有用，当点击列表时，会把音乐url都传进来
-            playList: [] as any[],
+            playList: [] as SongList[],
             // 当前播放歌曲在列表中的索引值
             currentindex: -1,
             // 歌曲插件是否显示

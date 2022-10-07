@@ -28,14 +28,14 @@
             </div>
 
             <div class="right-box el-style flex-grow-1 flex-jcenter">
-                <i class="iconfont noshake" :class="muted" @click="changeMuted"></i>
+                <i class="iconfont audio noshake" :class="muted" @click="changeMuted"></i>
                 <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="true" size="small"></el-slider>
             </div>
         </div>
     </div>
 </template>
 <script lang='ts' setup>
-import { ref, watch, computed, reactive, nextTick, onUnmounted, onMounted } from 'vue';
+import { ref, watch, computed, reactive } from 'vue';
 import { usePlay, playState } from '@/store/play';
 import { formatSecondTime, randomNum } from '@/hook';
 import { ElMessage } from 'element-plus';
@@ -303,6 +303,9 @@ watch(() => play.playing, (isPlaying) => {
             width: 80px;
             align-items: flex-end;
             padding-bottom: 10px;
+            .audio {
+                margin-right: 10px;
+            }
         }
 
     }

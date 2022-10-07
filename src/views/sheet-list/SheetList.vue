@@ -80,7 +80,7 @@ import {
 } from '@/api/http/api';
 import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
 import { useRoute, useRouter } from 'vue-router';
-import { onMounted, reactive, ref, watch, toRaw } from 'vue';
+import { reactive, ref, watch, toRaw } from 'vue';
 import SongList from '@/components/common/SongList.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/ListModule.vue';

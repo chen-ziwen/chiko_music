@@ -59,5 +59,5 @@ export function formatSecond(time: number) {
         var s = ~~((time % (1000 * 60)) / 1000)
         secondTime = Number(m * 60 + s)
     }
-    return secondTime
+    return secondTime as number;
 }

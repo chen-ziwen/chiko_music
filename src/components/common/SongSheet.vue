@@ -26,9 +26,11 @@ interface SongSheet {
 const props = withDefaults(defineProps<SongSheet>(), {
     textdir: 'start',
 });
+const emits = defineEmits(['sheetid'])
 const router = useRouter();
 // 返回id
 const sheetid = (id: number) => {
+    emits("sheetid", id)
     router.push({ name: 'sheetlist', query: { id } })
 }
 </script>
@@ -41,6 +43,7 @@ ul {
     margin: 10px 15px 10px 15px;
     vertical-align: top;
     cursor: pointer;
+    
 
     span {
         display: inline-block;
@@ -57,7 +60,8 @@ ul {
         min-height: 125px;
         width: 100%;
         height: 100%;
-        border-radius: 5px
+        border-radius: 5px;
+        box-shadow: 4px 4px 6px grey;
      }
   }
 }
