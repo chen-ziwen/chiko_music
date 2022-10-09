@@ -38,36 +38,38 @@ const sheetid = (id: number) => {
 <style lang='scss' scoped>
 ul {
     li {
-    display: inline-block;
-    width: calc(12.5% - 30px); // 分8块
-    margin: 10px 15px 10px 15px;
-    vertical-align: top;
-    cursor: pointer;
-    
-
-    span {
         display: inline-block;
-        font: {
-            size: 16px;
-            weight: 700;
-            family: Arial, Helvetica, sans-serif;
+        width: calc(12.5% - 30px); // 分8块
+        margin: 10px 15px 10px 15px;
+        vertical-align: top;
+        cursor: pointer;
+
+
+        span {
+            display: inline-block;
+
+            font: {
+                size: 16px;
+                weight: 700;
+                family: Arial, Helvetica, sans-serif;
+            }
+
+            width: 100%;
+            text-align: v-bind(textdir);
         }
-        width: 100%;
-        text-align: v-bind(textdir);
-     }
-     .sheet-pic {
-        min-width: 125px;
-        min-height: 125px;
-        width: 100%;
-        height: 100%;
-        border-radius: 5px;
-        box-shadow: 4px 4px 6px grey;
-     }
-  }
+
+        .sheet-pic {
+            min-width: 125px;
+            min-height: 125px;
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            box-shadow: 4px 4px 6px grey;
+        }
+    }
 }
 
 .image-slot {
     @include _imgslot(125px, 125px, 30px);
 }
-
 </style>

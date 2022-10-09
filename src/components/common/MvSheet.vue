@@ -34,57 +34,58 @@ const props = defineProps<MvSheet>();
 </script>
 <style lang='scss' scoped>
 ul {
-            li {
-                display: inline-block;
-                box-sizing: border-box;
-                width: 50%;
-                padding: 10px 15px 10px 15px;
-                // vertical-align: top;
-                cursor: pointer;
+    li {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 50%;
+        padding: 10px 15px 10px 15px;
+        // vertical-align: top;
+        cursor: pointer;
+
+        span {
+            display: inline-block;
+
+            font: {
+                size: 16px;
+                weight: 700;
+                family: Arial, Helvetica, sans-serif;
+            }
+        }
+
+        .newsong {
+            display: flex;
+
+            .newsong-text {
+                flex-grow: 1;
+                flex-direction: column;
+                @include _flex(center, flex-start);
+                flex-wrap: wrap;
+                margin-left: 25px;
+                white-space: pre-wrap; //允许换行
 
                 span {
-                    display: inline-block;
+                    &:nth-child(1) {
+                        padding-bottom: 20px;
+                    }
 
-                    font: {
-                        size: 16px;
-                        weight: 700;
-                        family: Arial, Helvetica, sans-serif;
+                    &:nth-child(2) {
+                        padding-bottom: 5px;
+                        font-size: 16px;
+                        font-weight: 400;
+                        color: rgb(238, 109, 109);
                     }
                 }
 
-                .newsong {
-                    display: flex;
-
-                    .newsong-text {
-                        flex-grow: 1;
-                        flex-direction: column;
-                        @include _flex(center, flex-start);
-                        flex-wrap: wrap;
-                        margin-left: 25px;
-                        white-space: pre-wrap; //允许换行
-
-                        span {
-                            &:nth-child(1) {
-                                padding-bottom: 20px;
-                            }
-
-                            &:nth-child(2) {
-                                padding-bottom: 5px;
-                                font-size: 16px;
-                                font-weight: 400;
-                                color: rgb(238, 109, 109);
-                            }
-                        }
-
-                        &-time {
-                            margin: auto 0;
-                            color: rgb(125, 162, 197);
-                        }
-                    }
+                &-time {
+                    margin: auto 0;
+                    color: rgb(125, 162, 197);
                 }
             }
         }
-        .image-slot {
+    }
+}
+
+.image-slot {
     @include _imgslot(120px, 120px, 18px);
 }
 </style>

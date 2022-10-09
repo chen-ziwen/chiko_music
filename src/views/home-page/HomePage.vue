@@ -4,7 +4,7 @@
     <MyMain></MyMain>
     <MyFooter></MyFooter>
     <Transition name="pop">
-      <ProgressBar v-show="barShow"></ProgressBar>
+      <ProgressBar v-if="barShow"></ProgressBar>
     </Transition>
   </div>
 </template>

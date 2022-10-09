@@ -17,18 +17,19 @@ const props = withDefaults(defineProps<Recommend>(), {
 </script>
 <style lang='scss' scoped>
 .recommend {
- background-color: $color;
- width: $width;
- margin: 0 -15px;
- .recomend-head {
-.m-title {
-    display: inline-block;
-    text-align: start;
-   margin: $margin_I;
-   font-size: 26px;
-   font-weight: 700;
-   font-family: Arial, Helvetica, sans-serif;
-}
- }
+    background-color: $color;
+    width: $width;
+    margin: 0 -15px;
+
+    .recomend-head {
+        .m-title {
+            display: inline-block;
+            text-align: start;
+            margin: $margin_I;
+            font-size: 26px;
+            font-weight: 700;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+    }
 }
 </style>

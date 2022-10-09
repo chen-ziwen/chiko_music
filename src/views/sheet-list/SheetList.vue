@@ -367,6 +367,7 @@ watch(() => route.query.id, () => {
                                 border-radius: 8px;
                                 color: white;
                                 background-color: red;
+
                                 &:hover {
                                     color: rgb(250, 125, 144);
                                 }

@@ -32,18 +32,20 @@ const props = defineProps<SingerSheet>();
 </script>
 <style lang='scss' scoped>
 ul {
-     li {
+    li {
         display: inline-block;
         box-sizing: border-box;
         width: 10%;
         padding: 0px 15px 15px 15px;
         vertical-align: top;
         cursor: pointer;
+
         .singer-message {
             width: 100%;
             flex-direction: column;
             @include _flex(center, center);
-            > span {
+
+            >span {
                 display: inline-block;
                 width: 100px;
                 text-align: center;
@@ -52,28 +54,33 @@ ul {
                 overflow: hidden;
                 text-overflow: ellipsis;
                 margin-top: 6px;
+
                 &:first-of-type {
                     color: rgb(67, 66, 66);
+
                     font: {
                         size: 18px;
                         weight: 700;
                         family: Arial, Helvetica, sans-serif;
                     }
-                 }
+                }
+
                 font: {
-                            size: 14px;
-                            family: Arial, Helvetica, sans-serif;
-                        }
-                        span {
-                            color: red;
-                            font-style: italic;
-                            font-weight: 700;
-                        }
-                    }
+                    size: 14px;
+                    family: Arial, Helvetica, sans-serif;
+                }
+
+                span {
+                    color: red;
+                    font-style: italic;
+                    font-weight: 700;
                 }
             }
         }
+    }
+}
+
 .image-slot {
     @include _imgslot(80px, 80px, 20px);
- }
+}
 </style>

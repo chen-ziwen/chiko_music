@@ -7,9 +7,9 @@
             </listmodule>
         </div>
         <div class="module-gap">
-            <list-module head="全球媒体榜" gapColor="blue">
+            <listmodule head="全球媒体榜" gapColor="blue">
                 <SongSheet :sheet="otherSheetRank"></SongSheet>
-            </list-module>
+            </listmodule>
         </div>
     </div>
 </template>
@@ -82,14 +82,11 @@ const sheetID = async (id: number, index: number) => {
         currentindex: index,
         playList: songArr,
     })
-
-
 }
 onMounted(getToplistMsg)
 </script>
 
 <style lang="scss" scoped>
-
 .module-gap {
     margin: 20px 0px;
 }

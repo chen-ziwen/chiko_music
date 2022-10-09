@@ -256,7 +256,7 @@ watch(() => play.playing, (isPlaying) => {
 
         .play-btn {
             padding: 6px 6px 10px 6px;
-            width:360px;
+            width: 360px;
             box-sizing: border-box;
         }
 
@@ -290,9 +290,10 @@ watch(() => play.playing, (isPlaying) => {
                 .singer-name {
                     font-size: 18px;
                     max-width: 180px;
-                    
+
                 }
-                .singer-name{
+
+                .singer-name {
                     font-size: 14px;
                     margin-top: 10px;
                 }
@@ -303,6 +304,7 @@ watch(() => play.playing, (isPlaying) => {
             width: 80px;
             align-items: flex-end;
             padding-bottom: 10px;
+
             .audio {
                 margin-right: 10px;
             }
@@ -317,15 +319,17 @@ watch(() => play.playing, (isPlaying) => {
     font-size: 24px;
     color: lightcoral;
     cursor: pointer;
-   text-align: center;
-    transform: translate(0,0);
+    text-align: center;
+    transform: translate(0, 0);
+
     &:not(.noshake) {
         &:active {
             transition: all 0.25s;
-            transform: translate(2px,2px);
+            transform: translate(2px, 2px);
         }
     }
 }
+
 .random {
     font-size: 20px;
 }

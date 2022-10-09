@@ -88,15 +88,18 @@ const playSong = (index: number) => {
         thead {
             display: block;
             width: 100%;
+
             // 移入时隐藏数字，显示图标
-           .sheet-list {
-            &:hover .sheet-index {
-                display: none;
+            .sheet-list {
+                &:hover .sheet-index {
+                    display: none;
+                }
+
+                &:hover .icon-show {
+                    display: inline-block;
+                }
             }
-            &:hover .icon-show {
-                display: inline-block;
-            }
-           }
+
             tr {
                 display: flex;
                 width: 100%;
@@ -134,12 +137,13 @@ const playSong = (index: number) => {
                     &:first-child {
                         width: 8%;
                         text-align: center;
+
                         .icon-show {
                             display: none;
                             font-size: 20px;
                             color: #ef4b4b;
                         }
-                        
+
                     }
 
                     &:nth-child(2) {
@@ -155,10 +159,11 @@ const playSong = (index: number) => {
                             margin-right: 10px;
                             border-radius: 5px;
                         }
+
                         span {
                             white-space: nowrap;
                             text-overflow: ellipsis;
-                            overflow:hidden
+                            overflow: hidden
                         }
 
                     }
@@ -209,6 +214,7 @@ const playSong = (index: number) => {
     }
 
 }
+
 .checked {
     >td {
         color: red;

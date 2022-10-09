@@ -61,7 +61,7 @@ const sheetid = (id: number) => {
         flex-wrap: nowrap;
         align-items: center;
         margin: 15px 15px 40px 15px;
-        
+
         .sheet-pic {
             flex-shrink: 0;
             width: 180px;
@@ -69,42 +69,48 @@ const sheetid = (id: number) => {
             margin-right: 40px;
             cursor: pointer;
         }
+
         .songs {
-            width:100%;
-            
+            width: 100%;
+
             .song-list {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 padding: 8px 0;
                 cursor: pointer;
+
                 &:hover {
                     background-color: #c6c6c6 !important;
                 }
-                &:nth-of-type(-n+3) .song-index   {
-                color: rgb(250, 25, 25) !important;
-              }
-               &:nth-of-type(odd) {
-                background-color: #FAFAFA;
-               } 
-               
-               .song-msg {
-                .song-index {
-                   padding: 0 12px;
-                   color: #48c941;
-                 } 
-               }
-               .singer-name {
-                padding-right: 20px;
-                color: #999999;
-                font-size: 14px;
-               }
+
+                &:nth-of-type(-n+3) .song-index {
+                    color: rgb(250, 25, 25) !important;
+                }
+
+                &:nth-of-type(odd) {
+                    background-color: #FAFAFA;
+                }
+
+                .song-msg {
+                    .song-index {
+                        padding: 0 12px;
+                        color: #48c941;
+                    }
+                }
+
+                .singer-name {
+                    padding-right: 20px;
+                    color: #999999;
+                    font-size: 14px;
+                }
             }
         }
     }
 }
+
 .checked {
-   color: rgb(255, 145, 0) !important;
-   font-weight: 600;
+    color: rgb(255, 145, 0) !important;
+    font-weight: 600;
 }
 </style>
