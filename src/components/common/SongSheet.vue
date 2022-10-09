@@ -10,7 +10,11 @@
                     </div>
                 </template>
             </el-image>
-            <span>{{ item.name }}</span>
+            <span class="describe-text">{{ item.name }}</span>
+            <div class="play-count">
+                <i class="iconfont icon-bofang1"></i>
+                <span class="count-num">{{changeNum(item.playCount)}}</span>
+            </div>
         </li>
     </ul>
 </template>
@@ -18,6 +22,8 @@
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from "@/models/detail";
 import { useRouter } from "vue-router";
+import { usePlay } from "@/store/play";
+import { changeNum } from '@/hook';
 
 interface SongSheet {
     sheet: RecommendList[];
@@ -26,6 +32,7 @@ interface SongSheet {
 const props = withDefaults(defineProps<SongSheet>(), {
     textdir: 'start',
 });
+const play = usePlay()
 const emits = defineEmits(['sheetid'])
 const router = useRouter();
 // 返回id
@@ -38,35 +45,56 @@ const sheetid = (id: number) => {
 <style lang='scss' scoped>
 ul {
     li {
+
+    position: relative;
+    display: inline-block;
+    width: calc(12.5% - 30px); // 分8块
+    margin: 10px 15px 10px 15px;
+    vertical-align: top;
+    cursor: pointer;
+     .sheet-pic {
+        min-width: 125px;
+        min-height: 125px;
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
+        box-shadow: 4px 4px 6px grey;
+        z-index: 9;
+     }
+     .describe-text {
+        padding-top: 5px;
         display: inline-block;
-        width: calc(12.5% - 30px); // 分8块
-        margin: 10px 15px 10px 15px;
-        vertical-align: top;
-        cursor: pointer;
-
-
-        span {
-            display: inline-block;
-
-            font: {
-                size: 16px;
-                weight: 700;
-                family: Arial, Helvetica, sans-serif;
-            }
-
-            width: 100%;
-            text-align: v-bind(textdir);
-        }
-
-        .sheet-pic {
+        font: normal 700 16px Arial, Helvetica, sans-serif;
+        width: 100%;
+        text-align: v-bind(textdir);
+     }
+     .play-count {
+       z-index: 10;
+       position: absolute;
+       right: 4px;
+       top: 4px;
+       padding: 4px;
+       font-size: 13px;
+       border-radius: 4px;
+       background-color: rgba(0, 0, 0, 0.5);
+       color: rgba(255,255,255);
+       .count-num {
+        padding-left: 3px;
+       }
+     }
+     &::after {
+            content: '';
+            display: block;
             min-width: 125px;
             min-height: 125px;
-            width: 100%;
-            height: 100%;
+            position: absolute;
+            left: 0;
+            top:0;
             border-radius: 5px;
-            box-shadow: 4px 4px 6px grey;
+            transform: rotate(12deg);
+            background-color: rgba(128, 128, 128, 0.45);
         }
-    }
+  }
 }
 
 .image-slot {

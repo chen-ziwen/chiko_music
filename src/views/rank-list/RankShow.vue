@@ -10,7 +10,11 @@
                     </div>
                 </template>
             </el-image>
-            <ul class="songs">
+            <div class="play-count">
+                <i class="iconfont icon-bofang1"></i>
+                <span class="count-num">{{changeNum(item.playCount)}}</span>
+            </div>
+            <ul class="songs" v-loading="!item.songList">
                 <li class="song-list" v-for="data in item.songList" @click="choseSong(item.id,data.index-1)">
                     <div class="song-msg">
                         <span class="song-index">{{data.index}}</span>
@@ -28,7 +32,7 @@ import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from '@/models/detail';
 import { useRouter } from 'vue-router';
 import { usePlay } from '@/store/play';
-import { changeData } from '@/hook';
+import { changeData, changeNum } from '@/hook';
 
 interface RanShow {
     rankSheet: RecommendList[]
@@ -57,11 +61,26 @@ const sheetid = (id: number) => {
 <style lang="scss" scoped>
 .ranks {
     .rank-list {
+        position: relative;
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
         margin: 15px 15px 40px 15px;
 
+     .play-count {
+       z-index: 10;
+       position: absolute;
+       left: 4px;
+       top: 6px;
+       padding: 4px;
+       font-size: 16px;
+       border-radius: 4px;
+       background-color: rgba(0, 0, 0, 0.5);
+       color: rgba(255,255,255);
+       .count-num {
+        padding-left: 3px;
+       }
+     }
         .sheet-pic {
             flex-shrink: 0;
             width: 180px;

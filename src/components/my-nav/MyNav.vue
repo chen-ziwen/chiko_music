@@ -68,7 +68,7 @@ const searchColor = ref<string>('#ffffff');
 }
 
 .music-nav {
-    z-index: 99;
+    z-index: 2001;
     position: fixed;
     top: 0px;
     background-color: rgb(8, 15, 49);

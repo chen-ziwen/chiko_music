@@ -9,10 +9,10 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
-                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index,item.id)" @click="playSong(item.index)">
+                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index,item.id)" @click="playSong(item.index,item.id)">
                     <td>
                         <span class="sheet-index">{{ (item.index + 1 + '').padStart(2, '0') }}</span>
-                        <i class="iconfont icon-show" :class="playing(item.index)"></i>
+                        <i class="iconfont icon-show" :class="playing(item.index,item.id)"></i>
                     </td>
                     <td>
                         <img :src="imgurl(item.image,'35')">
@@ -36,7 +36,7 @@ interface sheetProps {
     sheetList: SongList[];
 }
 const props = defineProps<sheetProps>();
-const emits = defineEmits(['keeylist']);
+const emits = defineEmits(['keeplist']);
 const play = usePlay();
 
 
@@ -48,26 +48,26 @@ function changeData(msg: any) {
     return newData.join(' / ')
 }
 
-const playing = (index: number) => {
-    if (index === play.currentindex && play.playing) {
+const playing = (index: number, id: number) => {
+    if (index === play.currentindex && play.playing && id == play.currentPlay.id) {
         return "icon-bofang"
     }
     return "icon-zanting"
 };
 
 const checked = (index: number, id: number) => {
-    if (index === play.currentindex && id === play.currentPlay.id) {
+    if (index === play.currentindex && play.playing && id === play.currentPlay.id) {
         return 'checked'
     }
     return;
 }
 
 // 将当前索引值传递到父组件,当索引值相同时则反复切换
-const playSong = (index: number) => {
-    if (index === play.currentindex) {
+const playSong = (index: number, id: number) => {
+    if (index === play.currentindex && id == play.currentPlay.id) {
         play.playing = !play.playing;
     }
-    emits("keeylist", index)
+    emits("keeplist", index)
 }
 
 

@@ -29,7 +29,7 @@
 
             <div class="right-box el-style flex-grow-1 flex-jcenter">
                 <i class="iconfont audio noshake" :class="muted" @click="changeMuted"></i>
-                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="true" size="small"></el-slider>
+                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"></el-slider>
             </div>
         </div>
     </div>
@@ -247,7 +247,8 @@ watch(() => play.playing, (isPlaying) => {
     height: 80px;
     min-width: $width;
     background-color: whitesmoke;
-
+    opacity: .92;
+    z-index: 9999;
 
     .info {
         display: flex;

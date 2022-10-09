@@ -330,6 +330,11 @@ export function getHighquality(cat?: string, limit?: number, before?: string) {
     return http.get<any>('/top/playlist/highquality', { cat, limit, before })
 }
 
+// 获取精品歌单标签
+export function getHighQualityTags() {
+    return http.get<any>('/playlist/highquality/tags')
+}
+
 /**
  * 调用此接口,传入歌单 id 可获取相关歌单
  * @function 相关歌单推荐

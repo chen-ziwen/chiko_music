@@ -3,13 +3,13 @@
     <div class="ran-list">
         <div class="module-gap">
             <listmodule head="官方特色榜" gapColor="red">
-                <RankShow :rank-sheet="mainSheetRank" textdir="center" @sheetid="sheetID"></RankShow>
+                <RankShow :rank-sheet="mainSheetRank" @sheetid="sheetID"></RankShow>
             </listmodule>
         </div>
         <div class="module-gap">
-            <listmodule head="全球媒体榜" gapColor="blue">
-                <SongSheet :sheet="otherSheetRank"></SongSheet>
-            </listmodule>
+            <list-module head="全球媒体榜" gapColor="blue">
+                <SongSheet :sheet="otherSheetRank" textdir="center"></SongSheet>
+            </list-module>
         </div>
     </div>
 </template>

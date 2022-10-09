@@ -16,6 +16,8 @@ export const usePlay = defineStore({
             songUrl: '',
             // 是否登陆
             loginStatu: false,
+            // 歌单id
+            sheetId: 0,
             // 用户信息
             userInfo: null,
             // 歌手信息

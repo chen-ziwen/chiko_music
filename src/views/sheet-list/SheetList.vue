@@ -32,7 +32,7 @@
                 </div>
             </div>
             <template v-if="sheetDetail.partsheet.length">
-                <SongList :sheetList="sheetDetail.partsheet" @keeylist="keepsheet"></SongList>
+                <SongList :sheetList="sheetDetail.partsheet" @keeplist="keepsheet"></SongList>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
                 <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:currentPage=page />
