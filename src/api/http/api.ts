@@ -330,6 +330,10 @@ export function getHighquality(cat?: string, limit?: number, before?: string) {
     return http.get<any>('/top/playlist/highquality', { cat, limit, before })
 }
 
+// 歌单网友精选碟
+export function getTopPlaylistDetail(cat: string, limit: number, offset: number, order?: "new" | "hot") {
+    return http.get<any>('./top/playlist', { cat, limit, offset, order })
+}
 // 获取精品歌单标签
 export function getHighQualityTags() {
     return http.get<any>('/playlist/highquality/tags')

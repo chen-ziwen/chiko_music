@@ -290,7 +290,7 @@ watch(() => play.playing, (isPlaying) => {
                 .song-name,
                 .singer-name {
                     font-size: 18px;
-                    max-width: 180px;
+                    max-width: 260px;
 
                 }
 
