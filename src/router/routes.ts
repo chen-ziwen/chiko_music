@@ -49,7 +49,7 @@ const mainRouter = [
                 name: 'songsheet',
                 meta: {
                     title: '歌单',
-                    keepAlive: false
+                    keepAlive: true
                 },
                 component: () => import('@/views/song-sheet/SongSheet.vue')
 
