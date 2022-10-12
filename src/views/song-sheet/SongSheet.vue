@@ -59,7 +59,7 @@ interface AllTags {
         hot: boolean;
     }[]
 }
-const props = defineProps<SongSheet>();
+// const props = defineProps<SongSheet>();
 const hotTags = ref<HotTags[]>([]); // 热门标签
 const allTags = ref<AllTags[]>([]); // 全部标签
 const TopTags = ref<HotTags[]>([]); //精品标签
@@ -136,12 +136,13 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-    .song-sheet {
-        .boutique {
+.song-sheet {
+    .boutique {
         height: 140px;
-        background-color: aquamarine;
-     
+        background-color: $color;
+
     }
+
     .sheet-tags-all {
         position: relative;
         display: flex;
@@ -150,6 +151,7 @@ onMounted(async () => {
         margin-bottom: 20px;
         margin-top: 10px;
         color: #373737;
+
         .tags-position {
             position: absolute;
             left: 0;
@@ -160,90 +162,105 @@ onMounted(async () => {
             background-color: #F9FAFC;
             border-radius: 10px;
             overflow: auto;
-            &::-webkit-scrollbar{
+
+            &::-webkit-scrollbar {
                 width: 0;
             }
+
             .tags-type {
                 margin-top: 10px;
+
                 .tags-hight-light {
                     font-weight: 700;
                     padding-left: 10px;
                 }
             }
+
             .tags-common-type {
-                .tags{
+                .tags {
                     display: inline-block;
                     padding: 0 10px;
                     margin: 10px 5px;
                     cursor: pointer;
+
                     span {
                         display: inline-block;
                         margin-bottom: 6px;
-                        sup{
+
+                        sup {
                             color: #F84E4E;
                         }
                     }
+
                     &:hover {
-                       color: #F84E4E;
-                   }
+                        color: #F84E4E;
+                    }
                 }
             }
         }
 
         .choose-key {
             font-size: 20px;
-            border-radius:20px;
-            border:1px solid rgb(170, 170, 170);
+            border-radius: 20px;
+            border: 1px solid rgb(170, 170, 170);
             padding: 0px 20px;
             user-select: none;
             cursor: pointer;
+
             &:hover {
                 background-color: #ffffff;
             }
         }
-        
-    .sheet-list-tag {
-        display: flex;
-        align-items: center;
-        margin: 0;
 
-      .sheet-hot-tag {
-        display:inline-block;
-        padding: 5px 12px;
-        margin: 0 5px;
-        cursor: pointer;
-      }  
+        .sheet-list-tag {
+            display: flex;
+            align-items: center;
+            margin: 0;
+
+            .sheet-hot-tag {
+                display: inline-block;
+                padding: 5px 12px;
+                margin: 0 5px;
+                cursor: pointer;
+            }
+        }
     }
-  }
+
     .my-pagination {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin:35px 0;
-        
+        margin: 35px 0;
+
     }
+
     &:deep(.el-pagination) {
-            --el-pagination-hover-color:rgb(248, 60, 60) ;
-            --el-pagination-bg-color:transparent;
-            --el-pagination-text-color:#302424c2;
-            button:disabled {
-                background-color: transparent;
-            }
+        --el-pagination-hover-color: rgb(248, 60, 60);
+        --el-pagination-bg-color: transparent;
+        --el-pagination-text-color: #302424c2;
+        --el-pagination-font-size: 18px;
+        font-weight: 700;
+
+        button:disabled {
+            background-color: transparent;
         }
     }
-    .hight-light {
-        border-radius: 16px;
-        background-color: #ffffd0;
-        color: #F84E4E;
-    }
+}
+
+.hight-light {
+    border-radius: 16px;
+    background-color: #ffffd0;
+    color: #F84E4E;
+}
+
 .pop-enter-active,
 .pop-leave-active {
-  transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
 }
 
 .pop-enter-from,
 .pop-leave-to {
-  transform: translateY(120px);
-  opacity: 0;
+    transform: translateY(100px);
+    opacity: 0;
 }
 </style>
