@@ -8,7 +8,7 @@
         </div>
         <div class="module-gap">
             <list-module head="全球媒体榜" gapColor="blue">
-                <SongSheet :sheet="otherSheetRank" textdir="center"></SongSheet>
+                <SongSheet :sheet="otherSheetRank" textdir="center" :item="7"></SongSheet>
             </list-module>
         </div>
     </div>

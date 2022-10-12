@@ -1,6 +1,6 @@
 <template>
     <ul>
-        <li v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
+        <li :class="'item-'+props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
             <el-image class="sheet-pic" :src="item.picUrl||item.coverImgUrl + '?param=125y125'" fit="fill">
                 <template #placeholder>
                     <div class="image-slot">
@@ -22,17 +22,18 @@
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from "@/models/detail";
 import { useRouter } from "vue-router";
-import { usePlay } from "@/store/play";
 import { changeNum } from '@/hook';
 
 interface SongSheet {
     sheet: RecommendList[];
     textdir?: string;
+    item?: number;
 }
 const props = withDefaults(defineProps<SongSheet>(), {
     textdir: 'start',
+    item: 8,
 });
-const play = usePlay()
+
 const emits = defineEmits(['sheetid'])
 const router = useRouter();
 // 返回id
@@ -45,21 +46,33 @@ const sheetid = (id: number) => {
 <style lang='scss' scoped>
 ul {
     li {
-
     position: relative;
     display: inline-block;
-    width: calc(12.5% - 30px); // 分8块
+    // width: calc(12.5% - 30px); // 分8块
     margin: 10px 15px 10px 15px;
     vertical-align: top;
     cursor: pointer;
      .sheet-pic {
-        min-width: 125px;
-        min-height: 125px;
         width: 100%;
         height: 100%;
         border-radius: 5px;
         box-shadow: 4px 4px 6px grey;
         z-index: 9;
+        overflow: visible;
+        
+        &::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top:0;
+            border-radius: 5px;
+            transform: rotate(12deg);
+            background-color: rgba(128, 128, 128, 0.45);
+            z-index: -1;
+        }
      }
      .describe-text {
         padding-top: 5px;
@@ -82,22 +95,17 @@ ul {
         padding-left: 3px;
        }
      }
-     &::after {
-            content: '';
-            display: block;
-            min-width: 125px;
-            min-height: 125px;
-            position: absolute;
-            left: 0;
-            top:0;
-            border-radius: 5px;
-            transform: rotate(12deg);
-            background-color: rgba(128, 128, 128, 0.45);
-        }
   }
 }
 
 .image-slot {
     @include _imgslot(125px, 125px, 30px);
+}
+
+// 项目平均分 2 - 10 格
+@for $i from 2 through 10 {
+    .item-#{$i} {
+        width: calc(100%/$i - 30px); // 间距30px
+    }
 }
 </style>
