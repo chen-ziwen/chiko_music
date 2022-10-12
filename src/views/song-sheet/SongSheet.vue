@@ -38,7 +38,7 @@
             </Transition>
         </div>
         <SongSheet :sheet="sheetList.playlists" :item="7"></SongSheet>
-        <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
+        <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="63" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
     </div>
 </template>
 
@@ -127,7 +127,7 @@ async function getAllTags() {
 
 // 全部标签选中
 const tagsList = async (name: string) => {
-    const { playlists, total } = await getTopPlaylistDetail(name, 64, 0);
+    const { playlists, total } = await getTopPlaylistDetail(name, 63, 0);
     const res = await getHighquality(name, 1);
     sheetList.playlists = playlists;
     sheetList.total = total;
@@ -141,7 +141,7 @@ const tagsList = async (name: string) => {
 
 //全部标签 跳转页面时，进行请求
 const currentChange = async (page: number) => {
-    const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 64, (page - 1) * 64); // offset n-1*64
+    const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 63, (page - 1) * 63); // offset n-1*63
     sheetList.playlists = playlists;
     sheetList.total = total;
     document.documentElement.scrollTop = 0;
