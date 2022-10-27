@@ -17,7 +17,7 @@
                         </li>
                         <li>
                             <span v-show="sheetDetail.detail.tags.length">标签&nbsp;:</span>
-                            <span v-for="tag, index in sheetDetail.detail.tags" :key="index">{{ tag }}</span>
+                            <span v-for="tag, index in sheetDetail.detail.tags" :key="index" @click="commonSheet(tag)">{{ tag }}</span>
                         </li>
                         <li>
                             <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
@@ -177,6 +177,15 @@ function turnSheet(id: number) {
         name: 'sheetlist',
         query: {
             id,
+        }
+    })
+}
+
+function commonSheet(name: string) {
+    router.push({
+        name: 'songsheet',
+        query: {
+            name,
         }
     })
 }

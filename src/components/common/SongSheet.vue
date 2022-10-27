@@ -1,7 +1,7 @@
 <template>
     <ul>
-        <li :class="'item-'+props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
-            <el-image class="sheet-pic" :src="item.picUrl||item.coverImgUrl + '?param=125y125'" fit="fill">
+        <li :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
+            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=125y125'" fit="fill">
                 <template #placeholder>
                     <div class="image-slot">
                         <el-icon>
@@ -13,12 +13,13 @@
             <span class="describe-text">{{ item.name }}</span>
             <div class="play-count">
                 <i class="iconfont icon-bofang1"></i>
-                <span class="count-num">{{changeNum(item.playCount)}}</span>
+                <span class="count-num">{{ changeNum(item.playCount) }}</span>
             </div>
         </li>
     </ul>
 </template>
 <script lang='ts' setup>
+import { computed } from 'vue';
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from "@/models/detail";
 import { useRouter } from "vue-router";
@@ -28,10 +29,12 @@ interface SongSheet {
     sheet: RecommendList[];
     textdir?: string;
     item?: number;
+    backShow?: boolean;
 }
 const props = withDefaults(defineProps<SongSheet>(), {
     textdir: 'start',
     item: 8,
+    backShow: true,
 });
 
 const emits = defineEmits(['sheetid'])
@@ -41,10 +44,20 @@ const sheetid = (id: number) => {
     emits("sheetid", id)
     router.push({ name: 'sheetlist', query: { id } })
 }
+
+const showBakc = computed(() => props.backShow ? "block" : "none")
 </script>
 
 <style lang='scss' scoped>
+
+   
 ul {
+    &:deep(.el-image) {
+        
+        img {
+            border-radius:5px;
+        }
+    }
     li {
     position: relative;
     display: inline-block;
@@ -62,7 +75,7 @@ ul {
         
         &::after {
             content: '';
-            display: block;
+            display: v-bind(showBakc);
             width: 100%;
             height: 100%;
             position: absolute;
@@ -108,4 +121,5 @@ ul {
         width: calc(100%/$i - 30px); // 间距30px
     }
 }
+
 </style>

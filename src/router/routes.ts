@@ -52,7 +52,6 @@ const mainRouter = [
                     keepAlive: true
                 },
                 component: () => import('@/views/song-sheet/SongSheet.vue')
-
             },
             {
                 path: 'ranklist',
@@ -102,6 +101,15 @@ const mainRouter = [
                 },
                 component: () => import('@/views/sheet-list/SheetList.vue')
 
+            },
+            {
+                path: 'boutiquesongsheet',
+                name: 'boutiquesongsheet',
+                meta: {
+                    title: '精品歌单',
+                    keepAlive: true,
+                },
+                component: () => import('@/views/song-sheet/BoutiqueSongSheet.vue')
             }
         ]
     },

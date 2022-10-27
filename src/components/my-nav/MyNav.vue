@@ -30,9 +30,9 @@
                         <router-link :to="{ name: 'newdisc' }" active-class="router-style">新碟</router-link>
                     </li>
 
-                    <li>
+                    <!-- <li>
                         <router-link :to="{ name: 'test' }" active-class="router-style">测试</router-link>
-                    </li>
+                    </li> -->
                 </ul>
                 <div class="nav-right">
                     <el-icon :size="28" class="el-search" :color="searchColor" @mouseenter="searchColor = '#ff0000'" @mouseleave="searchColor = '#ffffff'">

@@ -1,36 +1,36 @@
 <template>
     <div class="song-sheet">
-        <div class="boutique">
-            <div class="page-img-back" :style="{ backgroundImage:`url(${hightSheet.page.coverImgUrl})`}"></div>
+        <div class="boutique" @click="boutique(nameKey)">
+            <div class="page-img-back" :style="{ backgroundImage: `url(${hightSheet.page.coverImgUrl})` }"></div>
             <div class="content-box" v-if="hightSheet.page.coverImgUrl">
                 <img class="page-img" :src="hightSheet.page.coverImgUrl" />
                 <div class="sheet-box">
                     <span class="sheet-type">
                         <i class="iconfont icon-huangguan"></i>
                         精品歌单</span>
-                    <span class="sheet-desc">【 {{hightSheet.page.name}} 】</span>
+                    <span class="sheet-desc">【 {{ hightSheet.page.name }} 】</span>
                 </div>
             </div>
         </div>
         <div class="sheet-tags-all">
-            <div class="choose-key" @click="pop=!pop">
-                {{nameKey}}
+            <div class="choose-key" @click="pop = !pop">
+                {{ nameKey }}
                 <el-icon>
                     <ArrowDown />
                 </el-icon>
             </div>
             <ul class="sheet-list-tag">
                 <li class="sheet-hot-tag" v-for="item in hotTags" :class="hightlight(item.name)" @click="tagsList(item.name)">
-                    {{item.name}}
+                    {{ item.name }}
                 </li>
             </ul>
             <Transition name="pop">
                 <div class="tags-position" v-if="pop">
-                    <div class="tags-type" v-for="(item,index) in allTags" :key="item.name+index">
-                        <span class="tags-hight-light">{{item.name}}</span>
+                    <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
+                        <span class="tags-hight-light">{{ item.name }}</span>
                         <ul class="tags-common-type">
                             <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)" @click="tagsList(data.name)">
-                                <span>{{data.name}}<sup>{{data.hot?"hot":""}}</sup></span>
+                                <span>{{ data.name }}<sup>{{ data.hot ? "hot" : "" }}</sup></span>
                             </li>
                         </ul>
                     </div>
@@ -46,8 +46,8 @@
 import { getPlaylistHot, getTopPlaylistDetail, getPlaylistCatlist, getHighquality, getHighQualityTags } from '@/api/http/api';
 import SongSheet from '@/components/common/SongSheet.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { onMounted, reactive, ref, computed } from 'vue';
-
+import { onMounted, reactive, ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 interface HotTags {
     id: number;
     name: string;
@@ -69,9 +69,12 @@ interface HightPage {
     name: string;
 }
 // const props = defineProps<SongSheet>();
+
 const hotTags = ref<HotTags[]>([]); // 热门标签
 const allTags = ref<AllTags[]>([]); // 全部标签
 const TopTags = ref<HotTags[]>([]); //精品标签
+const route = useRoute();
+const router = useRouter();
 
 const sheetList = reactive({
     playlists: [],
@@ -82,6 +85,8 @@ const hightSheet = reactive({
     hightlists: [],
     total: 0
 });
+
+
 
 const curretnPage = ref<number>(1);
 const nameKey = ref<string>('');
@@ -103,10 +108,7 @@ async function getTags() {
 async function getTopTags() {
     const { tags } = await getHighQualityTags();
     TopTags.value = tags;
-    console.log("top", TopTags.value);
-
 }
-
 
 // 获取全部标签
 async function getAllTags() {
@@ -146,13 +148,31 @@ const currentChange = async (page: number) => {
     sheetList.total = total;
     document.documentElement.scrollTop = 0;
 }
+const boutique = (name: string) => {
+    router.push({
+        name: 'boutiquesongsheet', query: { name }
+    })
+}
+
+// 当name 发生变化时，重新获取所有的数据
+watch(() => route.query?.name, async (name) => {
+    // route query name 可能拿不到
+    nameKey.value = name as string;
+    await origin();
+    await tagsList(nameKey.value);
+})
+
+const origin = async () => {
+    await getTags();// 等getTags之行完 在去执行tagsList
+    getAllTags();
+    getTopTags()
+    // 传入热门标签的第一项 作为初始化
+}
 
 // 按 await顺序初始化标签
 onMounted(async () => {
-    await getTags();// 等getTags之行完 在去执行tagsList
-    await getAllTags();
-    await getTopTags()
-    await tagsList(hotTags.value[0].name) // 传入热门标签的第一项 作为初始化
+    await origin();
+    await tagsList(hotTags.value[0].name)
 })
 </script>
 

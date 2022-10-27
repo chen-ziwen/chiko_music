@@ -14,10 +14,12 @@ interface ListModule {
     outStyle?: string;
     headColor?: string;
     gapColor?: string;
+    gapHeight?: string;
 }
 const props = withDefaults(defineProps<ListModule>(), {
     headColor: 'rgba(74,74,74)',
     gapColor: 'rgba(254,236,239)',
+    gapHeight: "22px"
 });
 
 // 生成类名,可以在外部添加样式
@@ -47,7 +49,7 @@ const outStyle = computed(() => {
             content: '';
             display: inline-block;
             width: 2.5px;
-            height: 22px;
+            height: v-bind(gapHeight);
             background: v-bind('props.gapColor');
             vertical-align: text-top;
             margin-right: 10px;

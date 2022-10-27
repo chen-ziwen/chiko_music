@@ -1,7 +1,7 @@
 <template>
     <ul class="ranks">
         <li class="rank-list" v-for="(item, index) in rankSheet" :key="item.id + index">
-            <el-image class="sheet-pic" :src="item.picUrl||item.coverImgUrl + '?param=200y200'" fit="fill" @click="sheetid(item.id)">
+            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=200y200'" fit="fill" @click="sheetid(item.id)">
                 <template #placeholder>
                     <div class="image-slot">
                         <el-icon>
@@ -12,15 +12,15 @@
             </el-image>
             <div class="play-count">
                 <i class="iconfont icon-bofang1"></i>
-                <span class="count-num">{{changeNum(item.playCount)}}</span>
+                <span class="count-num">{{ changeNum(item.playCount) }}</span>
             </div>
             <ul class="songs" v-loading="!item.songList">
-                <li class="song-list" v-for="data in item.songList" @click="choseSong(item.id,data.index-1)">
+                <li class="song-list" v-for="data in item.songList" @click="choseSong(item.id, data.index - 1)">
                     <div class="song-msg">
-                        <span class="song-index">{{data.index}}</span>
-                        <span class="song-name" :class="checked(data.index,data.id)">{{data.name}}</span>
+                        <span class="song-index">{{ data.index }}</span>
+                        <span class="song-name" :class="checked(data.index, data.id)">{{ data.name }}</span>
                     </div>
-                    <span class="singer-name">{{changeData(data.singer)}}</span>
+                    <span class="singer-name">{{ changeData(data.singer) }}</span>
                 </li>
             </ul>
         </li>
