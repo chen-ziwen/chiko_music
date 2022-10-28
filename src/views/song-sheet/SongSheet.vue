@@ -1,6 +1,6 @@
 <template>
     <div class="song-sheet">
-        <div class="boutique" @click="boutique(nameKey)">
+        <div class="boutique" @click="boutique" v-if="!hightSheet.page?.none">
             <div class="page-img-back" :style="{ backgroundImage: `url(${hightSheet.page.coverImgUrl})` }"></div>
             <div class="content-box" v-if="hightSheet.page.coverImgUrl">
                 <img class="page-img" :src="hightSheet.page.coverImgUrl" />
@@ -20,8 +20,8 @@
                 </el-icon>
             </div>
             <ul class="sheet-list-tag">
-                <li class="sheet-hot-tag" v-for="item in hotTags" :class="hightlight(item.name)" @click="tagsList(item.name)">
-                    {{ item.name }}
+                <li class="sheet-hot-tag" v-for="name of hotTags" :class="hightlight(name)" @click="tagsList(name)">
+                    {{ name }}
                 </li>
             </ul>
             <Transition name="pop">
@@ -67,12 +67,12 @@ interface AllTags {
 interface HightPage {
     coverImgUrl: string;
     name: string;
+    none?: boolean,
 }
-// const props = defineProps<SongSheet>();
 
-const hotTags = ref<HotTags[]>([]); // 热门标签
+const hotTags = ref<string[]>([]); // 热门标签
+const TopTags = ref<string[]>([]); //精品标签
 const allTags = ref<AllTags[]>([]); // 全部标签
-const TopTags = ref<HotTags[]>([]); //精品标签
 const route = useRoute();
 const router = useRouter();
 
@@ -83,10 +83,8 @@ const sheetList = reactive({
 const hightSheet = reactive({
     page: {} as HightPage,
     hightlists: [],
-    total: 0
+    total: 0,
 });
-
-
 
 const curretnPage = ref<number>(1);
 const nameKey = ref<string>('');
@@ -99,15 +97,15 @@ const hightlight = (name: string) => {
     return;
 }
 
-// 获取热门歌单标签
 async function getTags() {
+    // 获取热门歌单标签
     const { tags } = await getPlaylistHot();
-    hotTags.value = tags;
+    hotTags.value = tags.map((x: HotTags) => x.name);
 }
 // 获取精品标签
 async function getTopTags() {
     const { tags } = await getHighQualityTags();
-    TopTags.value = tags;
+    TopTags.value = tags.map((x: HotTags) => x.name); // 拿到精品标签数组
 }
 
 // 获取全部标签
@@ -130,12 +128,16 @@ async function getAllTags() {
 // 全部标签选中
 const tagsList = async (name: string) => {
     const { playlists, total } = await getTopPlaylistDetail(name, 63, 0);
-    const res = await getHighquality(name, 1);
+    if (TopTags.value.includes(name)) {
+        const res = await getHighquality(name, 1);
+        hightSheet.page = res.playlists[0]; // 拿到歌单分类里的第一个歌单
+    } else {
+        hightSheet.page = { coverImgUrl: 'none', name: '暂无', none: true };
+    }
+    nameKey.value = name; // 保存name
     sheetList.playlists = playlists;
     sheetList.total = total;
     curretnPage.value = 1; // 当卡页重置为1
-    nameKey.value = name; // 保存name
-    hightSheet.page = res.playlists[0]; // 拿到歌单分类里的第一个歌单
     if (pop.value) {
         pop.value = !pop.value; // 关闭标签弹窗
     }
@@ -148,31 +150,29 @@ const currentChange = async (page: number) => {
     sheetList.total = total;
     document.documentElement.scrollTop = 0;
 }
-const boutique = (name: string) => {
+const boutique = () => {
     router.push({
-        name: 'boutiquesongsheet', query: { name }
+        name: 'boutiquesongsheet', query: { name: nameKey.value }
     })
 }
 
 // 当name 发生变化时，重新获取所有的数据
-watch(() => route.query?.name, async (name) => {
-    // route query name 可能拿不到
-    nameKey.value = name as string;
-    await origin();
-    await tagsList(nameKey.value);
+watch(() => route.query.name, (name) => {
+    if (!name) return; // 必须加 避免切换时name为undefined
+    tagsList(name as string);
 })
-
-const origin = async () => {
-    await getTags();// 等getTags之行完 在去执行tagsList
-    getAllTags();
-    getTopTags()
-    // 传入热门标签的第一项 作为初始化
-}
 
 // 按 await顺序初始化标签
 onMounted(async () => {
-    await origin();
-    await tagsList(hotTags.value[0].name)
+    try {
+        await getAllTags(); // 全部标签
+        await getTopTags(); // 精品标签
+        await getTags();// 等getTags之行完 在去执行tagsList
+        await tagsList(route.query.name as string || hotTags.value[0]); // 如果namekey为空，就拿第一项初始化
+    }
+    catch (e) {
+        console.log(e, "初始化歌单失败");
+    }
 })
 </script>
 
@@ -254,7 +254,7 @@ onMounted(async () => {
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        margin-top: 20px;
+        margin-top: 35px;
         color: #373737;
         .tags-position {
             position: absolute;

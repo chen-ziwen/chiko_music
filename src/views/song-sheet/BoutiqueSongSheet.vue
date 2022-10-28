@@ -1,14 +1,14 @@
 <template>
     <div class="boutique-song-list">
         <div class="module-gap">
-            <ListModule head="精品歌单" gap-color="red" gap-height="35px">
+            <Recommend title="精品歌单">
                 <ul class="boutique-list">
-                    <li v-for="(tag, index) of boutique" @click="turnSheet(tag.name)">
-                        {{ tag.name }}
+                    <li v-for="(name, index) of boutique" :key="index + name" @click="turnSheet(name)">
+                        {{ name }}
                     </li>
                 </ul>
                 <SongSheet :sheet="boSheet.playlists" :back-show="false"></SongSheet>
-            </ListModule>
+            </Recommend>
         </div>
     </div>
 </template>
@@ -17,6 +17,7 @@ import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getHighquality, getHighQualityTags } from '@/api/http/api'
 import ListModule from '@/components/common/ListModule.vue';
+import Recommend from '@/components/my-discover/Recommend.vue';
 import SongSheet from '@/components/common/SongSheet.vue';
 
 interface BoutiqueTags {
@@ -28,7 +29,7 @@ interface BoutiqueTags {
 }
 
 const route = useRoute();
-const boutique = ref<BoutiqueTags[]>([]) // 精品歌单标签
+const boutique = ref<string[]>([]) // 精品歌单标签
 const boSheet = reactive({
     playlists: [],
     total: 0,
@@ -38,7 +39,7 @@ const boSheet = reactive({
 const boutiqueTags = async () => {
     try {
         const { tags } = await getHighQualityTags();
-        boutique.value = tags;
+        boutique.value = tags.map((x: BoutiqueTags) => x.name);
     } catch (e) {
         console.log(e, '精品标签请求失败')
     }
@@ -46,7 +47,7 @@ const boutiqueTags = async () => {
 
 const turnSheet = async (name: string) => {
     try {
-        const { lasttime, more, playlists, total } = await getHighquality(name, 30)
+        const { lasttime, more, playlists, total } = await getHighquality(name, 30);
         boSheet.playlists = playlists;
         boSheet.lasttime = lasttime;
         boSheet.more = more;
@@ -57,15 +58,13 @@ const turnSheet = async (name: string) => {
     }
 }
 
-watch(() => route.query.name, () => {
-    const name = route.query.name as string;
-    if (name) {
-        turnSheet(name)
-    }
-})
+watch(() => route.query.name, (name) => {
+    if (!name) return;
+    turnSheet(name as string)
+}, { immediate: true })
 
-onMounted(async () => {
-    await boutiqueTags();
+onMounted(() => {
+    boutiqueTags();
 })
 
 </script>

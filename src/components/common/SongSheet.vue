@@ -112,7 +112,7 @@ ul {
 }
 
 .image-slot {
-    @include _imgslot(125px, 125px, 30px);
+    @include _imgslot(145px, 145px, 30px);
 }
 
 // 项目平均分 2 - 10 格
