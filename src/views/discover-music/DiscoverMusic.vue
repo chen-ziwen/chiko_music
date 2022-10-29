@@ -16,7 +16,7 @@
         <div class="sheet" v-if="sheetlist">
             <ContentBox title="推荐歌单">
                 <template v-if="sheetlist && sheetlist.length > 0">
-                    <SongSheet :sheet="sheetlist"></SongSheet>
+                    <SongSheetCard :sheet="sheetlist"></SongSheetCard>
                 </template>
             </ContentBox>
         </div>
@@ -43,7 +43,7 @@
 import { onMounted, ref } from "vue";
 import Carousel from "@/components/discover-music/Carousel.vue";
 import ContentBox from "@/components/common/ContentBox.vue";
-import SongSheet from "@/components/song-sheet/SongSheet.vue";
+import SongSheetCard from "@/components/song-sheet/SongSheetCard.vue";
 import SingerSheet from "@/components/singer/SingerSheet.vue";
 import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
 import MvSheet from "@/components/mv/MvSheet.vue";

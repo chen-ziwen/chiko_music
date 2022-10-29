@@ -13,7 +13,7 @@
                         </li>
                     </ul>
                 </Transition>
-                <SongSheet :sheet="boSheet.playlists" :back-show="false"></SongSheet>
+                <BoutiqueSongSheetCard :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
             </ContentBox>
 
         </div>
@@ -24,7 +24,7 @@ import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getHighquality, getHighQualityTags } from '@/api/http/api'
 import ContentBox from '@/components/common/ContentBox.vue';
-import SongSheet from '@/components/song-sheet/SongSheet.vue';
+import BoutiqueSongSheetCard from '@/components/song-sheet/BoutiqueSongSheetCard.vue';
 
 interface BoutiqueTags {
     id: number;
@@ -64,7 +64,8 @@ const boutiqueTags = async () => {
 
 const turnSheet = async (name: string) => {
     try {
-        const { lasttime, more, playlists, total } = await getHighquality(name, 30);
+        // 精品歌单一般不超过100个 直接全部拿出来 懒得写分页了
+        const { lasttime, more, playlists, total } = await getHighquality(name, 100);
         boSheet.playlists = playlists;
         boSheet.lasttime = lasttime;
         boSheet.more = more;

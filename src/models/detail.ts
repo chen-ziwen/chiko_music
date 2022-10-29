@@ -8,7 +8,18 @@ export interface SearchHotDetail {
     source: number;
     url: string;
 }
-
+// 精品歌单 creator
+interface AvatarDetail {
+    identityLevel: number,
+    identityIconUrl: string
+}
+export interface Creator {
+    avatarUrl: string;
+    userId: number;
+    nickname: string;
+    avatarDetail: AvatarDetail;
+}
+// 歌曲列表
 export interface SongList {
     id: number;
     singer: any[];
@@ -22,7 +33,9 @@ export interface SongList {
     index: number;
 }
 
+// 歌单列表
 export interface RecommendList {
+    [x: string]: any;
     alg: string;
     canDislike: boolean | null;
     highQuality: boolean;
@@ -34,8 +47,9 @@ export interface RecommendList {
     trackCount: number;
     songList: SongList[];
     trackNumberUpdateTime: number;
+    copywriter: string;
+    creator: Creator;
     type: number;
-    // [x: string]: any;
 
 }
 

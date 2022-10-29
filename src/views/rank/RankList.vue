@@ -8,7 +8,7 @@
         </div>
         <div class="module-gap">
             <list-module head="全球媒体榜" gapColor="blue">
-                <SongSheet :sheet="otherSheetRank" textdir="center" :item="7" :back-show="false"></SongSheet>
+                <SongSheetCard :sheet="otherSheetRank" textdir="center" :item="7" :back-show="false"></SongSheetCard>
             </list-module>
         </div>
     </div>
@@ -18,7 +18,7 @@
 import { reactive, toRefs, ref, onMounted } from 'vue';
 import { getToplist, getPlaylistTrackAll } from '@/api/http/api';
 import { RecommendList } from '@/models/detail';
-import SongSheet from '@/components/song-sheet/SongSheet.vue';
+import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import ListModule from '@/components/common/ListModule.vue';
 import RankShow from '@/components/rank/RankShow.vue';
 import { usePlay } from '@/store/play';

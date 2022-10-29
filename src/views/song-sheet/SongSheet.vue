@@ -38,14 +38,14 @@
                 </div>
             </Transition>
         </div>
-        <SongSheet :sheet="sheetList.playlists" :item="7"></SongSheet>
+        <SongSheetCard :sheet="sheetList.playlists" :item="7"></SongSheetCard>
         <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="63" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
     </div>
 </template>
 
 <script lang="ts" setup>
 import { getPlaylistHot, getTopPlaylistDetail, getPlaylistCatlist, getHighquality, getHighQualityTags } from '@/api/http/api';
-import SongSheet from '@/components/song-sheet/SongSheet.vue';
+import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { onMounted, reactive, ref, computed, watch, toRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -134,8 +134,6 @@ const tagsList = async (name: string) => {
     if (TopTags.value.includes(name)) {
         const res = await getHighquality(name, 1);
         page.value = res.playlists[0]; // 拿到歌单分类里的第一个歌单
-        console.log('high', res.playlists[0]);
-
     } else {
         page.value = { coverImgUrl: 'none', name: '暂无', copywriter: '暂无', none: true };
     }

@@ -25,13 +25,13 @@ import type { RecommendList } from "@/models/detail";
 import { useRouter } from "vue-router";
 import { changeNum } from '@/hook';
 
-interface SongSheet {
+interface SongSheetCard {
     sheet: RecommendList[];
     textdir?: string;
     item?: number;
     backShow?: boolean;
 }
-const props = withDefaults(defineProps<SongSheet>(), {
+const props = withDefaults(defineProps<SongSheetCard>(), {
     textdir: 'start',
     item: 8,
     backShow: true,

@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BoutiqueSongSheetCard: typeof import('./src/components/song-sheet/BoutiqueSongSheetCard.vue')['default']
     Carousel: typeof import('./src/components/discover-music/Carousel.vue')['default']
     ContentBox: typeof import('./src/components/common/ContentBox.vue')['default']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
@@ -13,6 +14,7 @@ declare module 'vue' {
     ElImage: typeof import('element-plus/es')['ElImage']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElSlider: typeof import('element-plus/es')['ElSlider']
+    InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
     ListModule: typeof import('./src/components/common/ListModule.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MvSheet: typeof import('./src/components/mv/MvSheet.vue')['default']
@@ -24,7 +26,7 @@ declare module 'vue' {
     RankShow: typeof import('./src/components/rank/RankShow.vue')['default']
     SingerSheet: typeof import('./src/components/singer/SingerSheet.vue')['default']
     SongList: typeof import('./src/components/song-sheet/SongList.vue')['default']
-    SongSheet: typeof import('./src/components/song-sheet/SongSheet.vue')['default']
+    SongSheetCard: typeof import('./src/components/song-sheet/SongSheetCard.vue')['default']
     SvgIcon: typeof import('./src/components/common/svgIcon/SvgIcon.vue')['default']
   }
 }
