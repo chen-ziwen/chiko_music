@@ -1,19 +1,20 @@
 <template>
-    <div class="song-sheet">
-        <div class="boutique" @click="boutique" v-if="!hightSheet.page?.none">
-            <div class="page-img-back" :style="{ backgroundImage: `url(${hightSheet.page.coverImgUrl})` }"></div>
-            <div class="content-box" v-if="hightSheet.page.coverImgUrl">
-                <img class="page-img" :src="hightSheet.page.coverImgUrl" />
+    <div class="song-sheet" @click="pop = false">
+        <div class="boutique" @click="boutique" v-if="!page?.none">
+            <div class="page-img-back" :style="{ backgroundImage: `url(${page.coverImgUrl})` }"></div>
+            <div class="content-box" v-if="page.coverImgUrl">
+                <img class="page-img" :src="page.coverImgUrl" />
                 <div class="sheet-box">
                     <span class="sheet-type">
                         <i class="iconfont icon-huangguan"></i>
                         精品歌单</span>
-                    <span class="sheet-desc">【 {{ hightSheet.page.name }} 】</span>
+                    <span class="sheet-desc">【 {{ page.name }} 】</span>
+                    <span class="copy-writer">{{ page.copywriter }}</span>
                 </div>
             </div>
         </div>
         <div class="sheet-tags-all">
-            <div class="choose-key" @click="pop = !pop">
+            <div class="choose-key" @click.stop="pop = !pop">
                 {{ nameKey }}
                 <el-icon>
                     <ArrowDown />
@@ -44,9 +45,9 @@
 
 <script lang="ts" setup>
 import { getPlaylistHot, getTopPlaylistDetail, getPlaylistCatlist, getHighquality, getHighQualityTags } from '@/api/http/api';
-import SongSheet from '@/components/common/SongSheet.vue';
+import SongSheet from '@/components/song-sheet/SongSheet.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { onMounted, reactive, ref, computed, watch } from 'vue';
+import { onMounted, reactive, ref, computed, watch, toRef } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 interface HotTags {
     id: number;
@@ -68,6 +69,7 @@ interface HightPage {
     coverImgUrl: string;
     name: string;
     none?: boolean,
+    copywriter: string;
 }
 
 const hotTags = ref<string[]>([]); // 热门标签
@@ -89,6 +91,7 @@ const hightSheet = reactive({
 const curretnPage = ref<number>(1);
 const nameKey = ref<string>('');
 const pop = ref<boolean>(false);
+const page = toRef(hightSheet, "page");
 
 const hightlight = (name: string) => {
     if (name == nameKey.value) {
@@ -130,9 +133,11 @@ const tagsList = async (name: string) => {
     const { playlists, total } = await getTopPlaylistDetail(name, 63, 0);
     if (TopTags.value.includes(name)) {
         const res = await getHighquality(name, 1);
-        hightSheet.page = res.playlists[0]; // 拿到歌单分类里的第一个歌单
+        page.value = res.playlists[0]; // 拿到歌单分类里的第一个歌单
+        console.log('high', res.playlists[0]);
+
     } else {
-        hightSheet.page = { coverImgUrl: 'none', name: '暂无', none: true };
+        page.value = { coverImgUrl: 'none', name: '暂无', copywriter: '暂无', none: true };
     }
     nameKey.value = name; // 保存name
     sheetList.playlists = playlists;
@@ -200,7 +205,7 @@ onMounted(async () => {
                 top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(108, 108, 108, 0.5);
+                background-color: rgba(44, 44, 44, 0.5);
                 backdrop-filter: blur(20px);
                 border-radius:15px;
                 overflow: hidden;
@@ -238,6 +243,11 @@ onMounted(async () => {
                 font-weight: 700;
                 font-size: 20px;
                 margin-top: 30px;
+                }
+                .copy-writer {
+                    padding-top: 15px;
+                    padding-left: 5px;
+                    color: #BCB7B7;
                 }
 
             }
@@ -353,14 +363,4 @@ onMounted(async () => {
     color: #F84E4E;
 }
 
-.pop-enter-active,
-.pop-leave-active {
-    transition: all 0.25s ease-in-out;
-}
-
-.pop-enter-from,
-.pop-leave-to {
-    transform: translateY(100px);
-    opacity: 0;
-}
 </style>

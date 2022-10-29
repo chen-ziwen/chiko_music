@@ -2,9 +2,9 @@
 <template>
     <div class="ran-list">
         <div class="module-gap">
-            <listmodule head="官方特色榜" gapColor="red">
+            <list-module head="官方特色榜" gapColor="red">
                 <RankShow :rank-sheet="mainSheetRank" @sheetid="sheetID"></RankShow>
-            </listmodule>
+            </list-module>
         </div>
         <div class="module-gap">
             <list-module head="全球媒体榜" gapColor="blue">
@@ -18,9 +18,9 @@
 import { reactive, toRefs, ref, onMounted } from 'vue';
 import { getToplist, getPlaylistTrackAll } from '@/api/http/api';
 import { RecommendList } from '@/models/detail';
-import SongSheet from '@/components/common/SongSheet.vue';
-import listmodule from '@/components/common/listmodule.vue';
-import RankShow from './RankShow.vue';
+import SongSheet from '@/components/song-sheet/SongSheet.vue';
+import ListModule from '@/components/common/ListModule.vue';
+import RankShow from '@/components/rank/RankShow.vue';
 import { usePlay } from '@/store/play';
 import { useSong } from "@/hook";
 

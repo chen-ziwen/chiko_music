@@ -1,0 +1,15 @@
+.pop-enter-active {
+    transition: all .25s ease-in-out;
+
+}
+.pop-leave-active {
+    transition: all .35s linear;
+}
+
+.pop-enter-from {
+    transform: translateY(25px);
+    opacity: 0;
+}
+.pop-leave-to {
+    opacity: 0;
+}

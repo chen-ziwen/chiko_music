@@ -2,51 +2,51 @@
     <div class="discover-music">
         <!-- banner 轮播图 -->
         <div class="scroll">
-            <RecommendScroll></RecommendScroll>
+            <Carousel></Carousel>
         </div>
         <!-- 歌曲 -->
         <div class="song">
-            <Recommend title="新歌首发">
-                <template v-if="newsong&&newsong.length>0">
+            <ContentBox title="新歌首发">
+                <template v-if="newsong && newsong.length > 0">
                     <NewSongSheet :new-sheet="newsong"></NewSongSheet>
                 </template>
-            </Recommend>
+            </ContentBox>
         </div>
         <!-- 歌单 -->
         <div class="sheet" v-if="sheetlist">
-            <Recommend title="推荐歌单">
-                <template v-if="sheetlist&&sheetlist.length>0">
+            <ContentBox title="推荐歌单">
+                <template v-if="sheetlist && sheetlist.length > 0">
                     <SongSheet :sheet="sheetlist"></SongSheet>
                 </template>
-            </Recommend>
+            </ContentBox>
         </div>
         <!-- 歌手 -->
         <div class="singer">
-            <Recommend title="推荐歌手">
-                <template v-if="artist&&artist.length>0">
+            <ContentBox title="推荐歌手">
+                <template v-if="artist && artist.length > 0">
                     <SingerSheet :singer-list="artist"></SingerSheet>
                 </template>
-            </Recommend>
+            </ContentBox>
         </div>
         <!-- MV -->
         <div class="mv">
-            <Recommend title="推荐MV">
-                <template v-if="recommendMv&&recommendMv.length>0">
+            <ContentBox title="推荐MV">
+                <template v-if="recommendMv && recommendMv.length > 0">
                     <MvSheet :mv-sheet="recommendMv"></MvSheet>
                 </template>
-            </Recommend>
+            </ContentBox>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import RecommendScroll from '@/components/my-discover/RecommendScroll.vue';
-import Recommend from "@/components/my-discover/Recommend.vue";
-import SongSheet from "@/components/common/SongSheet.vue";
-import SingerSheet from "@/components/common/SingerSheet.vue";
-import NewSongSheet from "@/components/common/NewSongSheet.vue";
-import MvSheet from "@/components/common/MvSheet.vue";
+import Carousel from "@/components/discover-music/Carousel.vue";
+import ContentBox from "@/components/common/ContentBox.vue";
+import SongSheet from "@/components/song-sheet/SongSheet.vue";
+import SingerSheet from "@/components/singer/SingerSheet.vue";
+import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
+import MvSheet from "@/components/mv/MvSheet.vue";
 import { getRecommendList, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
 import type { RecommendList, TopArtists, Newsong } from "@/models/detail";
 

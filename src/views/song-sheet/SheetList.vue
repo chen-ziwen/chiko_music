@@ -81,7 +81,7 @@ import {
 import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
 import { useRoute, useRouter } from 'vue-router';
 import { reactive, ref, watch, toRaw } from 'vue';
-import SongList from '@/components/common/SongList.vue';
+import SongList from '@/components/song-sheet/SongList.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/ListModule.vue';
 import { usePlay, playState } from '@/store/play';

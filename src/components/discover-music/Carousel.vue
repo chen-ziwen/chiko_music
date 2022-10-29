@@ -1,5 +1,5 @@
 <template>
-    <div class="recommend-scroll">
+    <div class="my-carousel">
         <el-carousel :interval="5000" type="card" height="260px" indicator-position="none" ref="carousel" :autoplay="true">
             <el-carousel-item v-for="data, index in myBanner" :key="index">
                 <el-image style="width: 100%; height: 260px;" :src="data?.imageUrl" fit="fill">
@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.recommend-scroll {
+.my-carousel {
     margin-top: 25px;
 }
 

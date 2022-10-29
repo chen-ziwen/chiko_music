@@ -11,9 +11,9 @@
 
 <script lang="ts" setup>
 // 使用了 unplugin-vue-components插件，插件可以自动引入，import引入就不需要了
-import MyNav from '@/components/my-nav/MyNav.vue';
-import MyMain from '@/components/my-main/MyMain.vue';
-import MyFooter from '@/components/my-footer/MyFooter.vue';
+import MyNav from '@/components/home-page/MyNav.vue';
+import MyMain from '@/components/home-page/MyMain.vue';
+import MyFooter from '@/components/home-page/MyFooter.vue';
 import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
 import { storeToRefs } from 'pinia';
 import { usePlay } from '@/store/play';

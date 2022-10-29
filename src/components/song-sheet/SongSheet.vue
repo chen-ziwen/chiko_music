@@ -44,8 +44,8 @@ const sheetid = (id: number) => {
     emits("sheetid", id)
     router.push({ name: 'sheetlist', query: { id } })
 }
+const showBakc = computed(() => props.backShow ? "block" : "none");
 
-const showBakc = computed(() => props.backShow ? "block" : "none")
 </script>
 
 <style lang='scss' scoped>

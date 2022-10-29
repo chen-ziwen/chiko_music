@@ -1,7 +1,7 @@
 <template>
-    <div class="recommend">
-        <div class="recomend-head">
-            <span class="m-title">{{props.title}}</span>
+    <div class="content-box">
+        <div class="content-head">
+            <span class="m-title">{{ props.title }}</span>
         </div>
         <slot></slot>
     </div>
@@ -18,7 +18,7 @@ const props = withDefaults(defineProps<Recommend>(), {
 
 </script>
 <style lang='scss' scoped>
-.recommend {
+.content-box {
  background-color: $color;
  width: $width;
 //  margin-bottom: 20px;
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<Recommend>(), {
  border-radius: 10px;
  padding: 0px 10px;
  box-sizing: border-box;
- .recomend-head {
+ .content-head {
 .m-title {
     display: inline-block;
     text-align: start;

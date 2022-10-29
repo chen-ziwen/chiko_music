@@ -1,6 +1,5 @@
 //登陆路由 和页面到主要路由 ，路由组件全部放在view中
 import home from '@/views/home-page/HomePage.vue';
-// import { defineAsyncComponent } from 'vue';
 
 const loginRouter = {
     path: '/login',
@@ -33,7 +32,6 @@ const mainRouter = [
                     keepAlive: true,
                 },
                 component: () => import('@/views/discover-music/DiscoverMusic.vue')
-
             },
             {
                 path: 'singer',
@@ -60,7 +58,7 @@ const mainRouter = [
                     title: '排行榜',
                     keepAlive: true
                 },
-                component: () => import('@/views/rank-list/RankList.vue')
+                component: () => import('@/views/rank/RankList.vue')
 
             },
             {
@@ -81,7 +79,6 @@ const mainRouter = [
                     keepAlive: false
                 },
                 component: () => import('@/views/new-disc/NewDisc.vue')
-
             },
             {
                 path: 'test',
@@ -99,8 +96,7 @@ const mainRouter = [
                     title: '歌单详情',
                     keepAlive: true,
                 },
-                component: () => import('@/views/sheet-list/SheetList.vue')
-
+                component: () => import('@/views/song-sheet/SheetList.vue')
             },
             {
                 path: 'boutiquesongsheet',
