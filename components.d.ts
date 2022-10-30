@@ -24,6 +24,7 @@ declare module 'vue' {
     NewSongSheet: typeof import('./src/components/new-disc/NewSongSheet.vue')['default']
     ProgressBar: typeof import('./src/components/progress-bar/ProgressBar.vue')['default']
     RankShow: typeof import('./src/components/rank/RankShow.vue')['default']
+    SearchMusic: typeof import('./src/components/common/SearchMusic.vue')['default']
     SingerSheet: typeof import('./src/components/singer/SingerSheet.vue')['default']
     SongList: typeof import('./src/components/song-sheet/SongList.vue')['default']
     SongSheetCard: typeof import('./src/components/song-sheet/SongSheetCard.vue')['default']

@@ -326,7 +326,7 @@ export function getPlaylistHot() {
  * @param limit 取出歌单数量
  * @param before 分页参数,取上一页最后一个歌单的 `updateTime` 获取下一页数据
  */
-export function getHighquality(cat?: string, limit?: number, before?: string) {
+export function getHighquality(cat?: string, limit?: number, before?: number) {
     return http.get<any>('/top/playlist/highquality', { cat, limit, before })
 }
 

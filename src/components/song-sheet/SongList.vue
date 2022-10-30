@@ -9,13 +9,13 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
-                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index,item.id)" @click="playSong(item.index,item.id)">
+                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index, item.id)" @click="playSong(item.index, item.id)">
                     <td>
                         <span class="sheet-index">{{ (item.index + 1 + '').padStart(2, '0') }}</span>
-                        <i class="iconfont icon-show" :class="playing(item.index,item.id)"></i>
+                        <i class="iconfont icon-show" :class="playing(item.index, item.id)"></i>
                     </td>
                     <td>
-                        <img :src="imgurl(item.image,'35')">
+                        <img :src="imgurl(item.image, '35')">
                         <span>{{ item.name }}</span>
                     </td>
                     <td>{{ changeData(item.singer) }}</td>

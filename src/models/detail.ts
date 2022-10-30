@@ -46,6 +46,7 @@ export interface RecommendList {
     playCount: number;
     trackCount: number;
     songList: SongList[];
+    updateTime: number;
     trackNumberUpdateTime: number;
     copywriter: string;
     creator: Creator;

@@ -1,5 +1,5 @@
 <template>
-    <ul class="boutique-sheet">
+    <ul class="boutique-sheet" ref="scrollTop" v-infinite-scroll="load" :infinite-scroll-immediate="false" :infinite-scroll-distance="50">
         <li class="boutique-sheet-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-img-box">
                 <el-image class="sheet-img" :src="item.picUrl || item.coverImgUrl + '?param=125y125'" fit="fill">
@@ -25,12 +25,11 @@
                 </span>
                 <span class="copy-writer">{{ item.copywriter }}</span>
             </div>
-            <!--定位的图标-->
         </li>
     </ul>
 </template>
 <script lang='ts' setup>
-import { computed } from 'vue';
+import { computed, ref, nextTick } from 'vue';
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from "@/models/detail";
 import { useRouter } from "vue-router";
@@ -49,23 +48,52 @@ const props = withDefaults(defineProps<SongSheetCard>(), {
 });
 
 const router = useRouter();
+const emit = defineEmits(['getscroll']);
+const scrollTop = ref<HTMLElement>();
 // 返回id
 const sheetid = (id: number) => {
     router.push({ name: 'sheetlist', query: { id } })
 }
 
+const load = () => {
+    // 拿到上一页最后的一个updatetime，作为后续接口的请求参数
+    const updatetime = props.sheet[props.sheet.length - 1].updateTime;
+    emit('getscroll', updatetime);
+}
+
+const topWay = () => {
+    nextTick(() => {
+        if (!scrollTop.value) return;
+        scrollTop.value.scrollTop = 0;
+    })
+}
+defineExpose({ topWay }) // 向父组件暴露方法
+
 </script>
 
 <style lang='scss' scoped>
 
-   
+    ::-webkit-scrollbar {
+       width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        display: none;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgb(8,15,49);
+        border-radius: 10px;
+
+    }
 .boutique-sheet {
+    height: 520px;
+    overflow: auto;
     &:deep(.el-image) {
         
         img {
             border-radius:5px;
         }
     }
+   
     .boutique-sheet-list {
     position: relative;
     display: inline-flex;
@@ -78,7 +106,8 @@ const sheetid = (id: number) => {
         border-radius: 5px;
         box-shadow: 4px 4px 6px grey;
         z-index: 9;
-        overflow: visible;
+        overflow: hidden;
+        
         .sheet-img{
            height: 100%;
         }
@@ -97,8 +126,8 @@ const sheetid = (id: number) => {
             transform: translate(-20px,-20px) rotateZ(45deg);
             .huang {
                 position: absolute;
-                font-size: 14px;
-                transform: translate(4px,-6px) rotateZ(-90deg);
+                font-size: 12px;
+                transform: translate(5px,-6px) rotateZ(-90deg);
                 color: #ffffff;
             }
         }

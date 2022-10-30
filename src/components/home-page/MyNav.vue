@@ -35,11 +35,15 @@
                     </li> -->
                 </ul>
                 <div class="nav-right">
-                    <el-icon :size="28" class="el-search" :color="searchColor" @mouseenter="searchColor = '#ff0000'" @mouseleave="searchColor = '#ffffff'">
+                    <el-icon :size="28" class="el-search">
                         <search />
                     </el-icon>
                     <span class="nav-login">登陆</span>
+                    <div class="search-music-box" v-if="false">
+                        <SearchMusic></SearchMusic>
+                    </div>
                 </div>
+
             </div>
         </div>
     </nav>
@@ -48,7 +52,7 @@
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue';
 import { ref } from 'vue';
-const searchColor = ref<string>('#ffffff');
+import SearchMusic from '../common/SearchMusic.vue';
 
 </script>
 
@@ -106,7 +110,14 @@ const searchColor = ref<string>('#ffffff');
     }
 
     .nav-right {
+        position: relative;
         @include _flex(center, center);
+        &:deep(.el-icon) {
+            color: #ffffff;
+            &:hover {
+                color: #ff0000;
+            }
+        }
 
         .el-search {
             display: inline-block;
@@ -122,6 +133,13 @@ const searchColor = ref<string>('#ffffff');
             cursor: pointer;
             color: white;
         }
+        .search-music-box {
+        position: absolute;
+        right: 0px;
+        top: 60px;
+        transform: translateX(30%);
     }
+    }
+   
 }
 </style>

@@ -13,7 +13,7 @@
                         </li>
                     </ul>
                 </Transition>
-                <BoutiqueSongSheetCard :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
+                <BoutiqueSongSheetCard ref="scroll" @getscroll="scrollData" :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
             </ContentBox>
 
         </div>
@@ -38,8 +38,9 @@ const route = useRoute();
 const boutique = ref<string[]>([]) // 精品歌单标签
 const nameKey = ref<string>('');
 const pop = ref<boolean>(false);
+const scroll = ref<any>(null);
 const boSheet = reactive({
-    playlists: [],
+    playlists: [] as any[],
     total: 0,
     lasttime: 0,
     more: false,
@@ -65,21 +66,32 @@ const boutiqueTags = async () => {
 const turnSheet = async (name: string) => {
     try {
         // 精品歌单一般不超过100个 直接全部拿出来 懒得写分页了
-        const { lasttime, more, playlists, total } = await getHighquality(name, 100);
+        const { lasttime, more, playlists, total } = await getHighquality(name, 30);
         boSheet.playlists = playlists;
         boSheet.lasttime = lasttime;
         boSheet.more = more;
         boSheet.total = total;
         nameKey.value = name; // 选中高亮
+        scroll.value.topWay() // 精品歌单置顶
     }
     catch (e) {
         console.log(e, '精歌单请求失败')
     }
 }
 
-watch(() => route.query.name, (name) => {
+const scrollData = async (time: number) => {
+    try {
+        const { playlists } = await getHighquality(nameKey.value, 30, time);
+        boSheet.playlists.push(...playlists); // 滚动条到指定位置时，便将新请求到的数据推入到当前类别的数组中
+    }
+    catch (e) {
+        console.log(e, '精歌单请求失败')
+    }
+}
+
+watch(() => route.query.name, async (name) => {
     if (!name) return;
-    turnSheet(name as string)
+    await turnSheet(name as string);
     nameKey.value = name as string;
 }, { immediate: true })
 
@@ -94,7 +106,8 @@ onMounted(() => {
     position: relative;
     .module-gap {
     position: relative;
-    margin: 20px 0px;
+    padding: 10px 0;
+    box-sizing: border-box;
     &:deep(.list-head) {
         font-weight: 700;
         font-size: 24px;

@@ -1,14 +1,14 @@
 <template>
-    <div class="song-sheet" @click="pop = false">
-        <div class="boutique" @click="boutique" v-if="!page?.none">
+    <div class="song-sheet" @click="pop = false" v-loading="!loading" element-loading-background="rgba(254,236,239, 1)">
+        <div class="boutique" @click="boutique" v-if="!page?.none && loading">
             <div class="page-img-back" :style="{ backgroundImage: `url(${page.coverImgUrl})` }"></div>
-            <div class="content-box" v-if="page.coverImgUrl">
+            <div class="content-box">
                 <img class="page-img" :src="page.coverImgUrl" />
                 <div class="sheet-box">
                     <span class="sheet-type">
                         <i class="iconfont icon-huangguan"></i>
                         精品歌单</span>
-                    <span class="sheet-desc">【 {{ page.name }} 】</span>
+                    <span class="sheet-desc">{{ page.name }}</span>
                     <span class="copy-writer">{{ page.copywriter }}</span>
                 </div>
             </div>
@@ -75,6 +75,7 @@ interface HightPage {
 const hotTags = ref<string[]>([]); // 热门标签
 const TopTags = ref<string[]>([]); //精品标签
 const allTags = ref<AllTags[]>([]); // 全部标签
+const loading = ref<boolean>(false);
 const route = useRoute();
 const router = useRouter();
 
@@ -172,6 +173,7 @@ onMounted(async () => {
         await getTopTags(); // 精品标签
         await getTags();// 等getTags之行完 在去执行tagsList
         await tagsList(route.query.name as string || hotTags.value[0]); // 如果namekey为空，就拿第一项初始化
+        loading.value = true;
     }
     catch (e) {
         console.log(e, "初始化歌单失败");
@@ -181,6 +183,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .song-sheet {
+    height: 100%;
     .boutique {
         margin-top: 20px;
         height: 240px;

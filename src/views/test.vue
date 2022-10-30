@@ -139,10 +139,11 @@ console.log('数组是我', arr)
 .test {
     position: relative;
     width: 800px;
-    height: 600px;
+    height: 1000px;
     /* border-radius: 250px; */
     background-image: linear-gradient(-45deg, lightblue, pink);
 }
+
 .audio {
     position: absolute;
     left: 50%;
@@ -150,24 +151,28 @@ console.log('数组是我', arr)
     bottom: 0px;
     width: 400px;
 }
+
 .songbtn {
     position: absolute;
     left: 50%;
     transform: translate(-50%, 30px);
     z-index: 5;
 }
+
 .video {
     position: absolute;
     left: 50%;
     transform: translate(-50%, -20px);
     bottom: 100px;
 }
+
 .uls {
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     align-items: flex-start;
 }
+
 .uls li {
     text-align: end;
 }

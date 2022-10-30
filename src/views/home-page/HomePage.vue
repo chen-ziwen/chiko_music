@@ -34,7 +34,6 @@ watch(() => currentindex.value, (num: number) => {
 <style lang="scss" scoped>
 .main-music {
   background-color: $color;
-
 }
 
 // ::-webkit-scrollbar 滚动条整体部分，可以设置宽度啥的
