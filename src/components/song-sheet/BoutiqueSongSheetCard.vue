@@ -80,7 +80,7 @@ defineExpose({ topWay }) // 向父组件暴露方法
         display: none;
     }
     ::-webkit-scrollbar-thumb {
-        background-color: rgb(8,15,49);
+        background-color: rgb(8,15,49,.5);
         border-radius: 10px;
 
     }

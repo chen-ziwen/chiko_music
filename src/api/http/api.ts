@@ -1,5 +1,5 @@
 import http from "./http";
-import type { SearchHotDetail, RecommendList } from '../../models/detail'
+import type { SingerListType, SearchHotDetail, RecommendList } from "@/models";
 
 //获取到的参数先用any表示,后续在去给她们添加类型。
 // 不需要登陆的接口
@@ -124,8 +124,16 @@ export function getTopArtists(limit?: number, offset?: number) {
  * @param type 取值:-1:全部 1:男歌手 2:女歌手 3:乐队
  * @param area 取值:-1:全部 7华语 96欧美 8:日本 16韩国 0:其他
  */
-export function getArtistAList(limit?: number, offset?: number, initial?: string, type?: number, area?: number) {
-    return http.get<any>('/artist/list', { limit, offset, initial, type, area })
+
+// 接收分开的参数
+
+// export function getArtistAList(limit?: number, offset?: number, initial?: string, type?: number, area?: number) {
+//     return http.get<any>('/artist/list', { limit, offset, initial, type, area })
+// }
+
+// 接收参数对象
+export function getArtistAList(param: { limit?: number, offset?: number, initial?: string | number, type?: number, area?: number }) {
+    return http.get<any>('/artist/list', param)
 }
 
 /**

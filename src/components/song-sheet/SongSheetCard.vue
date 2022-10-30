@@ -30,11 +30,13 @@ interface SongSheetCard {
     textdir?: string;
     item?: number;
     backShow?: boolean;
+    back?: string;
 }
 const props = withDefaults(defineProps<SongSheetCard>(), {
     textdir: 'start',
     item: 8,
     backShow: true,
+    back: "transparent"
 });
 
 const emits = defineEmits(['sheetid'])
@@ -52,6 +54,9 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 
    
 ul {
+    background-color: v-bind(back);
+    padding-top: 10px;
+    border-radius: 15px;
     &:deep(.el-image) {
         
         img {

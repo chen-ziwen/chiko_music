@@ -21,11 +21,11 @@
     </ul>
 </template>
 <script lang='ts' setup>
-import type { TopArtists } from "@/models/detail";
+import type { SingerListType } from "@/models";
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 
 interface SingerSheet {
-    singerList: TopArtists[]
+    singerList: SingerListType[]
 }
 const props = defineProps<SingerSheet>();
 
@@ -35,8 +35,8 @@ ul {
     li {
         display: inline-block;
         box-sizing: border-box;
-        width: 10%;
-        padding: 0px 15px 15px 15px;
+        width: calc(10% - 30px);
+        margin: 0px 15px 15px 15px;
         vertical-align: top;
         cursor: pointer;
 
@@ -44,6 +44,7 @@ ul {
             width: 100%;
             flex-direction: column;
             @include _flex(center, center);
+            margin: 10px 0;
 
             >span {
                 display: inline-block;
