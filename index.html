@@ -12,5 +12,33 @@
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>
+<style lang="scss">
+  body::-webkit-scrollbar {
+    width: 8px;
+
+  }
+
+  body::-webkit-scrollbar-thumb {
+    background-color: rgb(157, 157, 157);
+    border-radius: 10px;
+  }
+
+  body::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  body::-webkit-scrollbar-track-piece {
+    background-color: transparent;
+  }
+
+
+  /* -webkit-scrollbar ​滚动条整体部分
+​-webkit-scrollbar-button​ 滚动条两端的按钮
+​-webkit-scrollbar-track ​外层轨道
+​-webkit-scrollbar-track-piece​ 内层轨道，滚动条中间部分（除去）
+​-webkit-scrollbar-thumb​ 内嵌滑块
+​-webkit-scrollbar-corner​ 边角
+​-webkit-resizer ​定义右下角拖动块的样式 */
+</style>
 
 </html>

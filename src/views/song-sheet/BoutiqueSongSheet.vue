@@ -13,7 +13,9 @@
                         </li>
                     </ul>
                 </Transition>
-                <BoutiqueSongSheetCard ref="scroll" @getscroll="scrollData" :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
+                <LoadScroll @load-scorll="loadScroll" :distance="50">
+                    <BoutiqueSongSheetCard ref="scroll" :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
+                </LoadScroll>
             </ContentBox>
 
         </div>
@@ -24,8 +26,8 @@ import { onMounted, reactive, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { getHighquality, getHighQualityTags } from '@/api/http/api'
 import ContentBox from '@/components/common/ContentBox.vue';
+import LoadScroll from '@/components/common/LoadScroll.vue';
 import BoutiqueSongSheetCard from '@/components/song-sheet/BoutiqueSongSheetCard.vue';
-
 interface BoutiqueTags {
     id: number;
     name: string;
@@ -79,9 +81,10 @@ const turnSheet = async (name: string) => {
     }
 }
 
-const scrollData = async (time: number) => {
+const loadScroll = async () => {
+    const updatetime = boSheet.playlists[boSheet.playlists.length - 1]?.updateTime || 0;
     try {
-        const { playlists } = await getHighquality(nameKey.value, 30, time);
+        const { playlists } = await getHighquality(nameKey.value, 30, updatetime);
         boSheet.playlists.push(...playlists); // 滚动条到指定位置时，便将新请求到的数据推入到当前类别的数组中
     }
     catch (e) {

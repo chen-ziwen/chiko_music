@@ -9,8 +9,9 @@ interface API {
 }
 // const router = useRouter();
 const instance = axios.create({
-    baseURL: 'http://localhost:3000', //默认地址
+    baseURL: "http://localhost:3000",  //'https://chiko-music.vercel.app', //默认地址
     timeout: 5000, //请求超时五秒
+    params: { realIP: "58.23.138.35" }, // 添加公共的参数,就是每个接口都需要的参数
 });
 
 instance.interceptors.request.use(

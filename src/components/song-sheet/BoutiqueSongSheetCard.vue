@@ -1,5 +1,5 @@
 <template>
-    <ul class="boutique-sheet" ref="scrollTop" v-infinite-scroll="load" :infinite-scroll-immediate="false" :infinite-scroll-distance="50">
+    <ul class="boutique-sheet" ref="scrollTop">
         <li class="boutique-sheet-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-img-box">
                 <el-image class="sheet-img" :src="item.picUrl || item.coverImgUrl + '?param=125y125'" fit="fill">
@@ -48,17 +48,11 @@ const props = withDefaults(defineProps<SongSheetCard>(), {
 });
 
 const router = useRouter();
-const emit = defineEmits(['getscroll']);
+
 const scrollTop = ref<HTMLElement>();
 // 返回id
 const sheetid = (id: number) => {
     router.push({ name: 'sheetlist', query: { id } })
-}
-
-const load = () => {
-    // 拿到上一页最后的一个updatetime，作为后续接口的请求参数
-    const updatetime = props.sheet[props.sheet.length - 1].updateTime;
-    emit('getscroll', updatetime);
 }
 
 const topWay = () => {
@@ -85,8 +79,6 @@ defineExpose({ topWay }) // 向父组件暴露方法
 
     }
 .boutique-sheet {
-    height: 520px;
-    overflow: auto;
     &:deep(.el-image) {
         
         img {

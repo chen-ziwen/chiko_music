@@ -27,15 +27,17 @@
                 </ul>
             </div>
         </div>
-        <SingerSheet :singer-list="singerList"></SingerSheet>
-        <!-- <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="63" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" /> -->
+        <LoadScroll @load-scorll="loadScroll" :distance="60">
+            <SingerSheet :singer-list="singerList"></SingerSheet>
+        </LoadScroll>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, toRefs } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { getArtistAList } from '@/api/http/api';
 import type { SingerListType } from '@/models';
+import LoadScroll from '@/components/common/LoadScroll.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
 
 interface TagType {
@@ -67,13 +69,13 @@ const tagType: TagType = {
     ens: []
 };
 
-const params: Params = {
+const params: Params = reactive({
     limit: 40, // 一次性请求数量
     offset: 0, // 换页偏移值
     type: -1,  // 语种
     area: -1,  // 男女歌手
     initial: -1, // 26字母
-}
+})
 
 const singerList = ref<SingerListType[]>([]);
 
@@ -109,11 +111,10 @@ const checkTags = (name: string, tag: number) => {
     } else if (name == 'ens') {
         params.initial = tag;
     }
-    getSingerList(params)
+    alongSingerList(params);
 }
 
 // 选中高亮
-
 const checkHigh = (name: string, tag: number) => {
     const high = { langs: '', singer: '', ens: '' }
     if (name == 'langs' && params.area == tag) {
@@ -126,15 +127,40 @@ const checkHigh = (name: string, tag: number) => {
     return high;
 }
 
-// 根据标签获取歌手列表
+// 切换标签时，清空缓存 单独请求
+const alongSingerList = async (parm: Params) => {
+    try {
+        params.offset = 0;
+        singerList.value.splice(0, singerList.value.length);
+        const { artists } = await getArtistAList(parm);
+        singerList.value = artists;
+    } catch (e) {
+        console.log(e, '歌手列表请求失败');
+    }
+}
+
+// 根据标签获取歌手列表 滚动请求
 const getSingerList = async (parm: Params) => {
-    const { artists } = await getArtistAList(parm);
-    singerList.value = artists;
-    console.log('请求参数', artists);
+    try {
+        params.offset += 40; // 滚动一次 增加40条数据
+        const { artists, more } = await getArtistAList(parm);
+        if (more) {
+            singerList.value = singerList.value.concat(artists);
+        } else {
+            return;
+        }
+    } catch (e) {
+        console.log(e, '歌手列表请求失败');
+    }
+}
+
+// 滚动条到底 触发请求api
+const loadScroll = () => {
+    getSingerList(params);
 }
 
 onMounted(() => {
-    getSingerList(params) // 初始化请求
+    alongSingerList(params) // 初始化请求
 })
 
 </script>
