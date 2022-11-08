@@ -2,7 +2,7 @@
     <ul>
         <li v-for="(data, index) in mvSheet" :key="index" class="recommend-mv-show-li">
             <div class="newsong">
-                <el-image style="min-width: 120px; min-height: 120px;" :src="data?.picUrl + '?param=120y120'" fit="fill">
+                <el-image class="mv-img" style="min-width: 120px; min-height: 120px;" :src="data?.picUrl + '?param=120y120'" fit="fill">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>

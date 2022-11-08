@@ -1,15 +1,20 @@
 <template>
     <ul>
         <li :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
-            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=125y125'" fit="fill">
-                <template #placeholder>
-                    <div class="image-slot">
-                        <el-icon>
-                            <icon-picture />
-                        </el-icon>
-                    </div>
-                </template>
-            </el-image>
+            <div class="sheet-pic-box">
+                <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=300y300'" fit="fill" :lazy="true">
+                    <template #placeholder>
+                        <div class="image-slot">
+                            <el-icon>
+                                <icon-picture />
+                            </el-icon>
+                        </div>
+                    </template>
+                </el-image>
+                <span class="bofang-btn">
+                    <i class="bofang iconfont icon-bofang1"></i>
+                </span>
+            </div>
             <span class="describe-text">{{ item.name }}</span>
             <div class="play-count">
                 <i class="iconfont icon-bofang1"></i>
@@ -70,6 +75,12 @@ ul {
     margin: 10px 15px 10px 15px;
     vertical-align: top;
     cursor: pointer;
+   
+    .sheet-pic-box {
+        position: relative;
+        &:hover .bofang-btn{
+            display: flex ;
+        }
      .sheet-pic {
         width: 100%;
         height: 100%;
@@ -92,6 +103,25 @@ ul {
             z-index: -1;
         }
      }
+     .bofang-btn {
+     position: absolute;
+     right: 8px;
+     bottom: 8px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border-radius: 50%;
+     width: 28px;
+     height: 28px;
+     background-color: rgba(239, 237, 237, 0.909);
+     z-index: 10;
+     display: none;
+        .bofang {
+            color: rgb(249, 43, 43);
+            font-size: 16px;
+        }
+    }
+    }
      .describe-text {
         padding-top: 5px;
         display: inline-block;
@@ -117,7 +147,7 @@ ul {
 }
 
 .image-slot {
-    @include _imgslot(145px, 145px, 30px);
+    @include _imgslot(125px, 125px, 30px);
 }
 
 // 项目平均分 2 - 10 格

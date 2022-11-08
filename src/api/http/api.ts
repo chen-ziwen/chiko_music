@@ -56,24 +56,6 @@ export function getCommentMusic(id: number, limit?: number, offset?: number, bef
     return http.get<any>('/comment/music', { id, limit, offset, before })
 }
 
-/**
- * @function 获取歌手专辑(调用此接口,传入歌手id,可获得歌手专辑内容)
- * @param id 歌曲id必选
- * @param limit 取出数量,默认为 50
- * @param offset 偏移数量,用于分页,如 :( 评论页数 -1)*50,其中50为limit的值
- */
-export function getArtistAlbum(id: number, limit?: number, offset?: number) {
-    return http.get<any>('artist/album', { id, limit, offset })
-}
-
-/**
- * @function 获取歌手描述(调用此接口,传入歌手id,可获取歌手描述)
- * @param id 歌手id
- */
-export function getArtistDesc(id: number) {
-    return http.get<any>('/artist/desc', { id })
-
-}
 
 /**
  * @function 调用此接口,可获取所有榜单
@@ -145,6 +127,41 @@ export function getArtists(id: number) {
 }
 
 /**
+ * @function 获取歌手mv(调用此接口,传入歌手id,可获得歌手mv信息,具体mv播放地址可调用`/mv`传入此接口获得的mvid来拿到,如:`/artist/mv?id=6452`,`/mv?mvid=5461064`)
+ * @param id 歌手id, 可由搜索接口获得
+ */
+export function getArtistMv(id: number) {
+    return http.get<any>('/artist/mv', { id })
+}
+
+/**
+  * @function 获取相似歌手(调用此接口,传入歌手id,可获得相似歌手)
+  * @param id 歌手id
+  */
+export function getSimiArtist(id: number) {
+    return http.get<any>('/simi/artist', { id })
+}
+
+/**
+ * @function 获取歌手专辑(调用此接口,传入歌手id,可获得歌手专辑内容)
+ * @param id 歌曲id必选
+ * @param limit 取出数量,默认为 50
+ * @param offset 偏移数量,用于分页,如 :( 评论页数 -1)*50,其中50为limit的值
+ */
+export function getArtistAlbum(id: number, limit?: number, offset?: number) {
+    return http.get<any>('artist/album', { id, limit, offset })
+}
+
+/**
+ * @function 获取歌手描述(调用此接口,传入歌手id,可获取歌手描述)
+ * @param id 歌手id
+ */
+export function getArtistDesc(id: number) {
+    return http.get<any>('/artist/desc', { id })
+
+}
+
+/**
  * @function 全部mv(调用此接口,可获取全部mv)
  * @param area 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部
  * @param type 类型,可选值为全部,官方版,原生,现场版,网易出品,不填则为全部
@@ -156,13 +173,6 @@ export function getMvAll(area?: string, type?: number, order?: number, limit?: n
     return http.get<any>('/mv/all', { area, type, order, limit, offset })
 }
 
-/**
- * @function 获取歌手mv(调用此接口,传入歌手id,可获得歌手mv信息,具体mv播放地址可调用`/mv`传入此接口获得的mvid来拿到,如:`/artist/mv?id=6452`,`/mv?mvid=5461064`)
- * @param id 歌手id, 可由搜索接口获得
- */
-export function getArtistMv(id: number) {
-    return http.get<any>('/artist/mv', { id })
-}
 /**
  * @function 获取mv数据(调用此接口,传入mvid(在搜索音乐的时候传type=1004获得),可获取对应MV数据,数据包含mv名字,歌手,发布时间,mv视频地址等数据,其中mv视频网易做了防盗链处理,可能不能直接播放,需要播放的话需要调用'mv地址'接口)
  * @param mvid mv的id 通过'/artist/mv'接口可以获取到mvid
@@ -180,6 +190,7 @@ export function getMvUrl(id: number) {
 }
 /**
  * @function mv排行(调用此接口,可获取mv排行)
+ 
  * @param limit 取出数量,默认为30
  */
 export function getTopMv(limit?: number) {
@@ -192,13 +203,6 @@ export function getTopMv(limit?: number) {
 
 export function getPersonalizedMv() {
     return http.get<any>('/personalized/mv')
-}
-/**
- * @function 获取相似歌手(调用此接口,传入歌手id,可获得相似歌手)
- * @param id 歌手id
- */
-export function getSimiArtist(id: number) {
-    return http.get<any>('/simi/artist', { id })
 }
 
 /**

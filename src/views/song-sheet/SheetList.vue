@@ -3,7 +3,7 @@
         <div class="music-singer-left">
             <div class="music-singer-left-head">
                 <div class="music-player">
-                    <img :src="imgurl(sheetDetail.detail.coverImgUrl)" />
+                    <img :src="imgurl(sheetDetail.detail.coverImgUrl, '500')" />
                 </div>
                 <div class="content-box">
                     <ul class="content-box-ul">

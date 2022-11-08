@@ -2,7 +2,7 @@
     <ul>
         <li v-for="(data, index) in newSheet" :key="index" class="recommend-new-show-li">
             <div class="newsong">
-                <el-image style="min-width: 100px; min-height: 100px;border-radius: 20px;" :src="data?.picUrl + '?param=100y100'" fit="cover">
+                <el-image class="new-img" :src="data?.picUrl + '?param=200y200'" fit="cover">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -55,7 +55,11 @@ ul {
 
         .newsong {
             display: flex;
-
+            .new-img {
+                width: 100px;
+                height: 100px;
+                border-radius: 10px;
+            }
             .newsong-text {
                 flex-grow: 1;
                 flex-direction: column;

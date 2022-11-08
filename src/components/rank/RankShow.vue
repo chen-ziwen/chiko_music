@@ -1,7 +1,7 @@
 <template>
     <ul class="ranks">
         <li class="rank-list" v-for="(item, index) in rankSheet" :key="item.id + index">
-            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=200y200'" fit="fill" @click="sheetid(item.id)">
+            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=400y400'" fit="fill" @click="sheetid(item.id)">
                 <template #placeholder>
                     <div class="image-slot">
                         <el-icon>

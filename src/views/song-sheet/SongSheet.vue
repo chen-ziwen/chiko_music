@@ -38,8 +38,8 @@
                 </div>
             </Transition>
         </div>
-        <SongSheetCard :sheet="sheetList.playlists" :item="7"></SongSheetCard>
-        <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="63" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
+        <SongSheetCard :sheet="sheetList.playlists" :item="8"></SongSheetCard>
+        <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
     </div>
 </template>
 
@@ -131,7 +131,7 @@ async function getAllTags() {
 
 // 全部标签选中
 const tagsList = async (name: string) => {
-    const { playlists, total } = await getTopPlaylistDetail(name, 63, 0);
+    const { playlists, total } = await getTopPlaylistDetail(name, 64, 0);
     if (TopTags.value.includes(name)) {
         const res = await getHighquality(name, 1);
         page.value = res.playlists[0]; // 拿到歌单分类里的第一个歌单
@@ -149,7 +149,7 @@ const tagsList = async (name: string) => {
 
 //全部标签 跳转页面时，进行请求
 const currentChange = async (page: number) => {
-    const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 63, (page - 1) * 63); // offset n-1*63
+    const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 64, (page - 1) * 64); // offset n-1*64
     sheetList.playlists = playlists;
     sheetList.total = total;
     document.documentElement.scrollTop = 0;

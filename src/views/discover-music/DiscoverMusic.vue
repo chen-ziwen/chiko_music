@@ -16,7 +16,7 @@
         <div class="sheet" v-if="sheetlist">
             <ContentBox title="推荐歌单">
                 <template v-if="sheetlist && sheetlist.length > 0">
-                    <SongSheetCard :sheet="sheetlist"></SongSheetCard>
+                    <SongSheetCard :sheet="sheetlist" :backShow="false"></SongSheetCard>
                 </template>
             </ContentBox>
         </div>
@@ -48,10 +48,10 @@ import SingerSheet from "@/components/singer/SingerSheet.vue";
 import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
 import MvSheet from "@/components/mv/MvSheet.vue";
 import { getRecommendList, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
-import type { RecommendList, TopArtists, Newsong } from "@/models/detail";
+import type { RecommendList, Newsong, SingerListType } from "@/models";
 
 const sheetlist = ref<RecommendList[]>();
-const artist = ref<TopArtists[]>();
+const artist = ref<SingerListType[]>();
 const newsong = ref<Newsong[]>();
 const recommendMv = ref<any>();
 

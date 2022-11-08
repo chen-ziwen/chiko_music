@@ -13,7 +13,7 @@
                         </li>
                     </ul>
                 </Transition>
-                <LoadScroll @load-scorll="loadScroll" :distance="50">
+                <LoadScroll @load-scorll="loadScroll" :distance="100">
                     <BoutiqueSongSheetCard ref="scroll" :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
                 </LoadScroll>
             </ContentBox>

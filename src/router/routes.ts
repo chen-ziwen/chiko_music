@@ -43,6 +43,15 @@ const mainRouter = [
                 component: () => import('@/views/singer/Singer.vue')
             },
             {
+                path: 'singerdetails',
+                name: 'singerdetails',
+                meta: {
+                    title: '歌手详情',
+                    keepAlive: false
+                },
+                component: () => import('@/views/singer/SingerDetails.vue')
+            },
+            {
                 path: 'songsheet',
                 name: 'songsheet',
                 meta: {
@@ -50,6 +59,24 @@ const mainRouter = [
                     keepAlive: true
                 },
                 component: () => import('@/views/song-sheet/SongSheet.vue')
+            },
+            {
+                path: 'sheetlist',
+                name: 'sheetlist',
+                meta: {
+                    title: '歌单详情',
+                    keepAlive: true,
+                },
+                component: () => import('@/views/song-sheet/SheetList.vue')
+            },
+            {
+                path: 'boutiquesongsheet',
+                name: 'boutiquesongsheet',
+                meta: {
+                    title: '精品歌单',
+                    keepAlive: true,
+                },
+                component: () => import('@/views/song-sheet/BoutiqueSongSheet.vue')
             },
             {
                 path: 'ranklist',
@@ -89,24 +116,6 @@ const mainRouter = [
                 },
                 component: () => import('@/views/test/Test.vue')
             },
-            {
-                path: 'sheetlist',
-                name: 'sheetlist',
-                meta: {
-                    title: '歌单详情',
-                    keepAlive: true,
-                },
-                component: () => import('@/views/song-sheet/SheetList.vue')
-            },
-            {
-                path: 'boutiquesongsheet',
-                name: 'boutiquesongsheet',
-                meta: {
-                    title: '精品歌单',
-                    keepAlive: true,
-                },
-                component: () => import('@/views/song-sheet/BoutiqueSongSheet.vue')
-            }
         ]
     },
 

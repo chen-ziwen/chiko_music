@@ -2,7 +2,7 @@
     <ul class="boutique-sheet" ref="scrollTop">
         <li class="boutique-sheet-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-img-box">
-                <el-image class="sheet-img" :src="item.picUrl || item.coverImgUrl + '?param=125y125'" fit="fill">
+                <el-image class="sheet-img" :src="item.picUrl || item.coverImgUrl + '?param=250y250'" fit="fill">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -101,6 +101,7 @@ defineExpose({ topWay }) // 向父组件暴露方法
         overflow: hidden;
         
         .sheet-img{
+           width: 150px;
            height: 100%;
         }
         .top {
@@ -176,7 +177,7 @@ defineExpose({ topWay }) // 向父组件暴露方法
 }
 
 .image-slot {
-    @include _imgslot(125px, 125px, 30px);
+    @include _imgslot(150px, 150px, 30px);
 }
 
 // 项目平均分 2 - 10 格

@@ -1,8 +1,8 @@
 <template>
     <ul>
         <li v-for="data in singerList" :key="data.id" class="recommend-singer-show-li">
-            <div class="singer-message">
-                <el-image :style="{ width: 80 + 'px', height: 80 + 'px', borderRadius: 40 + 'px' }" :src="data?.picUrl + '?param=200y200'">
+            <div class="singer-message" @click="jumpPage(data.id)">
+                <el-image class="singer-img" :src="data?.picUrl + '?param=250y250'">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -22,12 +22,23 @@
 </template>
 <script lang='ts' setup>
 import type { SingerListType } from "@/models";
+import { useRoute, useRouter } from "vue-router";
 import { Picture as IconPicture } from '@element-plus/icons-vue'
-
 interface SingerSheet {
     singerList: SingerListType[]
 }
 const props = defineProps<SingerSheet>();
+const router = useRouter();
+
+const jumpPage = (id: number) => {
+    router.push({
+        name: 'singerdetails',
+        query: {
+            id,
+        }
+    })
+}
+
 
 </script>
 <style lang='scss' scoped>
@@ -45,6 +56,11 @@ ul {
             flex-direction: column;
             @include _flex(center, center);
             margin: 10px 0;
+            .singer-img {
+                width: 80px;
+                height: 80px;
+                border-radius :50%;;
+            }
 
             >span {
                 display: inline-block;
