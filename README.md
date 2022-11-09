@@ -2,7 +2,7 @@
 [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 ## 预览地址
 暂无（还在持续开发中）
-## 简单介绍
+## 部分截图
 ### 首页
 ![e65f91925b77d661bb0d328c023ca2b4](https://user-images.githubusercontent.com/85820568/200761799-07952db7-2db5-4c53-a7a4-7dd5e5c73f12.png)
 ### 排行榜
