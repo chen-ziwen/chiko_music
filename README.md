@@ -1,7 +1,7 @@
 ## 数据来源
-- [NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
+[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
 ## 预览地址
-- 暂无（还在持续开发中）
+暂无（还在持续开发中）
 ## 简单介绍
 ### 首页
 ![e65f91925b77d661bb0d328c023ca2b4.png](:/fcd74226308c4603ac466b9ac1ffefc8)
@@ -15,13 +15,13 @@
 ![56168abfcd4dfb0570da2af8ef60cf6a.png](:/f31d72ebff2e4f518eadda397b8e8491)
 
 ## 目录结构
-- 暂无（开发完成会提供）
+暂无（开发完成会提供）
 ## 安装运行
 ```git
 $ git clone https://github.com/Binaryify/NeteaseCloudMusicApi
 $ cd NeteaseCloudMusicApi
 $ npm install
-$ node app.js // 运行接口服务器
+$ node app.js // 运行接口服务器 运行成功才能拿到数据
 $ git clone git@github.com:chen-ziwen/chiko_music.git
 $ cd CHIKO_MUSIC
 $ npm install
