@@ -21,7 +21,7 @@
 $ git clone https://github.com/Binaryify/NeteaseCloudMusicApi
 $ cd NeteaseCloudMusicApi
 $ npm install
-$ node app.js
+$ node app.js // 运行接口服务器
 $ git clone git@github.com:chen-ziwen/chiko_music.git
 $ cd CHIKO_MUSIC
 $ npm install
