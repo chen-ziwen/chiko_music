@@ -9,6 +9,8 @@
                     <th><span>专辑</span></th>
                     <th><span>时长</span></th>
                 </tr>
+            </thead>
+            <tbody>
                 <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index, item.id)" @click="playSong(item.index, item.id)">
                     <td>
                         <span class="sheet-index">{{ (item.index + 1 + '').padStart(2, '0') }}</span>
@@ -22,7 +24,7 @@
                     <td>{{ item.album }}</td>
                     <td>{{ formatSecondTime(item.duration) }}</td>
                 </tr>
-            </thead>
+            </tbody>
         </table>
     </div>
 </template>
@@ -85,20 +87,10 @@ const playSong = (index: number, id: number) => {
         height: 100%;
         border-collapse: collapse;
 
-        thead {
+        thead,
+        tbody {
             display: block;
             width: 100%;
-
-            // 移入时隐藏数字，显示图标
-            .sheet-list {
-                &:hover .sheet-index {
-                    display: none;
-                }
-
-                &:hover .icon-show {
-                    display: inline-block;
-                }
-            }
 
             tr {
                 display: flex;
@@ -108,31 +100,11 @@ const playSong = (index: number, id: number) => {
                 align-items: center;
                 box-sizing: border-box;
 
-                >th {
-                    color: rgb(150, 150, 150);
-                    font-weight: 300;
-                    height: 50px;
-                    line-height: 40px;
-                    padding: 0px 10px;
-
-                    span {
-                        display: inline-block;
-                        line-height: 50px;
-                    }
-
-                }
-
-                >td {
-                    font-weight: 300;
-                    padding: 0px 10px;
-                }
-
                 >th,
                 >td {
                     text-overflow: ellipsis;
                     overflow: hidden;
                     white-space: nowrap;
-
 
                     &:first-child {
                         width: 8%;
@@ -184,23 +156,14 @@ const playSong = (index: number, id: number) => {
                     }
                 }
 
-                &:not(:first-child) {
-                    cursor: pointer;
-                    transition: all .25s linear;
-
-                    &:hover {
-                        background-color: rgb(227, 227, 227);
-                    }
-                }
-
                 &:not(:nth-child(2n-1)) {
-                    background-color: #fcfcfc;
+                    background-color: $color ;
                     height: 50px;
                 }
 
                 &:not(:nth-child(2n)) {
                     height: 50px;
-                    background-color: $color;
+                    background-color: #fcfcfc;
 
                     >span {
                         display: inline-block;
@@ -208,8 +171,52 @@ const playSong = (index: number, id: number) => {
                     }
                 }
             }
+        }
 
+        // 头部
+        thead {
+            tr {
+                >th {
+                    background-color: $color;
+                    color: rgb(150, 150, 150);
+                    font-weight: 300;
+                    height: 50px;
+                    line-height: 40px;
+                    padding: 0px 10px;
 
+                    span {
+                        display: inline-block;
+                        line-height: 50px;
+                    }
+                }
+            }
+        }
+
+        // 列表内容
+        tbody {
+            tr {
+                >td {
+                    font-weight: 300;
+                    padding: 0px 10px;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    transition: all .25s linear;
+                    background-color: rgb(227, 227, 227);
+                }
+            }
+
+            // 移入时隐藏数字，显示图标
+            .sheet-list {
+                &:hover .sheet-index {
+                    display: none;
+                }
+
+                &:hover .icon-show {
+                    display: inline-block;
+                }
+            }
         }
     }
 

@@ -56,10 +56,12 @@ ul {
             flex-direction: column;
             @include _flex(center, center);
             margin: 10px 0;
+
             .singer-img {
                 width: 80px;
                 height: 80px;
-                border-radius :50%;;
+                border-radius: 50%;
+                ;
             }
 
             >span {

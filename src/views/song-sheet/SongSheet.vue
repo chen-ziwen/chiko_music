@@ -184,12 +184,13 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .song-sheet {
     height: 100%;
+
     .boutique {
         margin-top: 20px;
         height: 240px;
         background-color: $color;
         position: relative;
-        
+
         .page-img-back {
             position: absolute;
             width: 100%;
@@ -197,7 +198,8 @@ onMounted(async () => {
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            border-radius:15px;
+            border-radius: 15px;
+
             &::after {
                 content: '';
                 display: block;
@@ -208,10 +210,11 @@ onMounted(async () => {
                 height: 100%;
                 background-color: rgba(44, 44, 44, 0.5);
                 backdrop-filter: blur(20px);
-                border-radius:15px;
+                border-radius: 15px;
                 overflow: hidden;
             }
         }
+
         .content-box {
             display: flex;
             align-items: center;
@@ -221,30 +224,35 @@ onMounted(async () => {
             left: 0;
             top: 0;
             cursor: pointer;
+
             .page-img {
-                width:200px;
+                width: 200px;
                 height: 200px;
                 padding: 20px;
             }
+
             .sheet-box {
                 display: flex;
                 flex-direction: column;
                 height: inherit;
+
                 .sheet-type {
                     display: inline-block;
-                    padding:5px 20px;
+                    padding: 5px 20px;
                     border-radius: 20px;
                     border: 1px solid #e0a464;
                     color: #e0a464;
                     align-self: flex-start;
                     margin-top: 55px;
                 }
+
                 .sheet-desc {
-                color: #ffffff;
-                font-weight: 700;
-                font-size: 20px;
-                margin-top: 30px;
+                    color: #ffffff;
+                    font-weight: 700;
+                    font-size: 20px;
+                    margin-top: 30px;
                 }
+
                 .copy-writer {
                     padding-top: 15px;
                     padding-left: 5px;
@@ -259,6 +267,7 @@ onMounted(async () => {
             height: 100px
         }
     }
+
     .sheet-tags-all {
         position: relative;
         display: flex;
@@ -267,6 +276,7 @@ onMounted(async () => {
         margin-bottom: 20px;
         margin-top: 35px;
         color: #373737;
+
         .tags-position {
             position: absolute;
             left: 0;
@@ -281,6 +291,7 @@ onMounted(async () => {
             &::-webkit-scrollbar {
                 width: 0;
             }
+
             .tags-type {
                 margin-top: 10px;
 
@@ -289,6 +300,7 @@ onMounted(async () => {
                     padding-left: 10px;
                 }
             }
+
             .tags-common-type {
                 .tags {
                     display: inline-block;
@@ -311,6 +323,7 @@ onMounted(async () => {
                 }
             }
         }
+
         .choose-key {
             font-size: 20px;
             border-radius: 20px;
@@ -326,6 +339,7 @@ onMounted(async () => {
                 border-color: #f86262;
             }
         }
+
         .sheet-list-tag {
             display: flex;
             align-items: center;
@@ -339,6 +353,7 @@ onMounted(async () => {
             }
         }
     }
+
     .my-pagination {
         display: flex;
         justify-content: center;
@@ -346,6 +361,7 @@ onMounted(async () => {
         margin: 35px 0;
 
     }
+
     &:deep(.el-pagination) {
         --el-pagination-hover-color: rgb(248, 60, 60);
         --el-pagination-bg-color: transparent;
@@ -358,10 +374,10 @@ onMounted(async () => {
         }
     }
 }
+
 .hight-light {
     border-radius: 16px;
     background-color: #f9d8e5;
     color: #F84E4E;
 }
-
 </style>

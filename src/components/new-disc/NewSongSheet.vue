@@ -55,11 +55,13 @@ ul {
 
         .newsong {
             display: flex;
+
             .new-img {
                 width: 100px;
                 height: 100px;
                 border-radius: 10px;
             }
+
             .newsong-text {
                 flex-grow: 1;
                 flex-direction: column;

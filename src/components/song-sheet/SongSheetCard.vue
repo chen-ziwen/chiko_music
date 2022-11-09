@@ -56,94 +56,102 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 </script>
 
 <style lang='scss' scoped>
-
-   
 ul {
     background-color: v-bind(back);
     padding-top: 10px;
     border-radius: 15px;
+
     &:deep(.el-image) {
-        
+
         img {
-            border-radius:5px;
-        }
-    }
-    li {
-    position: relative;
-    display: inline-block;
-    // width: calc(12.5% - 30px); // 分8块
-    margin: 10px 15px 10px 15px;
-    vertical-align: top;
-    cursor: pointer;
-   
-    .sheet-pic-box {
-        position: relative;
-        &:hover .bofang-btn{
-            display: flex ;
-        }
-     .sheet-pic {
-        width: 100%;
-        height: 100%;
-        border-radius: 5px;
-        box-shadow: 4px 4px 6px grey;
-        z-index: 9;
-        overflow: visible;
-        
-        &::after {
-            content: '';
-            display: v-bind(showBakc);
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            left: 0;
-            top:0;
             border-radius: 5px;
-            transform: rotate(12deg);
-            background-color: rgba(128, 128, 128, 0.45);
-            z-index: -1;
-        }
-     }
-     .bofang-btn {
-     position: absolute;
-     right: 8px;
-     bottom: 8px;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     border-radius: 50%;
-     width: 28px;
-     height: 28px;
-     background-color: rgba(239, 237, 237, 0.909);
-     z-index: 10;
-     display: none;
-        .bofang {
-            color: rgb(249, 43, 43);
-            font-size: 16px;
         }
     }
-    }
-     .describe-text {
-        padding-top: 5px;
+
+    li {
+        position: relative;
         display: inline-block;
-        font: normal 700 16px Arial, Helvetica, sans-serif;
-        width: 100%;
-        text-align: v-bind(textdir);
-     }
-     .play-count {
-       z-index: 10;
-       position: absolute;
-       right: 4px;
-       top: 4px;
-       padding: 4px;
-       font-size: 13px;
-       border-radius: 4px;
-       background-color: rgba(0, 0, 0, 0.5);
-       color: rgba(255,255,255);
-       .count-num {
-        padding-left: 3px;
-       }
-     }
-  }
+        // width: calc(12.5% - 30px); // 分8块
+        margin: 10px 15px 10px 15px;
+        vertical-align: top;
+        cursor: pointer;
+
+        .sheet-pic-box {
+            position: relative;
+
+            &:hover .bofang-btn {
+                display: flex;
+            }
+
+            .sheet-pic {
+                width: 100%;
+                height: 100%;
+                border-radius: 5px;
+                box-shadow: 4px 4px 6px grey;
+                z-index: 9;
+                overflow: visible;
+
+                &::after {
+                    content: '';
+                    display: v-bind(showBakc);
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    border-radius: 5px;
+                    transform: rotate(12deg);
+                    background-color: rgba(128, 128, 128, 0.45);
+                    z-index: -1;
+                }
+            }
+
+            .bofang-btn {
+                position: absolute;
+                right: 8px;
+                bottom: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                width: 28px;
+                height: 28px;
+                background-color: rgba(239, 237, 237, 0.909);
+                z-index: 10;
+                display: none;
+
+                .bofang {
+                    color: rgb(249, 43, 43);
+                    font-size: 16px;
+                    transform: translateX(1px);
+                }
+            }
+        }
+
+        .describe-text {
+            padding-top: 5px;
+            display: inline-block;
+            font: normal 700 16px Arial, Helvetica, sans-serif;
+            width: 100%;
+            text-align: v-bind(textdir);
+        }
+
+        .play-count {
+            z-index: 10;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            padding: 4px;
+            font-size: 13px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: rgba(255, 255, 255);
+
+            .count-num {
+                padding-left: 3px;
+            }
+        }
+    }
 }
 
 .image-slot {
@@ -156,5 +164,4 @@ ul {
         width: calc(100%/$i - 30px); // 间距30px
     }
 }
-
 </style>

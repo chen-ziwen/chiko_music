@@ -104,55 +104,60 @@ onMounted(() => {
 
 </script>
 <style lang='scss' scoped>
-
 .boutique-song-list {
     position: relative;
+
     .module-gap {
-    position: relative;
-    padding: 10px 0;
-    box-sizing: border-box;
-    &:deep(.list-head) {
-        font-weight: 700;
-        font-size: 24px;
-    }
-    .high-tags {
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        top: 35px;
-        right: 25px;
-        padding: 3px 15px;
-        border:1px solid #BCB7B7;
-        border-radius: 20px;
-        color: rgb(44,44,44);
-        cursor: pointer;
-        
-    }
-   
- }
- .boutique-list {
-    position: absolute;
-    right: 0;
-    top:75px;
-    width: 550px;
-    z-index: 99;
-    background-color: #F9FAFC;
-    border-radius: 15px;
-    .boutique-tag {
-        display: inline-block;
-        width: calc(20% - 10px);
-        text-align: center;
-        overflow: hidden;
-        margin: 10px 5px;
-        .checked-tag {
-            display: inline-block;
-            padding: 3px 10px;
-            cursor: pointer;
+        position: relative;
+        padding: 10px 0;
+        box-sizing: border-box;
+
+        &:deep(.list-head) {
+            font-weight: 700;
+            font-size: 24px;
         }
+
+        .high-tags {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: 35px;
+            right: 25px;
+            padding: 3px 15px;
+            border: 1px solid #BCB7B7;
+            border-radius: 20px;
+            color: rgb(44, 44, 44);
+            cursor: pointer;
+
+        }
+
     }
-   
- }
+
+    .boutique-list {
+        position: absolute;
+        right: 0;
+        top: 75px;
+        width: 550px;
+        z-index: 99;
+        background-color: #F9FAFC;
+        border-radius: 15px;
+
+        .boutique-tag {
+            display: inline-block;
+            width: calc(20% - 10px);
+            text-align: center;
+            overflow: hidden;
+            margin: 10px 5px;
+
+            .checked-tag {
+                display: inline-block;
+                padding: 3px 10px;
+                cursor: pointer;
+            }
+        }
+
+    }
 }
 
 .hight-light {
@@ -160,5 +165,4 @@ onMounted(() => {
     background-color: #f9d8e5;
     color: #F84E4E;
 }
-
 </style>

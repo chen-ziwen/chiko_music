@@ -67,20 +67,22 @@ const sheetid = (id: number) => {
         align-items: center;
         margin: 15px 15px 40px 15px;
 
-     .play-count {
-       z-index: 10;
-       position: absolute;
-       left: 4px;
-       top: 6px;
-       padding: 4px;
-       font-size: 16px;
-       border-radius: 4px;
-       background-color: rgba(0, 0, 0, 0.5);
-       color: rgba(255,255,255);
-       .count-num {
-        padding-left: 3px;
-       }
-     }
+        .play-count {
+            z-index: 10;
+            position: absolute;
+            left: 4px;
+            top: 6px;
+            padding: 4px;
+            font-size: 16px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: rgba(255, 255, 255);
+
+            .count-num {
+                padding-left: 3px;
+            }
+        }
+
         .sheet-pic {
             flex-shrink: 0;
             width: 180px;

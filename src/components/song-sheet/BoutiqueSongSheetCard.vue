@@ -66,114 +66,127 @@ defineExpose({ topWay }) // 向父组件暴露方法
 </script>
 
 <style lang='scss' scoped>
+::-webkit-scrollbar {
+    width: 6px;
+}
 
-    ::-webkit-scrollbar {
-       width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-        display: none;
-    }
-    ::-webkit-scrollbar-thumb {
-        background-color: rgb(8,15,49,.5);
-        border-radius: 10px;
+::-webkit-scrollbar-track {
+    display: none;
+}
 
-    }
+::-webkit-scrollbar-thumb {
+    background-color: rgb(8, 15, 49, .5);
+    border-radius: 10px;
+
+}
+
 .boutique-sheet {
     &:deep(.el-image) {
-        
+
         img {
-            border-radius:5px;
+            border-radius: 5px;
         }
     }
-   
+
     .boutique-sheet-list {
-    position: relative;
-    display: inline-flex;
-    margin: 10px 15px 50px 15px;
-    vertical-align: top;
-    cursor: pointer;
-     .sheet-img-box {
-        flex-shrink: 0;
         position: relative;
-        border-radius: 5px;
-        box-shadow: 4px 4px 6px grey;
-        z-index: 9;
-        overflow: hidden;
-        
-        .sheet-img{
-           width: 150px;
-           height: 100%;
-        }
-        .top {
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            content: '';
-            display: block;
-            // 三角形
-            border-top: 20px solid transparent;
-            border-bottom: 20px solid transparent;
-            border-left: 20px solid transparent;
-            border-right: 20px solid #F3B068;
+        display: inline-flex;
+        margin: 10px 15px 50px 15px;
+        vertical-align: top;
+        cursor: pointer;
+
+        .sheet-img-box {
+            flex-shrink: 0;
+            position: relative;
+            border-radius: 5px;
+            box-shadow: 4px 4px 6px grey;
             z-index: 9;
-            transform: translate(-20px,-20px) rotateZ(45deg);
-            .huang {
+            overflow: hidden;
+
+            .sheet-img {
+                width: 150px;
+                height: 100%;
+            }
+
+            .top {
                 position: absolute;
-                font-size: 12px;
-                transform: translate(5px,-6px) rotateZ(-90deg);
-                color: #ffffff;
+                left: 0px;
+                top: 0px;
+                content: '';
+                display: block;
+                // 三角形
+                border-top: 20px solid transparent;
+                border-bottom: 20px solid transparent;
+                border-left: 20px solid transparent;
+                border-right: 20px solid #F3B068;
+                z-index: 9;
+                transform: translate(-20px, -20px) rotateZ(45deg);
+
+                .huang {
+                    position: absolute;
+                    font-size: 12px;
+                    transform: translate(5px, -6px) rotateZ(-90deg);
+                    color: #ffffff;
+                }
+            }
+
+            .play-count {
+                z-index: 10;
+                position: absolute;
+                right: 4px;
+                top: 4px;
+                padding: 4px;
+                font-size: 13px;
+                border-radius: 4px;
+                background-color: rgba(0, 0, 0, 0.5);
+                color: rgba(255, 255, 255);
+
+                .count-num {
+                    padding-left: 3px;
+                }
             }
         }
-        .play-count {
-            z-index: 10;
-            position: absolute;
-            right: 4px;
-            top: 4px;
-            padding: 4px;
-            font-size: 13px;
-            border-radius: 4px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: rgba(255,255,255);
-            .count-num {
-                padding-left: 3px;
+
+        .describe-text {
+            padding-top: 5px;
+            display: inline-block;
+            font: normal 700 16px Arial, Helvetica, sans-serif;
+            width: 100%;
+            text-align: v-bind(textdir);
+        }
+
+        .sheet-list {
+            display: flex;
+            flex-direction: column;
+
+            >span {
+                margin-left: 20px
+            }
+
+            .sheet-text {
+                margin-top: 20px;
+                color: rgb(44, 44, 44);
+            }
+
+            .creator-name {
+                margin-top: 10px;
+                font-size: 14px;
+                color: #6f6e6e;
+
+                .vip-level {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+
+            .copy-writer {
+                margin-top: 8px;
+                font-size: 13px;
+                color: rgb(165, 165, 165);
             }
         }
-     }
-     
-     .describe-text {
-        padding-top: 5px;
-        display: inline-block;
-        font: normal 700 16px Arial, Helvetica, sans-serif;
-        width: 100%;
-        text-align: v-bind(textdir);
-     }
-     .sheet-list {
-        display: flex;
-        flex-direction: column;
-        >span {
-            margin-left: 20px
-        }
-        .sheet-text {
-            margin-top: 20px;
-            color: rgb(44,44,44);
-        }
-        .creator-name {
-            margin-top: 10px;
-            font-size: 14px;
-            color:#6f6e6e;
-            .vip-level {
-                width:15px;
-                height: 15px;
-            }
-        }
-        .copy-writer {
-            margin-top: 8px;
-            font-size: 13px;
-            color: rgb(165, 165, 165);
-        }
-     }
-     
-  }
+
+    }
 }
 
 .image-slot {
@@ -186,5 +199,4 @@ defineExpose({ topWay }) // 向父组件暴露方法
         width: calc(100%/$i - 30px); // 间距30px
     }
 }
-
 </style>

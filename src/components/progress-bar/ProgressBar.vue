@@ -6,23 +6,23 @@
                 <el-image class="picture" :src="currentPlay.image" fit="fill">
                 </el-image>
                 <div class="song-msg flex-column">
-                    <span class="song-name text-hidden">{{currentPlay.name}}</span>
-                    <span class="singer-name text-hidden">{{changeData(currentPlay.singer)}}</span>
+                    <span class="song-name text-hidden">{{ currentPlay.name }}</span>
+                    <span class="singer-name text-hidden">{{ changeData(currentPlay.singer) }}</span>
                 </div>
             </div>
 
             <div class="flex-column flex-grow-2 flex-center">
                 <div class="play-btn flex-acenter">
-                    <i class="iconfont" :class="[pattern.icon,randomStyle]" :title="pattern.name" @click="changeState"></i>
+                    <i class="iconfont" :class="[pattern.icon, randomStyle]" :title="pattern.name" @click="changeState"></i>
                     <i class="iconfont icon-shangyiji" @click="preSong"></i>
                     <i class="iconfont noshake play" :class="playing" @click="togglePlay"></i>
                     <i class="iconfont icon-xiayiji" @click="nextSong"></i>
                     <i class="iconfont icon-geciweidianji"></i>
                 </div>
                 <div class="play-bar el-style flex-center flex-row">
-                    <span class="start-time">{{formatSecondTime(currentTime)}}</span>
+                    <span class="start-time">{{ formatSecondTime(currentTime) }}</span>
                     <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress"></el-slider>
-                    <span class="end-time">{{formatSecondTime(currentPlay.duration)}}</span>
+                    <span class="end-time">{{ formatSecondTime(currentPlay.duration) }}</span>
                 </div>
 
             </div>
