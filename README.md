@@ -4,7 +4,7 @@
 暂无（还在持续开发中）
 ## 部分截图
 ### 首页
-![e65f91925b77d661bb0d328c023ca2b4](https://user-images.githubusercontent.com/85820568/200761799-07952db7-2db5-4c53-a7a4-7dd5e5c73f12.png)
+![image](https://user-images.githubusercontent.com/85820568/200762880-af69e938-ba5d-4c27-aea5-6c456ced9a9f.png)
 ### 排行榜
 ![66eed7194967aff3f40dd7e54d6aa0c6](https://user-images.githubusercontent.com/85820568/200761719-1e329d3a-7780-47c6-b67a-5502cf770e50.png)
 ### 歌单
