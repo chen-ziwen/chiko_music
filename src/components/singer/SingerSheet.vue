@@ -2,7 +2,7 @@
     <ul>
         <li v-for="data in singerList" :key="data.id" class="recommend-singer-show-li">
             <div class="singer-message" @click="jumpPage(data.id)">
-                <el-image class="singer-img" :src="data?.picUrl + '?param=250y250'">
+                <el-image class="singer-img" :class="picType" :src="data?.picUrl + '?param=250y250'">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -13,22 +13,32 @@
                 </el-image>
                 <span>{{ data.name }}</span>
                 <span>
-                    单曲数量
-                    <span>{{ data.musicSize }}</span>
+                    单曲数量 <span>{{ data.musicSize }}</span>
                 </span>
             </div>
         </li>
     </ul>
 </template>
 <script lang='ts' setup>
+import { computed } from "vue";
 import type { SingerListType } from "@/models";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 interface SingerSheet {
-    singerList: SingerListType[]
+    singerList: SingerListType[];
+    type?: "square" | "round";
 }
-const props = defineProps<SingerSheet>();
+const props = withDefaults(defineProps<SingerSheet>(), {
+    type: "round"
+});
 const router = useRouter();
+
+const picType = computed(() => {
+    if (props.type == 'round') {
+        return 'round'
+    }
+    return ''
+})
 
 const jumpPage = (id: number) => {
     router.push({
@@ -58,10 +68,10 @@ ul {
             margin: 10px 0;
 
             .singer-img {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                ;
+                width: 85px;
+                height: 85px;
+                border-radius: 5px;
+                
             }
 
             >span {
@@ -100,6 +110,9 @@ ul {
 }
 
 .image-slot {
-    @include _imgslot(80px, 80px, 20px);
+    @include _imgslot(85px, 85px, 20px);
+}
+.round{
+    border-radius:50% !important;
 }
 </style>

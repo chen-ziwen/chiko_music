@@ -247,7 +247,7 @@ watch(() => play.playing, (isPlaying) => {
     height: 80px;
     min-width: $width;
     background-color: whitesmoke;
-    opacity: .92;
+    opacity: .95;
     z-index: 9999;
 
     .info {

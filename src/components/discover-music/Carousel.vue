@@ -44,6 +44,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .my-carousel {
     margin-top: 25px;
+    margin-bottom: -25px
 }
 
 .image-slot {

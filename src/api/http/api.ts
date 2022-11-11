@@ -158,9 +158,15 @@ export function getArtistAlbum(id: number, limit?: number, offset?: number) {
  */
 export function getArtistDesc(id: number) {
     return http.get<any>('/artist/desc', { id })
-
 }
 
+/**
+ * @function 获取歌手详情 调用此接口 , 传入歌手 id, 可获得获取歌手详情
+ * @param id 歌手id
+ */
+export function getArtistDetail(id: number) {
+    return http.get<any>('/artist/detail', { id })
+}
 /**
  * @function 全部mv(调用此接口,可获取全部mv)
  * @param area 地区,可选值为全部,内地,港台,欧美,日本,韩国,不填则为全部

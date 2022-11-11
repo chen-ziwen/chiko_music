@@ -28,7 +28,7 @@
             </div>
         </div>
         <LoadScroll @load-scorll="loadScroll" :distance="100">
-            <SingerSheet :singer-list="singerList"></SingerSheet>
+            <SingerSheet :singer-list="singerList" type="square"></SingerSheet>
         </LoadScroll>
     </div>
 </template>

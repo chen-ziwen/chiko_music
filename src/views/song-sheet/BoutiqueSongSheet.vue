@@ -17,7 +17,6 @@
                     <BoutiqueSongSheetCard ref="scroll" :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
                 </LoadScroll>
             </ContentBox>
-
         </div>
     </div>
 </template>

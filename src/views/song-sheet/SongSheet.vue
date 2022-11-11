@@ -114,19 +114,23 @@ async function getTopTags() {
 
 // 获取全部标签
 async function getAllTags() {
-    const { sub, categories } = await getPlaylistCatlist();
-    // 分成一个大数组，大数组中包含类别对象，对象中包括分类名和类型数组集合
-    let tagList: AllTags[] = [];
-    // 对标签进行分类
-    for (let i = 0; i < sub.length; i++) {
-        let tags = { name: sub[i].name, hot: sub[i].hot, category: sub[i].category, type: sub[i].type };
-        if (tagList[sub[i].category] === undefined) {
-            tagList[sub[i].category] = { name: categories[sub[i].category], list: [tags] }
-        } else {
-            tagList[sub[i].category].list.push(tags)
+    try {
+        const { sub, categories } = await getPlaylistCatlist();
+        // 分成一个大数组，大数组中包含类别对象，对象中包括分类名和类型数组集合
+        let tagList: AllTags[] = [];
+        // 对标签进行分类
+        for (let i = 0; i < sub.length; i++) {
+            let tags = { name: sub[i].name, hot: sub[i].hot, category: sub[i].category, type: sub[i].type };
+            if (!tagList[sub[i].category]) {
+                tagList[sub[i].category] = { name: categories[sub[i].category], list: [tags] }
+            } else {
+                tagList[sub[i].category].list.push(tags)
+            }
         }
+        allTags.value = tagList;
+    } catch (e) {
+        console.log(e, '获取全部标签失败');
     }
-    allTags.value = tagList;
 }
 
 // 全部标签选中

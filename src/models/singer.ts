@@ -17,3 +17,13 @@ export interface SingerListType {
     topicPerson: number;
     trans: string;
 }
+
+// 歌手详情
+export interface SingerDetail {
+    id: number;
+    cover: string;
+    name: string;
+    albumSize: number;
+    musicSize: number;
+    mvSize: number;
+}
