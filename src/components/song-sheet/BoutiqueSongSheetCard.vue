@@ -52,7 +52,7 @@ const router = useRouter();
 const scrollTop = ref<HTMLElement>();
 // 返回id
 const sheetid = (id: number) => {
-    router.push({ name: 'sheetlist', query: { id } })
+    router.push({ name: 'sheetlist', query: { sheetid: id } })
 }
 
 const topWay = () => {

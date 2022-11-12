@@ -13,7 +13,7 @@
                 </el-image>
                 <span>{{ data.name }}</span>
                 <span>
-                    单曲数量 <span>{{ data.musicSize }}</span>
+                    单曲数 <span>{{ data.musicSize }}</span>
                 </span>
             </div>
         </li>
@@ -44,7 +44,7 @@ const jumpPage = (id: number) => {
     router.push({
         name: 'singerdetails',
         query: {
-            id,
+            singerid: id,
         }
     })
 }

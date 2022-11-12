@@ -47,7 +47,7 @@
 import { getPlaylistHot, getTopPlaylistDetail, getPlaylistCatlist, getHighquality, getHighQualityTags } from '@/api/http/api';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { onMounted, reactive, ref, computed, watch, toRef } from 'vue';
+import { onMounted, reactive, ref, computed, watch, toRef, onActivated } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 interface HotTags {
     id: number;

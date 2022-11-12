@@ -11,10 +11,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.index" :class="checked(item.index, item.id)" @click="playSong(item.index, item.id)">
+                <tr class="sheet-list" v-for="(item, index) in props.sheetList" :key="item.index || index" :class="checked(item.index || index, item.id)" @click="playSong(item.index || index, item.id)">
                     <td>
-                        <span class="sheet-index">{{ (item.index + 1 + '').padStart(2, '0') }}</span>
-                        <i class="iconfont icon-show" :class="playing(item.index, item.id)"></i>
+                        <span class="sheet-index">{{ judgeNan(item.index, index) }}</span>
+                        <i class="iconfont icon-show" :class="playing(item.index || index, item.id)"></i>
                     </td>
                     <td>
                         <img :src="imgurl(item.image, '35')">
@@ -40,7 +40,6 @@ interface sheetProps {
 const props = defineProps<sheetProps>();
 const emits = defineEmits(['keeplist']);
 const play = usePlay();
-
 
 function changeData(msg: any) {
     if (!msg) {
@@ -70,6 +69,14 @@ const playSong = (index: number, id: number) => {
         play.playing = !play.playing;
     }
     emits("keeplist", index)
+}
+
+const judgeNan = (num: number, index: number) => {
+    const n = Number((num + 1).toString().padStart(2, '0'));
+    if (isNaN(n)) {
+        return index + 1;
+    }
+    return n;
 }
 
 

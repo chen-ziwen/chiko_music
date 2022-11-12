@@ -54,7 +54,7 @@ const choseSong = (id: number, index: number) => {
     emits("sheetid", id, index)
 }
 const sheetid = (id: number) => {
-    router.push({ name: 'sheetlist', query: { id } })
+    router.push({ name: 'sheetlist', query: { sheetid: id } })
 }
 </script>
 

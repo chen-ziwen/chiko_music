@@ -78,6 +78,7 @@ const params: Params = reactive({
 })
 
 const singerList = ref<SingerListType[]>([]);
+let singerMore = false;
 
 // 获得26个大写字母
 const createEns = () => {
@@ -132,8 +133,7 @@ const alongSingerList = async (parm: Params) => {
     try {
         params.offset = 0;
         singerList.value.splice(0, singerList.value.length);
-        const { artists } = await getArtistAList(parm);
-        singerList.value = artists;
+        getSingerList(parm);
     } catch (e) {
         console.log(e, '歌手列表请求失败');
     }
@@ -142,12 +142,13 @@ const alongSingerList = async (parm: Params) => {
 // 根据标签获取歌手列表 滚动请求
 const getSingerList = async (parm: Params) => {
     try {
-        params.offset += 40; // 滚动一次 增加40条数据
         const { artists, more } = await getArtistAList(parm);
-        if (more) {
-            singerList.value = singerList.value.concat(artists);
+        singerList.value = singerList.value.concat(artists);
+        singerMore = more;
+        if (singerMore) {
+            params.offset += 40; // 滚动一次 增加40条数据
         } else {
-            return;
+            params.offset = 0;
         }
     } catch (e) {
         console.log(e, '歌手列表请求失败');
@@ -156,7 +157,9 @@ const getSingerList = async (parm: Params) => {
 
 // 滚动条到底 触发请求api
 const loadScroll = () => {
-    getSingerList(params);
+    if (singerMore) {
+        getSingerList(params);
+    }
 }
 
 onMounted(() => {

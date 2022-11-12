@@ -19,19 +19,17 @@ const props = withDefaults(defineProps<Recommend>(), {
 </script>
 <style lang='scss' scoped>
 .content-box {
-    background-color: $color;
     width: $width;
-    //  margin-bottom: 20px;
     background-color: v-bind(back);
-    border-radius: 10px;
-    padding: 0px 10px;
+    border-radius: 15px;
+    padding: 0px 10px 20px 10px;
     box-sizing: border-box;
 
     .content-head {
         .m-title {
             display: inline-block;
             text-align: start;
-            margin: $margin_I;
+            margin: 25px 0px 10px 15px;
             font-size: 26px;
             font-weight: 700;
             font-family: Arial, Helvetica, sans-serif;

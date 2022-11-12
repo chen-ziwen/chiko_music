@@ -49,7 +49,7 @@ const router = useRouter();
 // 返回id
 const sheetid = (id: number) => {
     emits("sheetid", id)
-    router.push({ name: 'sheetlist', query: { id } })
+    router.push({ name: 'sheetlist', query: { sheetid: id } })
 }
 const showBakc = computed(() => props.backShow ? "block" : "none");
 
@@ -58,7 +58,6 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 <style lang='scss' scoped>
 ul {
     background-color: v-bind(back);
-    padding-top: 10px;
     border-radius: 15px;
 
     &:deep(.el-image) {

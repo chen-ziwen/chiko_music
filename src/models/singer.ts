@@ -20,10 +20,21 @@ export interface SingerListType {
 
 // 歌手详情
 export interface SingerDetail {
-    id: number;
+    id?: number;
     cover: string;
     name: string;
     albumSize: number;
     musicSize: number;
     mvSize: number;
+    briefDesc: string;
+    identities: string[];
+}
+
+// 歌手专辑
+export interface SingerAlbumType {
+    picUrl: string;
+    publishTime: number;
+    name: string;
+    subType: string;
+    id: number;
 }

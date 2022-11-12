@@ -79,8 +79,8 @@ import {
     getPlaylistSubscribers,
 } from '@/api/http/api';
 import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
-import { useRoute, useRouter } from 'vue-router';
-import { reactive, ref, watch, toRaw } from 'vue';
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
+import { reactive, ref, watch, toRaw, onActivated } from 'vue';
 import SongList from '@/components/song-sheet/SongList.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/ListModule.vue';
@@ -119,31 +119,38 @@ const sheetDetail = reactive<sheetDetail>({
 const delSong = reactive<Record<string, any>[]>([]);
 
 async function playlistDetail(id: number) {
-    // 先将歌单列表数组清空
-    sheetDetail.sheetList.length = 0;
-    delSong.length = 0;
-    let nowTime = new Date().getTime();
-    let i = 0;
-    const { playlist } = await getPlaylistDetail(id, 50, nowTime);
-    if (playlist?.description) {
-        playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
-    }
-    sheetDetail.detail = playlist;
-    sheetDetail.creator = playlist?.creator;
-    const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
-    //给每一首歌添加一个顺序索引
-    while (i < songs.length) {
-        songs[i].index = i;
-        delSong.push(useSong(songs[i])) // 将数据进行过滤和处理
-        i++;
+    try {
+        // 先将歌单列表数组清空
+        sheetDetail.sheetList.length = 0;
+        delSong.length = 0;
+        let nowTime = new Date().getTime();
+        let i = 0;
+        const { playlist } = await getPlaylistDetail(id, 50, nowTime);
+        if (playlist?.description) {
+            playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
+        }
+        sheetDetail.detail = playlist;
+        sheetDetail.creator = playlist?.creator;
+        const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
+        //给每一首歌添加一个顺序索引
+        while (i < songs.length) {
+            songs[i].index = i;
+            delSong.push(useSong(songs[i])) // 将数据进行过滤和处理
+            i++;
+        }
+
+        //将大数组切割成指定大小的数组集合
+        for (let i = 0; i < delSong.length; i += 50) {
+            sheetDetail.sheetList.push(delSong.slice(i, i + 50))
+        }
+        // 分页的每一页歌曲
+        sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
+        // console.log(id, "====>");
+
+    } catch (e) {
+        console.log(e, id, '歌单列表请求错误');
     }
 
-    //将大数组切割成指定大小的数组集合
-    for (let i = 0; i < delSong.length; i += 50) {
-        sheetDetail.sheetList.push(delSong.slice(i, i + 50))
-    }
-    // 分页的每一页歌曲
-    sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
 }
 
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论，相关歌单，歌单收藏
@@ -176,7 +183,7 @@ function turnSheet(id: number) {
     router.push({
         name: 'sheetlist',
         query: {
-            id,
+            sheetid: id,
         }
     })
 }
@@ -191,12 +198,8 @@ function commonSheet(name: string) {
 }
 // 初始化界面
 function originContent(id: number) {
-    // 因为监听的是路由跳转的id，所以当从歌单跳转到发现音乐时，因为没传id，所以router.query.id为空会报错
-    // 如果id为空不执行
-    if (id) {
-        startSheet(id);
-        playlistDetail(id);
-    }
+    startSheet(id);
+    playlistDetail(id);
 }
 // 将当前歌单列表和当前索引值保存到pinia中
 const keepsheet = (index: number) => {
@@ -218,10 +221,11 @@ const playAll = () => {
     })
 }
 
-watch(() => route.query.id, () => {
+watch(() => route.query.sheetid, (id) => {
+    if (!id) return;
     // 跳转歌单时，将分页定位到第一页
     page.value = 1;
-    let sheetId = route.query.id as unknown as number;
+    let sheetId = id as unknown as number;
     storage.set('idsss', sheetId)
     originContent(sheetId);
 }, { immediate: true })

@@ -66,7 +66,6 @@ const boutiqueTags = async () => {
 
 const turnSheet = async (name: string) => {
     try {
-        // 精品歌单一般不超过100个 直接全部拿出来 懒得写分页了
         const { lasttime, more, playlists, total } = await getHighquality(name, 30);
         boSheet.playlists = playlists;
         boSheet.lasttime = lasttime;

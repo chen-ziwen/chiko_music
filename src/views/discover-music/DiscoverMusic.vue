@@ -6,7 +6,7 @@
         </div>
         <!-- 歌曲 -->
         <div class="song">
-            <ContentBox title="新歌首发">
+            <ContentBox title="新歌首发" back="#ffffff">
                 <template v-if="newsong && newsong.length > 0">
                     <NewSongSheet :new-sheet="newsong"></NewSongSheet>
                 </template>
@@ -14,7 +14,7 @@
         </div>
         <!-- 歌单 -->
         <div class="sheet" v-if="sheetlist">
-            <ContentBox title="推荐歌单">
+            <ContentBox title="推荐歌单" back="#ffffff">
                 <template v-if="sheetlist && sheetlist.length > 0">
                     <SongSheetCard :sheet="sheetlist" :backShow="false"></SongSheetCard>
                 </template>
@@ -22,7 +22,7 @@
         </div>
         <!-- 歌手 -->
         <div class="singer">
-            <ContentBox title="推荐歌手">
+            <ContentBox title="推荐歌手" back="#ffffff">
                 <template v-if="artist && artist.length > 0">
                     <SingerSheet :singer-list="artist"></SingerSheet>
                 </template>
@@ -30,7 +30,7 @@
         </div>
         <!-- MV -->
         <div class="mv">
-            <ContentBox title="推荐MV">
+            <ContentBox title="推荐MV" back="#ffffff">
                 <template v-if="recommendMv && recommendMv.length > 0">
                     <MvSheet :mv-sheet="recommendMv"></MvSheet>
                 </template>
@@ -87,6 +87,9 @@ onMounted(() => {
 .singer,
 .song,
 .mv {
-    margin-bottom: 30px;
+    margin-bottom: 60px;
+}
+.song {
+    margin-top: 80px;
 }
 </style>
