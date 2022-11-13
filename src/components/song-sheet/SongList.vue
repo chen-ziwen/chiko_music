@@ -65,7 +65,7 @@ const checked = (index: number, id: number) => {
 
 // 将当前索引值传递到父组件,当索引值相同时则反复切换
 const playSong = (index: number, id: number) => {
-    if (index === play.currentindex && id == play.currentPlay.id) {
+    if (index == play.currentindex && id == play.currentPlay.id) {
         play.playing = !play.playing;
     }
     emits("keeplist", index)

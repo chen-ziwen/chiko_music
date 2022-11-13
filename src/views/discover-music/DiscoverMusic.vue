@@ -47,12 +47,13 @@ import SongSheetCard from "@/components/song-sheet/SongSheetCard.vue";
 import SingerSheet from "@/components/singer/SingerSheet.vue";
 import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
 import MvSheet from "@/components/mv/MvSheet.vue";
-import { getRecommendList, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
-import type { RecommendList, Newsong, SingerListType } from "@/models";
+import { getRecommendList, getSongDetail, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
+import type { RecommendList, Newsong, SingerListType, SongList } from "@/models";
+import { useSong } from "@/hook";
 
 const sheetlist = ref<RecommendList[]>();
 const artist = ref<SingerListType[]>();
-const newsong = ref<Newsong[]>();
+const newsong = ref<SongList[]>();
 const recommendMv = ref<any>();
 
 async function getRecommend() {
@@ -63,9 +64,33 @@ async function topArtists() {
     let { artists } = await getTopArtists(40);
     artist.value = artists;
 }
+
 function Personalized() {
-    getPersonalizedNewsong(12).then(res => {
-        newsong.value = res.result;
+    getPersonalizedNewsong(12)
+        .then(res => {
+            const newIds: number[] = [];
+            res.result.forEach((x: SongList) => {
+                newIds.push(x.id)
+            })
+            const ids: string = newIds.join(',');
+            SongDetail(ids);
+        }).catch((e) => {
+            console.log(e, '推荐歌单请求失败');
+        });
+}
+
+const SongDetail = (ids: string) => {
+    const songs: SongList[] = [];
+    // 传入ids 字符串 可以请求到直接播放的
+    getSongDetail(ids).then(res => {
+        res.songs.forEach((x: SongList) => {
+            if (x.id) {
+                songs.push(useSong(x))
+            }
+        })
+        newsong.value = songs;
+    }).catch((e) => {
+        console.log(e, '歌曲列表请求失败');
     });
 }
 async function PersonalizedMv() {
