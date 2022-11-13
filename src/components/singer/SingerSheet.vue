@@ -60,6 +60,10 @@ ul {
         margin: 0px 15px 15px 15px;
         vertical-align: top;
         cursor: pointer;
+        &:hover .singer-img {
+            box-sizing: border-box;
+            border: 1px solid rgb(246, 67, 67);
+        }
 
         .singer-message {
             width: 100%;
