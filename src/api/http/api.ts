@@ -144,12 +144,12 @@ export function getSimiArtist(id: number) {
 
 /**
  * @function 获取歌手专辑(调用此接口,传入歌手id,可获得歌手专辑内容)
- * @param id 歌曲id必选
+ * @param id 歌手id
  * @param limit 取出数量,默认为 50
  * @param offset 偏移数量,用于分页,如 :( 评论页数 -1)*50,其中50为limit的值
  */
 export function getArtistAlbum(id: number, limit?: number, offset?: number) {
-    return http.get<any>('artist/album', { id, limit, offset })
+    return http.get<any>('/artist/album', { id, limit, offset })
 }
 
 /**
@@ -166,6 +166,24 @@ export function getArtistDesc(id: number) {
  */
 export function getArtistDetail(id: number) {
     return http.get<any>('/artist/detail', { id })
+}
+
+/**
+ * @function 获取专辑内容
+ * @param id 专辑id
+ */
+export function getAlbum(id: number, time: number) {
+    return http.get<any>('/album', { id, time })
+}
+/**
+ * @function 获取专辑评论数
+ * @param id 专辑id
+ * @param limit 取出评论数
+ * @param offset 偏移数量
+ * @param before 分页参数
+ */
+export function getCommentAlbum(id: number, limit?: number, offset?: number, before?: string) {
+    return http.get<any>('/comment/album', { id, limit, offset, before })
 }
 /**
  * @function 全部mv(调用此接口,可获取全部mv)

@@ -111,8 +111,8 @@ const sheetAbout = reactive<sheetAbout>({
 });
 const sheetDetail = reactive<sheetDetail>({
     //初始化，不想初始化就必须使用可选链或&&
-    detail: { coverImgUrl: '', name: '', createTime: 0, tags: [], description: '' },
-    creator: { avatarUrl: '', nickname: '' },
+    detail: { tags: [] },
+    creator: {},
     sheetList: [],
     partsheet: [],
 });

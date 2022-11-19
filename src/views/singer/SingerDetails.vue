@@ -4,7 +4,6 @@
             <el-image class="singer-img" :src="artDil?.cover + '?param=400y400'"></el-image>
             <div class="singer-msg">
                 <span class="artist-name">{{ artDil.name }}</span>
-                <!-- <span class=""></span> -->
                 <div class="music-size">
                     <span>单曲数：{{ artDil.musicSize }}</span>
                     <span>专辑数：{{ artDil.albumSize }}</span>
@@ -163,47 +162,55 @@ watch(() => route.query.singerid, (id) => {
     background-color: #ffffff;
     margin: 20px 0;
     border-radius: 15px;
-    .singer-details-msg  {
+
+    .singer-details-msg {
         display: flex;
         margin: 30px;
+
         .singer-img {
-        flex-shrink: 0;
-        width: 250px;
-        height: 250px;
-        border-radius: 5px;
-        border: 2px solid #f87a8f ;
-    }
-    .singer-msg {
-        display: flex;
-        flex-direction: column;
-        margin-left: 35px;
-        .artist-name {
-        font-size: 26px;
-        font-weight: 700;
-        margin-bottom: 20px;
+            flex-shrink: 0;
+            width: 250px;
+            height: 250px;
+            border-radius: 5px;
+            border: 2px solid #f87a8f;
         }
-        .music-size {
-            >span {
-                margin-right: 30px;
+
+        .singer-msg {
+            display: flex;
+            flex-direction: column;
+            margin-left: 35px;
+
+            .artist-name {
+                font-size: 26px;
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+
+            .music-size {
+                >span {
+                    margin-right: 30px;
+                }
+            }
+
+            .artist-brief {
+                margin-top: 20px;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 6;
+                overflow: hidden;
+                color: rgb(139, 138, 138);
+                line-height: 26px;
             }
         }
-        .artist-brief {
-          margin-top: 20px;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 6;
-          overflow: hidden;
-          color: rgb(139, 138, 138);
-          line-height: 26px;
-        }
-      }
     }
+
     .module-checked {
-      margin: 15px 30px;
-      &:deep(.el-tabs){
-        --el-color-primary:#f87a8f;
-      }
+        margin: 15px 30px;
+
+        &:deep(.el-tabs) {
+            --el-color-primary: #f87a8f;
+        }
     }
-    
+
 }
 </style>

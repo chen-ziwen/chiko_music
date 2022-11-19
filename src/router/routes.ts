@@ -70,6 +70,15 @@ const mainRouter = [
                 component: () => import('@/views/song-sheet/SheetList.vue')
             },
             {
+                path: 'albumlist',
+                name: 'albumlist',
+                meta: {
+                    title: '专辑详情',
+                    keepAlive: true,
+                },
+                component: () => import('@/views/singer/AlbumList.vue')
+            },
+            {
                 path: 'boutiquesongsheet',
                 name: 'boutiquesongsheet',
                 meta: {
@@ -107,15 +116,15 @@ const mainRouter = [
                 },
                 component: () => import('@/views/new-disc/NewDisc.vue')
             },
-            {
-                path: 'test',
-                name: 'test',
-                meta: {
-                    title: '测试',
-                    keepAlive: true
-                },
-                component: () => import('@/views/test/Test.vue')
-            },
+            // {
+            //     path: 'test',
+            //     name: 'test',
+            //     meta: {
+            //         title: '测试',
+            //         keepAlive: true
+            //     },
+            //     component: () => import('@/views/test/Test.vue')
+            // },
         ]
     },
 
