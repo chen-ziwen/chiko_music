@@ -3,3 +3,4 @@
 export * from './detail';
 export * from './search';
 export * from './singer';
+export * from './mv';

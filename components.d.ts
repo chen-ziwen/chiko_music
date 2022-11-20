@@ -19,6 +19,7 @@ declare module 'vue' {
     Listmodule: typeof import('./src/components/common/listmodule.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     LoadScroll: typeof import('./src/components/common/LoadScroll.vue')['default']
+    MvList: typeof import('./src/components/mv/MvList.vue')['default']
     MvSheet: typeof import('./src/components/mv/MvSheet.vue')['default']
     MyFooter: typeof import('./src/components/home-page/MyFooter.vue')['default']
     MyMain: typeof import('./src/components/home-page/MyMain.vue')['default']

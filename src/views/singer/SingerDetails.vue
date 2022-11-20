@@ -22,7 +22,9 @@
                         <SingerAlbum :data="artAlbum"></SingerAlbum>
                     </LoadScroll>
                 </el-tab-pane>
-                <el-tab-pane label="MV" name="mv">MV</el-tab-pane>
+                <el-tab-pane label="MV" name="mv">
+                    <MvList :list="artMV"></MvList>
+                </el-tab-pane>
                 <el-tab-pane label="歌手详情" name="detail">
                     <SingerMsg :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
                 </el-tab-pane>
@@ -32,7 +34,7 @@
     </div>
 </template>
 <script lang='ts' setup>
-import type { SingerDetail, SongList as SongListType, SingerAlbumType } from '@/models'
+import type { SingerDetail, ArtMV, SongList as SongListType, SingerAlbumType } from '@/models'
 import { usePlay } from '@/store/play';
 import { watch, ref, reactive } from 'vue';
 import { useRoute } from 'vue-router';
@@ -42,6 +44,7 @@ import SingerMsg from '@/components/singer/SingerMsg.vue';
 import SongList from '@/components/song-sheet/SongList.vue';
 import SingerAlbum from '@/components/singer/SingerAlbum.vue';
 import LoadScroll from '@/components/common/LoadScroll.vue';
+import MvList from '@/components/mv/MvList.vue';
 
 const route = useRoute();
 const play = usePlay();
@@ -66,6 +69,7 @@ const artDil = ref<SingerDetail>({
 });
 // 歌手专辑
 const artAlbum = ref<SingerAlbumType[]>([]);
+const artMV = ref<ArtMV[]>([]);
 let albumOffset = 0;
 let albumMore = false;
 
@@ -104,12 +108,24 @@ const singerHotsongs = async (id: number) => {
 
 // 相似歌手 需要登陆
 const simiArtist = async (id: number) => {
+    // try {
+    //     const { hotAlbums, more, artist } = await getSimiArtist(id);
+    // } catch (e) {
+    //     console.log(e, '相似歌手需要的登陆才能获取');
+    // }
+}
+
+const singerMv = async (id: number) => {
     try {
-        const { hotAlbums, more, artist } = await getSimiArtist(id);
-    } catch (e) {
-        console.log(e, '相似歌手需要的登陆才能获取');
+        const { mvs } = await getArtistMv(id);
+        artMV.value = mvs;
+        console.log(artMV.value, '6666');
+    }
+    catch (e) {
+        console.log(e, '获取歌手mv失败')
     }
 }
+
 
 // 歌手专辑 
 const ArtistAlbum = async (id: number) => {
@@ -151,6 +167,7 @@ watch(() => route.query.singerid, (id) => {
     singerHotsongs(singerid);
     simiArtist(singerid);
     ArtistAlbum(singerid);
+    singerMv(singerid);
 }, { immediate: true });
 
 </script>

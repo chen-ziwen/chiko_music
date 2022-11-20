@@ -53,7 +53,7 @@ const turnSheet = (id: number) => {
             align-items: center;
 
             &:hover .album-back {
-                right: -35px;
+                right: -32px;
             }
 
 
@@ -78,7 +78,7 @@ const turnSheet = (id: number) => {
                 height: 140px;
                 border-radius: 50%;
                 background-color: rgba(44, 44, 4);
-                right: -20px;
+                right: -25px;
                 transition: all 0.25s;
 
                 &::after,
