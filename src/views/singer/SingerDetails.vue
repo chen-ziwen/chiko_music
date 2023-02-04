@@ -28,7 +28,11 @@
                 <el-tab-pane label="歌手详情" name="detail">
                     <SingerMsg :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
                 </el-tab-pane>
-                <el-tab-pane label="相似歌手" name="like">相似歌手</el-tab-pane>
+                <el-tab-pane label="相似歌手" name="like">
+                    <template v-if="singerList && singerList.length > 0">
+                        <SingerSheet :singer-list="singerList"></SingerSheet>
+                    </template>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -37,22 +41,26 @@
 import type { SingerDetail, ArtMV, SongList as SongListType, SingerAlbumType } from '@/models'
 import { usePlay } from '@/store/play';
 import { watch, ref, reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useSong } from '@/hook';
 import { getArtists, getArtistMv, getSimiArtist, getArtistAlbum, getArtistDesc, getArtistDetail } from '@/api/http/api';
 import SingerMsg from '@/components/singer/SingerMsg.vue';
 import SongList from '@/components/song-sheet/SongList.vue';
 import SingerAlbum from '@/components/singer/SingerAlbum.vue';
+import SingerSheet from '@/components/singer/SingerSheet.vue';
 import LoadScroll from '@/components/common/LoadScroll.vue';
 import MvList from '@/components/mv/MvList.vue';
 
 const route = useRoute();
+const router = useRouter();
 const play = usePlay();
 // tabs选择
 const checkedname = ref<string>('hot');
 const singerId = ref<number>(0);
-const checkedClick = (name: string) => {
-    console.log(name, 'name');
+const checkedClick = (name: { paneName: string }) => {
+    if (name.paneName == 'like' && !play.loginStatu) {
+        router.push({ name: 'login' })
+    }
 }
 const delSong = reactive<SongListType[]>([]);
 // 歌手详情  (歌曲数、专辑数)
@@ -69,6 +77,7 @@ const artDil = ref<SingerDetail>({
 });
 // 歌手专辑
 const artAlbum = ref<SingerAlbumType[]>([]);
+const singerList = ref<any>();
 const artMV = ref<ArtMV[]>([]);
 let albumOffset = 0;
 let albumMore = false;
@@ -108,11 +117,12 @@ const singerHotsongs = async (id: number) => {
 
 // 相似歌手 需要登陆
 const simiArtist = async (id: number) => {
-    // try {
-    //     const { hotAlbums, more, artist } = await getSimiArtist(id);
-    // } catch (e) {
-    //     console.log(e, '相似歌手需要的登陆才能获取');
-    // }
+    try {
+        const { artists } = await getSimiArtist(id);
+        singerList.value = artists;
+    } catch (e) {
+        console.log(e, '相似歌手需要的登陆才能获取');
+    }
 }
 
 const singerMv = async (id: number) => {

@@ -1,9 +1,11 @@
 <template>
-    <div class="container">2222 {{ play.name }}{{ play.age }}</div>
+    <div class="container">2222 {{ play.name }}{{ play.age }}
+    </div>
 </template>
 
 <script lang="ts" setup>
 import { useStore } from '@/store/index';
+
 const play = useStore();
 play.$patch({
     name: '陈孜孜',
@@ -18,4 +20,5 @@ play.cName('吉克隽逸')
 </script>
 
 <style lang="scss" scoped>
+
 </style>

@@ -172,43 +172,48 @@ onMounted(() => {
 .music-singer {
     background-color: $color;
     margin: 0 auto;
+
     .singer-tags {
         .tag-all {
             display: flex;
             margin: 20px 0px;
+
             &:not(:last-of-type) {
                 align-items: center;
             }
-            
+
             .tag-text {
                 width: 60px;
                 display: inline-block;
                 flex-shrink: 0;
                 font-style: normal;
-                color: rgb(88,88,88);
+                color: rgb(88, 88, 88);
                 font-weight: 600;
             }
         }
 
-    .langs,.singer,.ens {
-        color: rgb(99, 99, 99);
-        
-       li {
-        display: inline-block;
-        padding: 3px;
-        margin: 0 10px;
-        cursor:pointer;
-        width: 60px;
-        text-align: center;
-       } 
-    }
-    .ens {
-        li {
-            margin-bottom: 15px;
-            
+        .langs,
+        .singer,
+        .ens {
+            color: rgb(99, 99, 99);
+
+            li {
+                display: inline-block;
+                padding: 3px;
+                margin: 0 10px;
+                cursor: pointer;
+                width: 60px;
+                text-align: center;
+            }
+        }
+
+        .ens {
+            li {
+                margin-bottom: 15px;
+
+            }
         }
     }
-}
 }
 
 .high {

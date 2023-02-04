@@ -38,7 +38,7 @@
                     <el-icon :size="28" class="el-search">
                         <search />
                     </el-icon>
-                    <span class="nav-login">登陆</span>
+                    <span class="nav-login" @click="login">登陆</span>
                     <div class="search-music-box" v-if="false">
                         <SearchMusic></SearchMusic>
                     </div>
@@ -50,10 +50,14 @@
 </template>
 
 <script lang="ts" setup>
+import { useRouter } from 'vue-router';
 import { Search } from '@element-plus/icons-vue';
-import { ref } from 'vue';
 import SearchMusic from '../common/SearchMusic.vue';
+const router = useRouter();
 
+const login = () => {
+    router.push('/login')
+}
 </script>
 
 <style lang="scss" scoped>
@@ -112,8 +116,10 @@ import SearchMusic from '../common/SearchMusic.vue';
     .nav-right {
         position: relative;
         @include _flex(center, center);
+
         &:deep(.el-icon) {
             color: #ffffff;
+
             &:hover {
                 color: #ff0000;
             }
@@ -133,13 +139,14 @@ import SearchMusic from '../common/SearchMusic.vue';
             cursor: pointer;
             color: white;
         }
+
         .search-music-box {
-        position: absolute;
-        right: 0px;
-        top: 60px;
-        transform: translateX(30%);
+            position: absolute;
+            right: 0px;
+            top: 60px;
+            transform: translateX(30%);
+        }
     }
-    }
-   
+
 }
 </style>

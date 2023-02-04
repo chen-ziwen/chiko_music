@@ -5,7 +5,7 @@ const loginRouter = {
     path: '/login',
     name: 'login',
     meta: {
-        title: '登陆chikoMusic',
+        title: '登陆',
         isLogin: true,
         keepAlive: false
     },
@@ -38,7 +38,7 @@ const mainRouter = [
                 name: 'singer',
                 meta: {
                     title: '歌手',
-                    keepAlive: false
+                    keepAlive: true
                 },
                 component: () => import('@/views/singer/Singer.vue')
             },

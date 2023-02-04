@@ -31,7 +31,6 @@ const props = defineProps<{ list: ArtMV[] }>();
             .mv-pic {
                 width: 300px;
                 height: 170px;
-                border-radius: 10px;
             }
         }
 

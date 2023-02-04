@@ -13,33 +13,35 @@
                 </div>
             </div>
         </div>
-        <div class="sheet-tags-all">
-            <div class="choose-key" @click.stop="pop = !pop">
-                {{ nameKey }}
-                <el-icon>
-                    <ArrowDown />
-                </el-icon>
-            </div>
-            <ul class="sheet-list-tag">
-                <li class="sheet-hot-tag" v-for="name of hotTags" :class="hightlight(name)" @click="tagsList(name)">
-                    {{ name }}
-                </li>
-            </ul>
-            <Transition name="pop">
-                <div class="tags-position" v-if="pop">
-                    <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
-                        <span class="tags-hight-light">{{ item.name }}</span>
-                        <ul class="tags-common-type">
-                            <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)" @click="tagsList(data.name)">
-                                <span>{{ data.name }}<sup>{{ data.hot ? "hot" : "" }}</sup></span>
-                            </li>
-                        </ul>
-                    </div>
+        <div class="sheet-module">
+            <div class="sheet-tags-all">
+                <div class="choose-key" @click.stop="pop = !pop">
+                    {{ nameKey }}
+                    <el-icon>
+                        <ArrowDown />
+                    </el-icon>
                 </div>
-            </Transition>
+                <ul class="sheet-list-tag">
+                    <li class="sheet-hot-tag" v-for="name of hotTags" :class="hightlight(name)" @click="tagsList(name)">
+                        {{ name }}
+                    </li>
+                </ul>
+                <Transition name="pop">
+                    <div class="tags-position" v-if="pop">
+                        <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
+                            <span class="tags-hight-light">{{ item.name }}</span>
+                            <ul class="tags-common-type">
+                                <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)" @click="tagsList(data.name)">
+                                    <span>{{ data.name }}<sup>{{ data.hot ? "hot" : "" }}</sup></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </Transition>
+            </div>
+            <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
+            <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
         </div>
-        <SongSheetCard :sheet="sheetList.playlists" :item="8"></SongSheetCard>
-        <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
     </div>
 </template>
 
@@ -188,12 +190,12 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .song-sheet {
     height: 100%;
+    margin: 20px 0;
 
     .boutique {
-        margin-top: 20px;
-        height: 240px;
-        background-color: $color;
         position: relative;
+        height: 240px;
+        margin-bottom: 25px;
 
         .page-img-back {
             position: absolute;
@@ -272,88 +274,94 @@ onMounted(async () => {
         }
     }
 
-    .sheet-tags-all {
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        margin-top: 35px;
-        color: #373737;
+    .sheet-module {
+        padding: 10px 15px;
+        border-radius: 15px;
+        background-color: #ffffff;
 
-        .tags-position {
-            position: absolute;
-            left: 0;
-            top: 40px;
-            width: 600px;
-            height: 400px;
-            z-index: 99;
-            background-color: #F9FAFC;
-            border-radius: 10px;
-            overflow: auto;
+        .sheet-tags-all {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            color: #373737;
 
-            &::-webkit-scrollbar {
-                width: 0;
-            }
+            .tags-position {
+                position: absolute;
+                left: 0;
+                top: 40px;
+                width: 600px;
+                height: 400px;
+                z-index: 99;
+                background-color: rgb(255, 231, 235);
+                border-radius: 10px;
+                overflow: auto;
 
-            .tags-type {
-                margin-top: 10px;
-
-                .tags-hight-light {
-                    font-weight: 700;
-                    padding-left: 10px;
+                &::-webkit-scrollbar {
+                    width: 0;
                 }
-            }
 
-            .tags-common-type {
-                .tags {
-                    display: inline-block;
-                    padding: 0 10px;
-                    margin: 10px 5px;
-                    cursor: pointer;
+                .tags-type {
+                    margin-top: 10px;
 
-                    span {
+                    .tags-hight-light {
+                        font-weight: 700;
+                        padding-left: 10px;
+                    }
+                }
+
+                .tags-common-type {
+                    .tags {
                         display: inline-block;
-                        margin-bottom: 6px;
+                        padding: 0 10px;
+                        margin: 10px 5px;
+                        cursor: pointer;
 
-                        sup {
+                        span {
+                            display: inline-block;
+                            margin-bottom: 6px;
+
+                            sup {
+                                color: #F84E4E;
+                            }
+                        }
+
+                        &:hover {
                             color: #F84E4E;
                         }
                     }
-
-                    &:hover {
-                        color: #F84E4E;
-                    }
                 }
             }
-        }
 
-        .choose-key {
-            font-size: 20px;
-            border-radius: 20px;
-            border: 1px solid rgb(170, 170, 170);
-            padding: 0px 20px;
-            user-select: none;
-            color: #656464;
-            cursor: pointer;
-
-            &:hover {
-                background-color: #ffe1ed;
-                color: #f86262;
-                border-color: #f86262;
-            }
-        }
-
-        .sheet-list-tag {
-            display: flex;
-            align-items: center;
-            margin: 0;
-
-            .sheet-hot-tag {
-                display: inline-block;
-                padding: 5px 12px;
-                margin: 0 5px;
+            .choose-key {
+                font-size: 20px;
+                border-radius: 20px;
+                border: 1px solid rgb(170, 170, 170);
+                padding: 0px 20px;
+                user-select: none;
+                color: #656464;
                 cursor: pointer;
+
+                &:hover {
+                    background-color: #ffe1ed;
+                    color: #f86262;
+                    border-color: #f86262;
+                }
+            }
+
+            .sheet-list-tag {
+                display: flex;
+                align-items: center;
+                margin: 0;
+
+                .sheet-hot-tag {
+                    display: inline-block;
+                    padding: 5px 12px;
+                    margin: 0 5px;
+                    cursor: pointer;
+                }
             }
         }
     }
@@ -362,7 +370,7 @@ onMounted(async () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 35px 0;
+        margin: 20px 0 10px 0;
 
     }
 
@@ -380,8 +388,8 @@ onMounted(async () => {
 }
 
 .hight-light {
-    border-radius: 16px;
-    background-color: #f9d8e5;
+    border-radius: 2px;
+    background-color: #fde583;
     color: #F84E4E;
 }
 </style>

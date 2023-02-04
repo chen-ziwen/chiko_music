@@ -1,7 +1,7 @@
 <template>
     <div class="boutique-song-list" @click="pop = false">
         <div class="module-gap">
-            <ContentBox title="精品歌单">
+            <ContentBox title="精品歌单" back="#ffffff">
                 <span class="high-tags" @click.stop="pop = !pop">
                     <i class="iconfont icon-xiangxia" :style="{ marginRight: '3px' }"></i>
                     {{ nameKey }}
@@ -107,7 +107,7 @@ onMounted(() => {
 
     .module-gap {
         position: relative;
-        padding: 10px 0;
+        padding: 20px 0;
         box-sizing: border-box;
 
         &:deep(.list-head) {
@@ -134,11 +134,11 @@ onMounted(() => {
 
     .boutique-list {
         position: absolute;
-        right: 0;
+        right: 10px;
         top: 75px;
         width: 550px;
         z-index: 99;
-        background-color: #F9FAFC;
+        background-color: rgb(255, 231, 235);
         border-radius: 15px;
 
         .boutique-tag {
@@ -147,6 +147,7 @@ onMounted(() => {
             text-align: center;
             overflow: hidden;
             margin: 10px 5px;
+            color: #383838;
 
             .checked-tag {
                 display: inline-block;
@@ -159,8 +160,8 @@ onMounted(() => {
 }
 
 .hight-light {
-    border-radius: 16px;
-    background-color: #f9d8e5;
+    border-radius: 2px;
+    background-color: #fde583;
     color: #F84E4E;
 }
 </style>
