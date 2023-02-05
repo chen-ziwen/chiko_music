@@ -142,6 +142,7 @@ const singerMv = async (id: number) => {
 const ArtistAlbum = async (id: number) => {
     try {
         const { hotAlbums, more } = await getArtistAlbum(id, 30, albumOffset);
+        console.log('专辑歌曲', artAlbum.value, more, albumOffset);
         artAlbum.value = artAlbum.value.concat(hotAlbums);
         albumMore = more;
         if (albumMore) {
@@ -155,7 +156,8 @@ const ArtistAlbum = async (id: number) => {
     }
 }
 const loadScroll = () => {
-    if (albumMore) {
+    // 限制在专辑中触发
+    if (albumMore && checkedname.value == 'album') {
         ArtistAlbum(singerId.value)
     }
 }
@@ -168,22 +170,25 @@ const keepsheet = (index: number) => {
         playList: songArr,
     })
 }
-onMounted(() => {
-    console.log('666');
 
-})
+// 整体方法执行 
+const changeSingerId = (id: number) => {
+    artistDesc(id);
+    artDetail(id);
+    singerHotsongs(id);
+    simiArtist(id);
+    ArtistAlbum(id);
+    singerMv(id);
+    checkedname.value = 'hot'; // 切换歌手id时 切换到第一个页面
+    artAlbum.value.splice(0, artAlbum.value.length); // 切换歌手时 清空专辑拼接
+    albumOffset = 0; // 重置专辑偏移值
+}
 
 watch(() => route.query.singerid, (id) => {
     if (!id) return;
     const singerid = id as unknown as number;
     singerId.value = singerid;
-    artistDesc(singerid);
-    artDetail(singerid);
-    singerHotsongs(singerid);
-    simiArtist(singerid);
-    ArtistAlbum(singerid);
-    singerMv(singerid);
-    checkedname.value = 'hot'; // 切换歌手id时 切换到第一个页面
+    changeSingerId(singerid);
 }, { immediate: true });
 
 </script>

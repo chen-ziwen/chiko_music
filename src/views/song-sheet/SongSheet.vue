@@ -295,7 +295,7 @@ onMounted(async () => {
                 width: 600px;
                 height: 400px;
                 z-index: 99;
-                background-color: rgb(255, 231, 235);
+                background-color: rgb(254, 236, 239);
                 border-radius: 10px;
                 overflow: auto;
 

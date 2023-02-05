@@ -138,7 +138,7 @@ onMounted(() => {
         top: 75px;
         width: 550px;
         z-index: 99;
-        background-color: rgb(255, 231, 235);
+        background-color: rgb(254, 236, 239);
         border-radius: 15px;
 
         .boutique-tag {
