@@ -47,7 +47,7 @@ const mainRouter = [
                 name: 'singerdetails',
                 meta: {
                     title: '歌手详情',
-                    keepAlive: false
+                    keepAlive: true
                 },
                 component: () => import('@/views/singer/SingerDetails.vue')
             },

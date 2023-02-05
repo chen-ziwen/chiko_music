@@ -38,9 +38,9 @@
     </div>
 </template>
 <script lang='ts' setup>
-import type { SingerDetail, ArtMV, SongList as SongListType, SingerAlbumType } from '@/models'
+import type { SingerDetail, ArtMV, SongList as SongListType, SingerAlbumType, SingerListType } from '@/models'
 import { usePlay } from '@/store/play';
-import { watch, ref, reactive } from 'vue';
+import { watch, ref, reactive, onUnmounted, onActivated, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useSong } from '@/hook';
 import { getArtists, getArtistMv, getSimiArtist, getArtistAlbum, getArtistDesc, getArtistDetail } from '@/api/http/api';
@@ -57,11 +57,7 @@ const play = usePlay();
 // tabs选择
 const checkedname = ref<string>('hot');
 const singerId = ref<number>(0);
-const checkedClick = (name: { paneName: string }) => {
-    if (name.paneName == 'like' && !play.loginStatu) {
-        router.push({ name: 'login' })
-    }
-}
+
 const delSong = reactive<SongListType[]>([]);
 // 歌手详情  (歌曲数、专辑数)
 const artDesc: { intro: [], brief: string } = reactive({ intro: [], brief: '暂无数据' });
@@ -77,11 +73,17 @@ const artDil = ref<SingerDetail>({
 });
 // 歌手专辑
 const artAlbum = ref<SingerAlbumType[]>([]);
-const singerList = ref<any>();
+const singerList = ref<SingerListType[]>();
 const artMV = ref<ArtMV[]>([]);
 let albumOffset = 0;
 let albumMore = false;
 
+// 判断时候登录 如果未登录 相似歌手无法读取
+const checkedClick = (name: { paneName: string }) => {
+    if (name.paneName == 'like' && !play.loginStatu) {
+        router.push({ name: 'login' })
+    }
+}
 // 歌手详情
 const artistDesc = async (id: number) => {
     try {
@@ -129,7 +131,6 @@ const singerMv = async (id: number) => {
     try {
         const { mvs } = await getArtistMv(id);
         artMV.value = mvs;
-        console.log(artMV.value, '6666');
     }
     catch (e) {
         console.log(e, '获取歌手mv失败')
@@ -167,6 +168,10 @@ const keepsheet = (index: number) => {
         playList: songArr,
     })
 }
+onMounted(() => {
+    console.log('666');
+
+})
 
 watch(() => route.query.singerid, (id) => {
     if (!id) return;
@@ -178,6 +183,7 @@ watch(() => route.query.singerid, (id) => {
     simiArtist(singerid);
     ArtistAlbum(singerid);
     singerMv(singerid);
+    checkedname.value = 'hot'; // 切换歌手id时 切换到第一个页面
 }, { immediate: true });
 
 </script>
