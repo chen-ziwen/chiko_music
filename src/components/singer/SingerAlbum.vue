@@ -1,6 +1,6 @@
 <template>
     <ul class="singer-album">
-        <li class="singer-album-list" v-for="(item, index) in data" :key="index" @click="turnSheet(item.id)">
+        <li class="singer-album-list" v-for="(item, index) in data" :key="item.id" @click="turnSheet(item.id)">
             <div class="album-img-box">
                 <el-image class="album-img" :src="item.picUrl + '?param=250y250'">
                     <template #placeholder>

@@ -29,9 +29,7 @@ async function banners() {
     }
     catch (e) {
         console.log('banner获取失败');
-
     }
-
 }
 onMounted(() => {
     banners();

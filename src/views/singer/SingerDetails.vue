@@ -22,8 +22,8 @@
                         <SingerAlbum :data="artAlbum"></SingerAlbum>
                     </LoadScroll>
                 </el-tab-pane>
-                <el-tab-pane label="MV" name="mv">
-                    <MvList :list="artMV"></MvList>
+                <el-tab-pane label="热门MV" name="mv">
+                    <MvList :list="artMv"></MvList>
                 </el-tab-pane>
                 <el-tab-pane label="歌手详情" name="detail">
                     <SingerMsg :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
@@ -38,11 +38,11 @@
     </div>
 </template>
 <script lang='ts' setup>
-import type { SingerDetail, ArtMV, SongList as SongListType, SingerAlbumType, SingerListType } from '@/models'
+import type { SingerDetail, SongList as SongListType, SingerAlbumType, SingerListType } from '@/models'
 import { usePlay } from '@/store/play';
 import { watch, ref, reactive, onUnmounted, onActivated, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useSong } from '@/hook';
+import { useSong, useMv, MvType } from '@/hook';
 import { getArtists, getArtistMv, getSimiArtist, getArtistAlbum, getArtistDesc, getArtistDetail } from '@/api/http/api';
 import SingerMsg from '@/components/singer/SingerMsg.vue';
 import SongList from '@/components/song-sheet/SongList.vue';
@@ -74,7 +74,7 @@ const artDil = ref<SingerDetail>({
 // 歌手专辑
 const artAlbum = ref<SingerAlbumType[]>([]);
 const singerList = ref<SingerListType[]>();
-const artMV = ref<ArtMV[]>([]);
+const artMv = ref<MvType[]>([]);
 let albumOffset = 0;
 let albumMore = false;
 
@@ -130,7 +130,10 @@ const simiArtist = async (id: number) => {
 const singerMv = async (id: number) => {
     try {
         const { mvs } = await getArtistMv(id);
-        artMV.value = mvs;
+        artMv.value.splice(0, artMv.value.length);
+        for (let i = 0; i < mvs.length; i++) {
+            artMv.value.push(useMv(mvs[i]))
+        }
     }
     catch (e) {
         console.log(e, '获取歌手mv失败')
@@ -142,7 +145,6 @@ const singerMv = async (id: number) => {
 const ArtistAlbum = async (id: number) => {
     try {
         const { hotAlbums, more } = await getArtistAlbum(id, 30, albumOffset);
-        console.log('专辑歌曲', artAlbum.value, more, albumOffset);
         artAlbum.value = artAlbum.value.concat(hotAlbums);
         albumMore = more;
         if (albumMore) {
@@ -171,17 +173,20 @@ const keepsheet = (index: number) => {
     })
 }
 
+const resetAlbun = () => {
+    albumOffset = 0; // 重置专辑偏移值
+    artAlbum.value.splice(0, artAlbum.value.length); // 切换歌手时 清空专辑拼接
+    checkedname.value = 'hot'; // 切换歌手id时 切换到第一个页面
+}
 // 整体方法执行 
 const changeSingerId = (id: number) => {
+    resetAlbun(); // 这个方法的调用必须在ArtistAlbum方法之前
     artistDesc(id);
     artDetail(id);
     singerHotsongs(id);
     simiArtist(id);
     ArtistAlbum(id);
     singerMv(id);
-    checkedname.value = 'hot'; // 切换歌手id时 切换到第一个页面
-    artAlbum.value.splice(0, artAlbum.value.length); // 切换歌手时 清空专辑拼接
-    albumOffset = 0; // 重置专辑偏移值
 }
 
 watch(() => route.query.singerid, (id) => {
