@@ -16,7 +16,7 @@ declare module 'vue' {
     ElSlider: typeof import('element-plus/es')['ElSlider']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
-    Listmodule: typeof import('./src/components/common/listmodule.vue')['default']
+    ListModule: typeof import('./src/components/common/ListModule.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     LoadScroll: typeof import('./src/components/common/LoadScroll.vue')['default']
     MvList: typeof import('./src/components/mv/MvList.vue')['default']

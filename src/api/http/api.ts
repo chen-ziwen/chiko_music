@@ -196,6 +196,12 @@ export function getCommentAlbum(id: number, limit?: number, offset?: number, bef
 export function getMvAll(area?: string, type?: number, order?: number, limit?: number, offset?: number) {
     return http.get<any>('/mv/all', { area, type, order, limit, offset })
 }
+export function getMvAllUp(param: { area?: string, type?: string, order?: string, limit?: number, offset?: number }) {
+    return http.get<any>('/mv/all', param);
+}
+export function getMvExclusive(limit: number) {
+    return http.get<any>('/mv/exclusive/rcmd', { limit })
+}
 
 /**
  * @function 获取mv数据(调用此接口,传入mvid(在搜索音乐的时候传type=1004获得),可获取对应MV数据,数据包含mv名字,歌手,发布时间,mv视频地址等数据,其中mv视频网易做了防盗链处理,可能不能直接播放,需要播放的话需要调用'mv地址'接口)
@@ -431,4 +437,9 @@ export function getCommentPlaylist(id: number, limit?: number, offset?: number, 
  */
 export function getPlaylistSubscribers(id: number, limit?: number, offset?: number) {
     return http.get<any>('/playlist/subscribers', { id, limit, offset })
+}
+
+// 最新mv
+export function getMvFirst(limit?: number, area?: string) {
+    return http.get<any>('/mv/first', { limit, area })
 }

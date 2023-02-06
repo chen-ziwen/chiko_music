@@ -101,11 +101,28 @@ const mainRouter = [
                 path: 'mv',
                 name: 'mv',
                 meta: {
-                    title: 'mv',
-                    keepAlive: false
+                    title: 'MV',
+                    keepAlive: true
                 },
                 component: () => import('@/views/mv/Mv.vue')
-
+            },
+            {
+                path: 'mvdetail',
+                name: 'mvdetail',
+                meta: {
+                    title: 'MV详情',
+                    keepAlive: true
+                },
+                component: () => import('@/views/mv/MvDetail.vue')
+            },
+            {
+                path: 'mvsort',
+                name: 'mvsort',
+                meta: {
+                    title: 'MV分类',
+                    keepAlive: true
+                },
+                component: () => import('@/views/mv/MvSort.vue')
             },
             {
                 path: 'newdisc',

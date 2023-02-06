@@ -17,7 +17,7 @@
 .music-main {
   background-color: $color;
   // 上下的盒子宽高各是80px，所以中间盒子的最小宽度设置为100vh - 160px 就能做到完美适应
-  min-height: calc(100vh - 180px);
+  min-height: calc(100vh - 160px);
 
 }
 

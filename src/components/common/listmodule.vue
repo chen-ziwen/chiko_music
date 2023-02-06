@@ -1,16 +1,17 @@
 <template>
     <div class="list-module" :class="[boxStyle, outStyle]">
-        <span class="list-head">{{ head }}</span>
+        <span class="list-head" :class="[headStyle]" @click="triggerFun">{{ head }}</span>
         <div class="list-content">
             <slot></slot>
         </div>
     </div>
 </template>
 <script lang='ts' setup>
-import { computed } from 'vue';
+import { computed, defineEmits, onMounted } from 'vue';
 interface ListModule {
     head: string;
     boxStyle?: string;
+    headStyle?: string;
     outStyle?: string;
     headColor?: string;
     gapColor?: string;
@@ -21,6 +22,7 @@ const props = withDefaults(defineProps<ListModule>(), {
     gapColor: 'rgba(254,236,239)',
     gapHeight: "22px"
 });
+const emits = defineEmits(['turn']);
 
 // 生成类名,可以在外部添加样式
 const outStyle = computed(() => {
@@ -31,6 +33,9 @@ const outStyle = computed(() => {
     }
 })
 
+function triggerFun() {
+    emits('turn')
+}
 </script>
 <style lang='scss' scoped>
 .list-module {
@@ -66,5 +71,14 @@ const outStyle = computed(() => {
 
 .wdashed {
     border: 2px dashed black !important;
+}
+
+.head-point {
+    cursor: pointer;
+    font-weight: 600;
+
+    &:hover {
+        color: rgb(255, 117, 117);
+    }
 }
 </style>

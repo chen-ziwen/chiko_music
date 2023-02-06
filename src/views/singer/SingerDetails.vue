@@ -40,7 +40,7 @@
 <script lang='ts' setup>
 import type { SingerDetail, SongList as SongListType, SingerAlbumType, SingerListType } from '@/models'
 import { usePlay } from '@/store/play';
-import { watch, ref, reactive, onUnmounted, onActivated, onMounted } from 'vue';
+import { watch, ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useSong, useMv, MvType } from '@/hook';
 import { getArtists, getArtistMv, getSimiArtist, getArtistAlbum, getArtistDesc, getArtistDetail } from '@/api/http/api';
@@ -131,9 +131,7 @@ const singerMv = async (id: number) => {
     try {
         const { mvs } = await getArtistMv(id);
         artMv.value.splice(0, artMv.value.length);
-        for (let i = 0; i < mvs.length; i++) {
-            artMv.value.push(useMv(mvs[i]))
-        }
+        artMv.value = useMv(mvs);
     }
     catch (e) {
         console.log(e, '获取歌手mv失败')

@@ -44,10 +44,12 @@ const props = defineProps<{ list: MvType[] }>();
             align-items: center;
             cursor: pointer;
 
+
             .mv-message {
                 position: relative;
                 width: 300px;
                 height: 170px;
+                box-shadow: 0 0 8px black;
 
                 &:hover .bofang-btn {
                     display: flex !important;
