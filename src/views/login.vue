@@ -34,6 +34,7 @@ async function qrCheck(key: string) {
             console.log('我是登录界面', res);
             if (res.code == 803) {
                 storage.set('cookie', res.cookie)
+                storage.set('loginStatu', true);
                 router.replace({ name: 'discover' })
                 clearInterval(timer);
             }

@@ -1,6 +1,6 @@
 <template>
     <ul class="mv-list">
-        <li class="mv-list-li" v-for="item, index in list" :key="item.id + index">
+        <li class="mv-list-li" v-for="item, index in list" :key="item.id + item.info">
             <div class="mv-content">
                 <div class="mv-message">
                     <el-image class="mv-pic" :src="item.imgurl"></el-image>
@@ -33,7 +33,7 @@ const props = defineProps<{ list: MvType[] }>();
 
     .mv-list-li {
         position: relative;
-        width: 33.3%;
+        width: 25%;
         text-align: center;
         padding: 0 15px;
         box-sizing: border-box;
@@ -47,8 +47,8 @@ const props = defineProps<{ list: MvType[] }>();
 
             .mv-message {
                 position: relative;
-                width: 300px;
-                height: 170px;
+                width: 260px;
+                height: 150px;
                 box-shadow: 0 0 8px black;
 
                 &:hover .bofang-btn {

@@ -18,7 +18,7 @@
                 </ul>
             </div>
             <div class="tag-all">
-                <i class="tag-text">筛选 : </i>
+                <i class="tag-text">排序 : </i>
                 <ul class="order">
                     <li class="order-li" v-for="(tag, index) of order" :key="index">
                         <span class="tag-label" :class="checkHigh('order', tag.value).order" @click="checkTags('order', tag.value)">{{ tag.label }}</span>
@@ -26,11 +26,15 @@
                 </ul>
             </div>
         </div>
+        <MvList :list="mvContnet"></MvList>
     </div>
 </template>
 <script lang='ts' setup>
+import { onMounted, reactive, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
-import { reactive } from 'vue';
+import { MvType, useMv } from '@/hook';
+import MvList from '@/components/mv/MvList.vue';
 
 interface TagType {
     area: Record<string, string>[],
@@ -40,6 +44,9 @@ interface TagType {
 interface Params {
     [key: string]: string | number;
 }
+
+const route = useRoute();
+
 const tagType: TagType = {
     // 地区
     area: [
@@ -69,7 +76,7 @@ const tagType: TagType = {
 const { area, type, order } = tagType;
 
 // 初始的请求参数 // 其实应该靠后续传进来
-const params: Params = reactive({
+const params = ref<Params>({
     area: '全部',
     type: '全部',
     order: '最热',
@@ -77,36 +84,53 @@ const params: Params = reactive({
     offset: 0
 })
 
+const mvContnet = ref<MvType[]>([]);
+
 // 选中不同标签时，更新param请求参数
 const checkTags = (name: string, tag: string) => {
     if (name == 'area') {
-        params.area = tag
+        params.value.area = tag
     } else if (name == 'type') {
-        params.type = tag
+        params.value.type = tag
     } else if (name == 'order') {
-        params.order = tag;
+        params.value.order = tag;
     }
-    // alongSingerList(params);
+    getMvTagContent(params.value)
 }
 
 // 选中高亮
 const checkHigh = (name: string, tag: string) => {
     const high = { area: '', type: '', order: '' }
-    if (name == 'area' && params.area == tag) {
+    if (name == 'area' && params.value.area == tag) {
         high.area = "high"
-    } else if (name == 'type' && params.type == tag) {
+    } else if (name == 'type' && params.value.type == tag) {
         high.type = "high"
-    } else if (name == 'order' && params.order == tag) {
+    } else if (name == 'order' && params.value.order == tag) {
         high.order = "high"
     }
     return high;
 }
 
+async function getMvTagContent(param: Params) {
+    try {
+        const { data } = await getMvAllUp(param);
+        mvContnet.value = useMv(data)
+    } catch (e) {
+        console.log(e, 'mv请求失败');
+    }
+}
+
+watch(() => route.params, (val) => {
+    params.value = val as Params
+    getMvTagContent(params.value)
+})
+
 
 </script>
 <style lang='scss' scoped>
 .mv-sort {
-    height: 500px;
+    // height: 500px;
+    margin: 0 auto;
 
     .mv-tags {
         .tag-all {
@@ -145,7 +169,7 @@ const checkHigh = (name: string, tag: string) => {
                 width: 90px;
 
                 &:not(:last-of-type) {
-                    border-right: 1px solid rgb(153, 153, 153);
+                    border-right: 1px solid rgb(203, 203, 203);
                 }
 
                 .tag-label {

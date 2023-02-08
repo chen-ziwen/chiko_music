@@ -7,7 +7,7 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { computed, defineEmits, onMounted } from 'vue';
+import { computed } from 'vue';
 interface ListModule {
     head: string;
     boxStyle?: string;

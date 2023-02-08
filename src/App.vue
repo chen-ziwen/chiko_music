@@ -19,6 +19,8 @@ router.beforeEach((to, from, next) => {
 // 项目加载时触发
 onMounted(async () => {
   const { data } = await loginStatus();
+  console.log(data);
+
   if (data.account.status >= 0) {
     play.$patch({
       loginStatu: true,
