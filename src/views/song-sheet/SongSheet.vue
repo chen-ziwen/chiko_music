@@ -40,7 +40,7 @@
                 </Transition>
             </div>
             <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
-            <el-pagination class="my-pagination" v-model:currentPage="curretnPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
+            <el-pagination class="my-pagination" v-model:currentPage="currentPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
         </div>
     </div>
 </template>
@@ -91,7 +91,7 @@ const hightSheet = reactive({
     total: 0,
 });
 
-const curretnPage = ref<number>(1);
+const currentPage = ref<number>(1);
 const nameKey = ref<string>('');
 const pop = ref<boolean>(false);
 const page = toRef(hightSheet, "page");
@@ -147,7 +147,7 @@ const tagsList = async (name: string) => {
     nameKey.value = name; // 保存name
     sheetList.playlists = playlists;
     sheetList.total = total;
-    curretnPage.value = 1; // 当卡页重置为1
+    currentPage.value = 1; // 当卡页重置为1
     if (pop.value) {
         pop.value = !pop.value; // 关闭标签弹窗
     }

@@ -27,11 +27,12 @@
             </div>
         </div>
         <MvList :list="mvContnet" :style="{ marginTop: '40px' }"></MvList>
+        <el-pagination class="my-pagination" v-model:currentPage="currentPage" :page-size="32" layout="prev, pager, next" :total="mvCount" @current-change="currentChange" />
     </div>
 </template>
 <script lang='ts' setup>
-import { onMounted, reactive, ref, watch } from 'vue';
-import { onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
 import { MvType, useMv } from '@/hook';
 import MvList from '@/components/mv/MvList.vue';
@@ -46,6 +47,7 @@ interface Params {
 }
 
 const route = useRoute();
+const currentPage = ref<number>(1);
 
 const tagType: TagType = {
     // 地区
@@ -80,11 +82,12 @@ const params = ref<Params>({
     area: '',
     type: '',
     order: '',
-    limit: 30,
+    limit: 32,
     offset: 0
 })
 
 const mvContnet = ref<MvType[]>([]);
+const mvCount = ref<number>(0); // 给初始值 不然会报错
 
 // 选中不同标签时，更新param请求参数
 const checkTags = (name: string, tag: string) => {
@@ -111,11 +114,24 @@ const checkHigh = (name: string, tag: string) => {
     return high;
 }
 
+const currentChange = async (page: number) => {
+    try {
+        params.value.offset = (page - 1) * (params.value.limit as number);
+        const { data } = await getMvAllUp(params.value);
+        mvContnet.value = useMv(data);
+    } catch (e) {
+        console.log(e, 'mv页数切换失败');
+    }
+}
 // 处理获取到的mv数据
 async function getMvTagContent(param: Params) {
     try {
-        const { data } = await getMvAllUp(param);
-        mvContnet.value = useMv(data)
+        currentPage.value = 1; // 重新切换到第一页
+        params.value.offset = 0; // offset 从0 开始重新计算
+        const { data, count } = await getMvAllUp(param);
+        mvContnet.value = useMv(data);
+        mvCount.value = count;
+
     } catch (e) {
         console.log(e, 'mv请求失败');
     }
@@ -183,6 +199,26 @@ watch(() => route.query, (val) => {
                     cursor: pointer;
                 }
             }
+        }
+    }
+
+    .my-pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0 10px 0;
+
+    }
+
+    &:deep(.el-pagination) {
+        --el-pagination-hover-color: rgb(248, 60, 60);
+        --el-pagination-bg-color: transparent;
+        --el-pagination-text-color: #302424c2;
+        --el-pagination-font-size: 18px;
+        font-weight: 700;
+
+        button:disabled {
+            background-color: transparent;
         }
     }
 }

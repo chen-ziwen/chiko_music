@@ -43,7 +43,7 @@ function turnMvDetail(key: string) {
                 area: '全部',
                 type: '全部',
                 order: '最新',
-                limit: 30,
+                limit: 32,
                 offset: 0
             }
             break;
@@ -52,7 +52,7 @@ function turnMvDetail(key: string) {
                 area: '全部',
                 type: '全部',
                 order: '最热',
-                limit: 30,
+                limit: 32,
                 offset: 0
             }
             break;
@@ -61,7 +61,7 @@ function turnMvDetail(key: string) {
                 area: '全部',
                 type: '网易出品',
                 order: '最热',
-                limit: 30,
+                limit: 32,
                 offset: 0
             }
             break;
