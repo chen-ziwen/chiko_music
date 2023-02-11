@@ -34,9 +34,9 @@ const router = useRouter();
 const mvFristList = ref<MvType[]>([]);
 const mvHotList = ref<MvType[]>([]);
 const mvYun = ref<MvType[]>([]);
+let params: Params = {}
 
 function turnMvDetail(key: string) {
-    let params: Params = {}
     switch (key) {
         case 'frist':
             params = {
@@ -66,7 +66,7 @@ function turnMvDetail(key: string) {
             }
             break;
     }
-    router.push({ name: 'mvsort', params: params })
+    router.push({ name: 'mvsort', query: params })
 }
 
 async function mvFrist() {

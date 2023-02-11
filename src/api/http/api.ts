@@ -130,8 +130,8 @@ export function getArtists(id: number) {
  * @function 获取歌手mv(调用此接口,传入歌手id,可获得歌手mv信息,具体mv播放地址可调用`/mv`传入此接口获得的mvid来拿到,如:`/artist/mv?id=6452`,`/mv?mvid=5461064`)
  * @param id 歌手id, 可由搜索接口获得
  */
-export function getArtistMv(id: number) {
-    return http.get<any>('/artist/mv', { id })
+export function getArtistMv(id: number, limit: number) {
+    return http.get<any>('/artist/mv', { id, limit })
 }
 
 /**

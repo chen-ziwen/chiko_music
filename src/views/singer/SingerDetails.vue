@@ -129,7 +129,7 @@ const simiArtist = async (id: number) => {
 
 const singerMv = async (id: number) => {
     try {
-        const { mvs } = await getArtistMv(id);
+        const { mvs } = await getArtistMv(id, 12);
         artMv.value.splice(0, artMv.value.length);
         artMv.value = useMv(mvs);
     }

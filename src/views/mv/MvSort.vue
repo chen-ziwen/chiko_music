@@ -26,12 +26,12 @@
                 </ul>
             </div>
         </div>
-        <MvList :list="mvContnet"></MvList>
+        <MvList :list="mvContnet" :style="{ marginTop: '40px' }"></MvList>
     </div>
 </template>
 <script lang='ts' setup>
 import { onMounted, reactive, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
 import { MvType, useMv } from '@/hook';
 import MvList from '@/components/mv/MvList.vue';
@@ -77,9 +77,9 @@ const { area, type, order } = tagType;
 
 // 初始的请求参数 // 其实应该靠后续传进来
 const params = ref<Params>({
-    area: '全部',
-    type: '全部',
-    order: '最热',
+    area: '',
+    type: '',
+    order: '',
     limit: 30,
     offset: 0
 })
@@ -111,6 +111,7 @@ const checkHigh = (name: string, tag: string) => {
     return high;
 }
 
+// 处理获取到的mv数据
 async function getMvTagContent(param: Params) {
     try {
         const { data } = await getMvAllUp(param);
@@ -120,10 +121,13 @@ async function getMvTagContent(param: Params) {
     }
 }
 
-watch(() => route.params, (val) => {
-    params.value = val as Params
-    getMvTagContent(params.value)
-})
+
+watch(() => route.query, (val) => {
+    if (route.name == 'mvsort') {
+        params.value = val as Params
+        getMvTagContent(params.value);
+    }
+}, { immediate: true })
 
 
 </script>
@@ -133,6 +137,7 @@ watch(() => route.params, (val) => {
     margin: 0 auto;
 
     .mv-tags {
+
         .tag-all {
             display: flex;
             margin: 20px 0px;
