@@ -1,18 +1,18 @@
 <template>
     <div class="mv">
         <div class="module-gap">
-            <ListModule head="最新MV" gap-color="red" head-style="head-point" @turn="turnMvDetail('frist')">
-                <MvList :list="mvFristList"></MvList>
+            <ListModule head="最新MV" gap-color="red" head-style="head-point" @turn="turnMvSort('frist')">
+                <MvList :list="mvFristList" @mvid="turnMvDetail"></MvList>
             </ListModule>
         </div>
         <div class="module-gap">
-            <ListModule head="最热MV" gap-color="blue" head-style="head-point" @turn="turnMvDetail('hot')">
-                <MvList :list="mvHotList"></MvList>
+            <ListModule head="最热MV" gap-color="blue" head-style="head-point" @turn="turnMvSort('hot')">
+                <MvList :list="mvHotList" @mvid="turnMvDetail"></MvList>
             </ListModule>
         </div>
         <div class="module-gap">
-            <ListModule head="网易云出品MV" gap-color="green" head-style="head-point" @turn="turnMvDetail('yun')">
-                <MvList :list="mvYun"></MvList>
+            <ListModule head="网易云出品MV" gap-color="green" head-style="head-point" @turn="turnMvSort('yun')">
+                <MvList :list="mvYun" @mvid="turnMvDetail"></MvList>
             </ListModule>
         </div>
     </div>
@@ -36,7 +36,7 @@ const mvHotList = ref<MvType[]>([]);
 const mvYun = ref<MvType[]>([]);
 let params: Params = {}
 
-function turnMvDetail(key: string) {
+function turnMvSort(key: string) {
     switch (key) {
         case 'frist':
             params = {
@@ -102,6 +102,11 @@ async function mvWangYiYun() {
         console.log(e, '网易云出品mv请求失败');
     }
 }
+
+const turnMvDetail = (id: number) => {
+    router.push({ name: 'mvdetail', query: { mvid: id } })
+}
+
 onMounted(() => {
     mvFrist();
     mvHot();

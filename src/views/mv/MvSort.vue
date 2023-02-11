@@ -26,7 +26,7 @@
                 </ul>
             </div>
         </div>
-        <MvList :list="mvContnet" :style="{ marginTop: '40px' }"></MvList>
+        <MvList :list="mvContnet" :style="{ marginTop: '40px' }" @mvid="turnMvDetail"></MvList>
         <el-pagination class="my-pagination" v-model:currentPage="currentPage" :page-size="32" layout="prev, pager, next" :total="mvCount" @current-change="currentChange" />
     </div>
 </template>
@@ -36,6 +36,7 @@ import { useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
 import { MvType, useMv } from '@/hook';
 import MvList from '@/components/mv/MvList.vue';
+import router from '@/router';
 
 interface TagType {
     area: Record<string, string>[],
@@ -135,6 +136,11 @@ async function getMvTagContent(param: Params) {
     } catch (e) {
         console.log(e, 'mv请求失败');
     }
+}
+
+// 跳转到mv详情
+const turnMvDetail = (id: number) => {
+    router.push({ name: 'mvdetail', query: { mvid: id } })
 }
 
 

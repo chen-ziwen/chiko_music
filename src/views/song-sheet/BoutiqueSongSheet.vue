@@ -128,8 +128,12 @@ onMounted(() => {
             color: rgb(44, 44, 44);
             cursor: pointer;
 
+            &:hover {
+                background-color: #ffe1ed;
+                color: #f86262;
+                border-color: #f86262;
+            }
         }
-
     }
 
     .boutique-list {
@@ -138,7 +142,8 @@ onMounted(() => {
         top: 75px;
         width: 550px;
         z-index: 99;
-        background-color: rgb(254, 236, 239);
+        background-color: #ffffff;
+        box-shadow: 0 0 5px #4f4f4f;
         border-radius: 15px;
 
         .boutique-tag {
@@ -160,8 +165,8 @@ onMounted(() => {
 }
 
 .hight-light {
-    border-radius: 2px;
-    background-color: #fde583;
+    border-radius: 3px;
+    background-color: rgb(245, 204, 211);
     color: #F84E4E;
 }
 </style>

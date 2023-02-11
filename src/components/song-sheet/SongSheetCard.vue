@@ -2,7 +2,7 @@
     <ul>
         <li :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-pic-box">
-                <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=300y300'" fit="fill" :lazy="true">
+                <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=300y300'" fit="fill">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -130,7 +130,8 @@ ul {
         .describe-text {
             padding-top: 5px;
             display: inline-block;
-            font: normal 700 16px Arial, Helvetica, sans-serif;
+            font: normal 700 14px Arial, Helvetica, sans-serif;
+            color: #2b2b2b;
             width: 100%;
             text-align: v-bind(textdir);
         }

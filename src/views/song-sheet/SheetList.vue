@@ -79,7 +79,7 @@ import {
     getPlaylistSubscribers,
 } from '@/api/http/api';
 import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
-import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { reactive, ref, watch, toRaw, onActivated } from 'vue';
 import SongList from '@/components/song-sheet/SongList.vue';
 import dayjs from 'dayjs';
@@ -155,12 +155,12 @@ async function playlistDetail(id: number) {
 
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论，相关歌单，歌单收藏
 async function startSheet(id: number) {
-    const { subscribers } = await getPlaylistSubscribers(id, 30);
-    const { playlists } = await getRelatedPlaylist(id);
-    sheetAbout.subscribers = subscribers;  // 歌单收藏
-    sheetAbout.aboutList = playlists;  //相关歌单
     try {
+        const { subscribers } = await getPlaylistSubscribers(id, 30);
+        const { playlists } = await getRelatedPlaylist(id);
         const { comments, hotComments } = await getCommentPlaylist(id, 10);
+        sheetAbout.subscribers = subscribers;  // 歌单收藏
+        sheetAbout.aboutList = playlists;  //相关歌单
         if (hotComments.length > 0) {
             sheetAbout.comments = hotComments;
         } else {
@@ -235,7 +235,7 @@ watch(() => route.query.sheetid, (id) => {
 <style lang="scss" scoped>
 .music-singer {
     width: $width;
-    margin: 0 auto;
+    margin: 15px auto;
     box-sizing: border-box;
     display: flex;
 
@@ -244,6 +244,7 @@ watch(() => route.query.sheetid, (id) => {
         padding: 15px;
         overflow: hidden;
         background-color: white;
+        border-radius: 15px;
 
         .pagination {
             width: 100%;
@@ -395,7 +396,8 @@ watch(() => route.query.sheetid, (id) => {
     &-right {
         display: inline-block;
         width: 30%;
-        padding: 15px;
+        // padding: 15px;
+        padding-left: 15px;
         overflow: hidden;
 
         .box-list {

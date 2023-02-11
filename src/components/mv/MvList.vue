@@ -1,6 +1,6 @@
 <template>
     <ul class="mv-list">
-        <li class="mv-list-li" v-for="item, index in list" :key="item.id + item.info">
+        <li class="mv-list-li" v-for="item in list" :key="item.id + item.info" @click="sendId(item.id)">
             <div class="mv-content">
                 <div class="mv-message">
                     <el-image class="mv-pic" :src="item.imgurl"></el-image>
@@ -24,6 +24,11 @@
 <script lang='ts' setup>
 import type { MvType } from '@/hook';
 const props = defineProps<{ list: MvType[] }>();
+const emits = defineEmits(['mvid']);
+
+const sendId = (id: number | string) => {
+    emits('mvid', id);
+}
 </script>
 <style lang='scss' scoped>
 .mv-list {
@@ -44,6 +49,9 @@ const props = defineProps<{ list: MvType[] }>();
             align-items: center;
             cursor: pointer;
 
+            &:hover .mv-info {
+                color: rgb(253, 83, 83) !important;
+            }
 
             .mv-message {
                 position: relative;
@@ -77,6 +85,7 @@ const props = defineProps<{ list: MvType[] }>();
 
             .mv-info {
                 padding: 5px 0 15px 0;
+                color: rgb(58, 58, 58);
             }
         }
     }

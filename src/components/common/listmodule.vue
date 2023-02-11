@@ -41,7 +41,6 @@ function triggerFun() {
 .list-module {
     width: calc(100% - 35px);
     border-radius: 15px;
-    box-shadow: 0px 5px 40px -1px rgb(2 10 18 / 10%);
     padding: 15px;
     background-color: white;
 

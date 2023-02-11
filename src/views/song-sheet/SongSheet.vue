@@ -32,7 +32,7 @@
                             <span class="tags-hight-light">{{ item.name }}</span>
                             <ul class="tags-common-type">
                                 <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)" @click="tagsList(data.name)">
-                                    <span>{{ data.name }}<sup>{{ data.hot ? "hot" : "" }}</sup></span>
+                                    <span>{{ data.name }}<sup :style="{ fontSize: '10px' }">{{ data.hot ? "hot" : "" }}</sup></span>
                                 </li>
                             </ul>
                         </div>
@@ -295,7 +295,8 @@ onMounted(async () => {
                 width: 600px;
                 height: 400px;
                 z-index: 99;
-                background-color: rgb(254, 236, 239);
+                background: #ffffff;
+                box-shadow: 0 0 5px #4f4f4f;
                 border-radius: 10px;
                 overflow: auto;
 
@@ -388,8 +389,8 @@ onMounted(async () => {
 }
 
 .hight-light {
-    border-radius: 2px;
-    background-color: #fde583;
+    border-radius: 3px;
+    background-color: rgb(245, 204, 211);
     color: #F84E4E;
 }
 </style>

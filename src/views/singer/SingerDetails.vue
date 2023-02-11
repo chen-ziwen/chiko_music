@@ -23,7 +23,7 @@
                     </LoadScroll>
                 </el-tab-pane>
                 <el-tab-pane label="热门MV" name="mv">
-                    <MvList :list="artMv"></MvList>
+                    <MvList :list="artMv" @mvid="turnMvDetail"></MvList>
                 </el-tab-pane>
                 <el-tab-pane label="歌手详情" name="detail">
                     <SingerMsg :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
@@ -84,6 +84,12 @@ const checkedClick = (name: { paneName: string }) => {
         router.push({ name: 'login' })
     }
 }
+
+// 跳转到mv详情
+const turnMvDetail = (id: number) => {
+    router.push({ name: 'mvdetail', query: { mvid: id } })
+}
+
 // 歌手详情
 const artistDesc = async (id: number) => {
     try {
