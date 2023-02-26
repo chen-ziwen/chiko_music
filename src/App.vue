@@ -7,7 +7,7 @@ import { onMounted, onUnmounted } from 'vue';
 import { loginStatus } from '@/api';
 import { usePlay } from './store/play';
 import router from './router';
-import { useStorage } from '@/hook';
+import { useStorage } from '@/util';
 
 const play = usePlay();
 const storage = new useStorage();

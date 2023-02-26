@@ -34,7 +34,7 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
-import { MvType, useMv } from '@/hook';
+import { MvType, useMv } from '@/util';
 import MvList from '@/components/mv/MvList.vue';
 import router from '@/router';
 

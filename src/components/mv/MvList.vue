@@ -22,7 +22,7 @@
     </ul>
 </template>
 <script lang='ts' setup>
-import type { MvType } from '@/hook';
+import type { MvType } from '@/util';
 const props = defineProps<{ list: MvType[] }>();
 const emits = defineEmits(['mvid']);
 

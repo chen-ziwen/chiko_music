@@ -49,7 +49,7 @@ import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
 import MvSheet from "@/components/mv/MvSheet.vue";
 import { getRecommendList, getSongDetail, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
 import type { RecommendList, Newsong, SingerListType, SongList } from "@/models";
-import { useSong } from "@/hook";
+import { useSong } from "@/util";
 
 const sheetlist = ref<RecommendList[]>();
 const artist = ref<SingerListType[]>();
@@ -114,6 +114,7 @@ onMounted(() => {
 .mv {
     margin-bottom: 60px;
 }
+
 .song {
     margin-top: 80px;
 }

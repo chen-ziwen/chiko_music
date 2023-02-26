@@ -22,7 +22,7 @@ import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import ListModule from '@/components/common/ListModule.vue';
 import RankShow from '@/components/rank/RankShow.vue';
 import { usePlay } from '@/store/play';
-import { useSong } from "@/hook";
+import { useSong } from "@/util";
 
 const sheetType = reactive({
     mainSheetRank: [] as RecommendList[],

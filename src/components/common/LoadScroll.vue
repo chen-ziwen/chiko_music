@@ -5,7 +5,7 @@
 </template>
 <script lang='ts' setup>
 import { onMounted } from 'vue';
-import { Throttle } from '@/hook';
+import { Throttle } from '@/util';
 interface LoadScrollProps {
     distance?: number; // 距离底部多少px时触发函数
 }
@@ -47,6 +47,4 @@ onMounted(() => {
     window.addEventListener('scroll', () => throttle());
 })
 </script>
-<style lang='scss' scoped>
-
-</style>
+<style lang='scss' scoped></style>

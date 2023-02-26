@@ -42,7 +42,7 @@ import type { SingerDetail, SongList as SongListType, SingerAlbumType, SingerLis
 import { usePlay } from '@/store/play';
 import { watch, ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { useSong, useMv, MvType } from '@/hook';
+import { useSong, useMv, MvType } from '@/util';
 import { getArtists, getArtistMv, getSimiArtist, getArtistAlbum, getArtistDesc, getArtistDetail } from '@/api/http/api';
 import SingerMsg from '@/components/singer/SingerMsg.vue';
 import SongList from '@/components/song-sheet/SongList.vue';

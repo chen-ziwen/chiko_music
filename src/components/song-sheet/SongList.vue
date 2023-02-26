@@ -30,7 +30,7 @@
 </template>
 
 <script lang='ts' setup>
-import { formatSecondTime, imgurl } from '@/hook';
+import { formatSecondTime, imgurl } from '@/util';
 import type { SongList } from "@/models/detail"
 import { usePlay } from '@/store/play';
 

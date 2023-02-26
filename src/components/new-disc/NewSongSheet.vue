@@ -28,7 +28,7 @@
     </ul>
 </template>
 <script lang='ts' setup>
-import { changeData, formatSecondTime } from '@/hook';
+import { changeData, formatSecondTime } from '@/util';
 import type { SongList } from '@/models/detail';
 import { usePlay } from '@/store/play';
 import { Picture as IconPicture } from '@element-plus/icons-vue'
@@ -82,8 +82,10 @@ ul {
 
         .newsong {
             display: flex;
+
             .new-img-box {
                 position: relative;
+
                 // &:hover .bofang-btn {
                 //    display: flex;
                 // }
@@ -95,28 +97,29 @@ ul {
                     z-index: 9;
                     overflow: visible;
                 }
-             .bofang-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: absolute;
-                right: 50%;
-                bottom: 50%;
-                transform: translate(50%,50%);
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                background-color: rgba(239, 237, 237, 0.8);
-                z-index: 10;
-                // display: none;
 
-                .bofang {
-                    color: rgb(249, 43, 43,0.8);
-                    font-size: 20px;
-                    transform: translateX(1px);
+                .bofang-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    right: 50%;
+                    bottom: 50%;
+                    transform: translate(50%, 50%);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    background-color: rgba(239, 237, 237, 0.8);
+                    z-index: 10;
+                    // display: none;
+
+                    .bofang {
+                        color: rgb(249, 43, 43, 0.8);
+                        font-size: 20px;
+                        transform: translateX(1px);
+                    }
                 }
             }
-          }
 
             .newsong-text {
                 flex-grow: 1;
@@ -150,5 +153,4 @@ ul {
 
 .image-slot {
     @include _imgslot(100px, 100px, 16px);
-}
-</style>
+}</style>

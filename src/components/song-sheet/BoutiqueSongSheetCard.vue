@@ -33,7 +33,7 @@ import { computed, ref, nextTick } from 'vue';
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from "@/models/detail";
 import { useRouter } from "vue-router";
-import { changeNum } from '@/hook';
+import { changeNum } from '@/util';
 
 interface SongSheetCard {
     sheet: RecommendList[];

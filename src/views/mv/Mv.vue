@@ -22,7 +22,7 @@
 import { onMounted, ref } from 'vue';
 import ListModule from '@/components/common/ListModule.vue';
 import { getMvAllUp, getMvFirst, getMvExclusive } from '@/api';
-import { MvType, useMv } from '@/hook';
+import { MvType, useMv } from '@/util';
 import { useRouter } from 'vue-router';
 import MvList from '@/components/mv/MvList.vue';
 

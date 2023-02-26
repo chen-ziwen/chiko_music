@@ -78,7 +78,7 @@ import {
     getCommentPlaylist,
     getPlaylistSubscribers,
 } from '@/api/http/api';
-import { ScrollTop, useStorage, imgurl, useSong } from '@/hook';
+import { ScrollTop, useStorage, imgurl, useSong } from '@/util';
 import { useRoute, useRouter } from 'vue-router';
 import { reactive, ref, watch, toRaw, onActivated } from 'vue';
 import SongList from '@/components/song-sheet/SongList.vue';

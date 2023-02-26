@@ -70,7 +70,7 @@
 <script lang="ts" setup>
 import { reactive, ref, watch, toRaw } from 'vue';
 import { getAlbum, getArtistAlbum, getCommentAlbum } from '@/api/http/api';
-import { ScrollTop, imgurl, useSong } from '@/hook';
+import { ScrollTop, imgurl, useSong } from '@/util';
 import { useRoute, useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import SongList from '@/components/song-sheet/SongList.vue';

@@ -32,7 +32,7 @@ import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from '@/models/detail';
 import { useRouter } from 'vue-router';
 import { usePlay } from '@/store/play';
-import { changeData, changeNum } from '@/hook';
+import { changeData, changeNum } from '@/util';
 
 interface RanShow {
     rankSheet: RecommendList[]

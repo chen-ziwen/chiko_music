@@ -1,4 +1,4 @@
-import { changetime, changeNum } from '@/hook';
+import { changetime, changeNum } from '@/util';
 export interface MvType {
     id: number;
     imgurl: string;

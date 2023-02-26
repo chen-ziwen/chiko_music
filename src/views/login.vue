@@ -11,7 +11,7 @@
 import { useRouter } from 'vue-router';
 import { phoneGet, loginKey, loginQrCheck, loginQrCreate } from '@/api';
 import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
-import { useStorage } from '@/hook';
+import { useStorage } from '@/util';
 
 const router = useRouter();
 const qrSrc = ref<string>('');

@@ -37,7 +37,7 @@
 <script lang='ts' setup>
 import { ref, watch, computed, reactive } from 'vue';
 import { usePlay, playState } from '@/store/play';
-import { formatSecondTime, randomNum } from '@/hook';
+import { formatSecondTime, randomNum } from '@/util';
 import { ElMessage } from 'element-plus';
 
 const play = usePlay();

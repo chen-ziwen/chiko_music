@@ -24,7 +24,7 @@
 </template>
 <script lang='ts' setup>
 import { Picture as IconPicture } from '@element-plus/icons-vue'
-import { changetime, changeData } from '@/hook';
+import { changetime, changeData } from '@/util';
 
 interface MvSheet {
     mvSheet: any[];
