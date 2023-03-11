@@ -73,6 +73,12 @@
     flex-wrap: nowrap;
 }
 
+.ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -97,6 +103,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
 
 /* ::-webkit-scrollbar 滚动条整体部分，可以设置宽度啥的
 

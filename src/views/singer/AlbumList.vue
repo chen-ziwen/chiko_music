@@ -46,9 +46,9 @@
             </div>
             <div class="common-style" v-show="sheetAbout.subscribers.length > 0">
                 <ListModule head="歌单收藏者" gap-color="blue">
-                    <!-- <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId" :title="item.nickname">
+                    <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId" :title="item.nickname">
                         <img class="user-avatar" :src="item.avatarUrl">
-                    </div> -->
+                    </div>
                 </ListModule>
             </div>
             <div class="common-style" v-show="sheetAbout.comments.length > 0">
@@ -151,7 +151,7 @@ function choose(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
     // 切换分页时 屏幕回到顶部
-    scroll();
+    scroll(5);
 }
 
 // 点击跳转歌单页面
@@ -439,5 +439,9 @@ watch(() => route.query.albumid, (id) => {
 :deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
     background-color: pink !important; //修改默认的背景色
     cursor: pointer;
+}
+
+:deep(.el-pagination) {
+    --el-pagination-hover-color: pink !important;
 }
 </style>

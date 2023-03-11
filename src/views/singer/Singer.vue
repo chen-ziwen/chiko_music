@@ -39,6 +39,7 @@ import { getArtistAList } from '@/api/http/api';
 import type { SingerListType } from '@/models';
 import LoadScroll from '@/components/common/LoadScroll.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
+import { useRoute } from 'vue-router';
 
 interface TagType {
     langs: Record<string, string | number>[],
@@ -48,6 +49,7 @@ interface TagType {
 interface Params {
     [key: string]: number;
 }
+const route = useRoute();
 const tagType: TagType = {
     // 语种tag
     langs: [
@@ -157,8 +159,10 @@ const getSingerList = async (parm: Params) => {
 
 // 滚动条到底 触发请求api
 const loadScroll = () => {
-    if (singerMore) {
-        getSingerList(params);
+    if (route.name == 'singer') {
+        if (singerMore) {
+            getSingerList(params);
+        }
     }
 }
 
@@ -170,13 +174,17 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .music-singer {
-    background-color: $color;
-    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 0 auto 20px;
 
     .singer-tags {
+        padding: 15px 0px 0px;
+        margin: 20px;
+
         .tag-all {
             display: flex;
-            margin: 20px 0px;
+            margin-bottom: 20px;
 
             &:not(:last-of-type) {
                 align-items: center;

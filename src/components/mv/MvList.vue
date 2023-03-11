@@ -34,14 +34,12 @@ const sendId = (id: number | string) => {
 .mv-list {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 30px;
+    margin-top: 25px -15px 0;
 
     .mv-list-li {
         position: relative;
-        width: 25%;
-        text-align: center;
-        padding: 0 15px;
-        box-sizing: border-box;
+        flex: 0 0 25%;
+        max-width: 25%;
 
         .mv-content {
             display: flex;
@@ -72,7 +70,7 @@ const sendId = (id: number | string) => {
                     position: absolute;
                     bottom: 0;
                     width: 100%;
-                    height: 38px;
+                    height: 30px;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -80,11 +78,12 @@ const sendId = (id: number | string) => {
                     background-color: rgba(0, 0, 0, .4);
                     padding: 0 15px;
                     box-sizing: border-box;
+                    font-size: 14px;
                 }
             }
 
             .mv-info {
-                padding: 5px 0 15px 0;
+                padding: 5px 25px 15px 25px;
                 color: rgb(58, 58, 58);
             }
         }
@@ -113,18 +112,25 @@ const sendId = (id: number | string) => {
 }
 
 .play-count {
+    display: flex;
+    align-items: center;
     z-index: 10;
     position: absolute;
     right: 4px;
     top: 6px;
     padding: 4px;
-    font-size: 16px;
     border-radius: 4px;
     background-color: rgba(0, 0, 0, 0.5);
     color: rgba(255, 255, 255);
+    font-size: 12px;
+
+    i {
+        font-size: 14px;
+    }
 
     .count-num {
         padding-left: 3px;
+        vertical-align: middle;
     }
 }
 </style>

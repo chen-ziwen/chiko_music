@@ -236,6 +236,19 @@ export function getPersonalizedMv() {
 }
 
 /**
+ * @function 获取mv的点赞转发评论数
+ */
+export function getMvDetailInfo(mvid: number, time: number) {
+    return http.get<any>('/mv/detail/info', { mvid, timestamp: time })
+}
+
+/**
+ * @function 获取MV评论
+ */
+export function getCommentMv(param: { id: number, limit?: number, offset?: number, timestamp?: number }) {
+    return http.get<any>('/comment/mv', param)
+}
+/**
  * @function 获取相似歌单(调用此接口,传入歌曲id,可获得相似歌单)
  * @param id 歌曲id
  */

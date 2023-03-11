@@ -62,3 +62,30 @@ export function formatSecond(time: number) {
     return secondTime as number;
 }
 
+// 日期格式化
+export function dateFormat(str: number | string, type: string) {
+    let date = new Date(str)
+    let year = date.getFullYear()
+    let month = formatZero(date.getMonth() + 1, 2)
+    let day = formatZero(date.getDate(), 2)
+    let hour = formatZero(date.getHours(), 2)
+    let minute = formatZero(date.getMinutes(), 2)
+    let seconds = formatZero(date.getSeconds(), 2)
+    if (type == 'YYYY-MM-DD') {
+        return `${year}-${month}-${day}`
+    } else if (type == 'YYYY-MM-DD HH:MM:SS') {
+        return `${year}-${month}-${day} ${hour}:${minute}:${seconds}`
+    } else if (type == 'MM/DD  HH:MM:SS') {
+        return `${month}/${day} ${hour}:${minute}:${seconds}`
+    }
+};
+
+// 获取当前时间前后N天前后日期
+export function getDateBefore(dayCount: number) {
+    var date = new Date()
+    date.setDate(date.getDate() + dayCount)
+    let year = date.getFullYear()
+    let month = formatZero(date.getMonth() + 1, 2)
+    let day = formatZero(date.getDate(), 2)
+    return `${year}-${month}-${day}`
+};

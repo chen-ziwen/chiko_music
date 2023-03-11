@@ -15,23 +15,28 @@
         <div class="module-checked">
             <el-tabs v-model="checkedname" type="card" class="demo-tabs" @tab-click="checkedClick">
                 <el-tab-pane label="热门歌曲" name="hot">
-                    <SongList :sheetList="delSong" @keeplist="keepsheet"></SongList>
+                    <SongList v-if="delSong.length" :sheetList="delSong" @keeplist="keepsheet"></SongList>
+                    <p v-else>暂无热门歌曲</p>
                 </el-tab-pane>
                 <el-tab-pane label="专辑" name="album">
                     <LoadScroll :distance="100" @load-scorll="loadScroll">
-                        <SingerAlbum :data="artAlbum"></SingerAlbum>
+                        <SingerAlbum v-if="artAlbum.length" :data="artAlbum"></SingerAlbum>
+                        <p v-else>暂无专辑</p>
                     </LoadScroll>
                 </el-tab-pane>
                 <el-tab-pane label="热门MV" name="mv">
-                    <MvList :list="artMv" @mvid="turnMvDetail"></MvList>
+                    <MvList v-if="artMv.length" :list="artMv" @mvid="turnMvDetail"></MvList>
+                    <p v-else>暂无热门MV</p>
                 </el-tab-pane>
                 <el-tab-pane label="歌手详情" name="detail">
-                    <SingerMsg :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
+                    <SingerMsg v-if="artDesc.intro.length" :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
+                    <p v-else>暂无歌手详情</p>
                 </el-tab-pane>
                 <el-tab-pane label="相似歌手" name="like">
                     <template v-if="singerList && singerList.length > 0">
                         <SingerSheet :singer-list="singerList"></SingerSheet>
                     </template>
+                    <p v-else>暂无相似歌手</p>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -114,7 +119,7 @@ const artDetail = async (id: number) => {
 const singerHotsongs = async (id: number) => {
     try {
         delSong.splice(0, delSong.length);
-        const { artist, hotSongs } = await getArtists(id);
+        const { hotSongs } = await getArtists(id);
         for (let item of hotSongs) {
             delSong.push(useSong(item))
         }
@@ -208,7 +213,7 @@ watch(() => route.query.singerid, (id) => {
     width: 100%;
     background-color: #ffffff;
     margin: 20px 0;
-    border-radius: 15px;
+    border-radius: 10px;
 
     .singer-details-msg {
         display: flex;

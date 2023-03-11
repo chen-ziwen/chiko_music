@@ -34,6 +34,7 @@ declare module 'vue' {
     SongList: typeof import('./src/components/song-sheet/SongList.vue')['default']
     SongSheetCard: typeof import('./src/components/song-sheet/SongSheetCard.vue')['default']
     SvgIcon: typeof import('./src/components/common/svgIcon/SvgIcon.vue')['default']
+    TalkList: typeof import('./src/components/common/TalkList.vue')['default']
   }
 }
 

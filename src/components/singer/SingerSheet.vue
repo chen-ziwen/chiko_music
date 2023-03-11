@@ -53,6 +53,8 @@ const jumpPage = (id: number) => {
 </script>
 <style lang='scss' scoped>
 ul {
+    margin: 0 -5px;
+
     li {
         display: inline-block;
         box-sizing: border-box;
@@ -60,6 +62,8 @@ ul {
         margin: 0px 15px 15px 15px;
         vertical-align: top;
         cursor: pointer;
+
+
         &:hover .singer-img {
             box-sizing: border-box;
             border: 1px solid rgb(246, 67, 67);
@@ -75,7 +79,8 @@ ul {
                 width: 85px;
                 height: 85px;
                 border-radius: 5px;
-                
+                box-shadow: 0 0 3px #4e4e4e;
+
             }
 
             >span {
@@ -116,7 +121,8 @@ ul {
 .image-slot {
     @include _imgslot(85px, 85px, 20px);
 }
-.round{
-    border-radius:50% !important;
+
+.round {
+    border-radius: 50% !important;
 }
 </style>

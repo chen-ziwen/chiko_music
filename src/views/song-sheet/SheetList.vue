@@ -56,14 +56,9 @@
             </div>
             <div class="common-style" v-show="sheetAbout.comments.length > 0">
                 <ListModule head="精彩评论" gap-color="green">
-                    <div class="talk-box-list" v-for="item in sheetAbout.comments" :key="item.commentId">
-                        <div class="user-box">
-                            <img class="talk-user-avatar" :src="item.user.avatarUrl" :title="item.user.nickname" />
-                            <span class="talk-user-name">{{ item.user.nickname }}</span>
-                            <span class="talk-time">{{ item.timeStr }}</span>
-                        </div>
-                        <p class="talk-list">{{ item.content }}</p>
-                    </div>
+                    <template v-for="{ user: { nickname, avatarUrl }, commentId, content, timeStr, } in sheetAbout.comments" :key="commentId">
+                        <TalkList :name="nickname" :avatar="avatarUrl" :time="timeStr" :content="content"></TalkList>
+                    </template>
                 </ListModule>
             </div>
         </div>
@@ -77,13 +72,14 @@ import {
     getPlaylistTrackAll,
     getCommentPlaylist,
     getPlaylistSubscribers,
-} from '@/api/http/api';
+} from '@/api';
 import { ScrollTop, useStorage, imgurl, useSong } from '@/util';
 import { useRoute, useRouter } from 'vue-router';
 import { reactive, ref, watch, toRaw, onActivated } from 'vue';
 import SongList from '@/components/song-sheet/SongList.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/ListModule.vue';
+import TalkList from '@/components/common/TalkList.vue';
 import { usePlay, playState } from '@/store/play';
 
 interface sheetAbout {
@@ -110,7 +106,6 @@ const sheetAbout = reactive<sheetAbout>({
     comments: []
 });
 const sheetDetail = reactive<sheetDetail>({
-    //初始化，不想初始化就必须使用可选链或&&
     detail: { tags: [] },
     creator: {},
     sheetList: [],
@@ -175,7 +170,7 @@ function choose(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
     // 切换分页时 屏幕回到顶部
-    scroll();
+    scroll(5);
 }
 
 // 点击跳转歌单页面
@@ -244,7 +239,7 @@ watch(() => route.query.sheetid, (id) => {
         padding: 15px;
         overflow: hidden;
         background-color: white;
-        border-radius: 15px;
+        border-radius: 10px;
 
         .pagination {
             width: 100%;
@@ -414,48 +409,6 @@ watch(() => route.query.sheetid, (id) => {
             }
         }
 
-        .talk-box-list {
-            display: flex;
-            flex-direction: column;
-            padding: 5px 0px;
-
-            .user-box {
-                display: flex;
-                align-items: center;
-
-                .talk-user-avatar {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                }
-
-                .talk-user-name {
-                    width: 0;
-                    flex-grow: 1;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    margin-left: 6px;
-                }
-
-                .talk-time {
-                    color: rgb(100, 99, 99);
-                }
-            }
-
-            .talk-list {
-                padding: 5px;
-                margin: 5px 0px 0px 35px;
-                border: 3px dashed pink;
-                font-size: 14px;
-                color: rgb(76, 73, 73);
-                letter-spacing: 1px;
-            }
-
-
-
-        }
-
         .sheet-commond {
             margin-bottom: 10px;
             display: flex;
@@ -464,8 +417,8 @@ watch(() => route.query.sheetid, (id) => {
             cursor: pointer;
 
             .sheet-img {
-                width: 35px;
-                height: 35px;
+                width: 40px;
+                height: 40px;
                 border-radius: 50%;
                 margin-right: 10px;
             }
@@ -488,5 +441,9 @@ watch(() => route.query.sheetid, (id) => {
 :deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
     background-color: pink !important; //修改默认的背景色
     cursor: pointer;
+}
+
+:deep(.el-pagination) {
+    --el-pagination-hover-color: pink !important;
 }
 </style>

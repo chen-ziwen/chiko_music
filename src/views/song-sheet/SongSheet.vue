@@ -40,7 +40,9 @@
                 </Transition>
             </div>
             <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
-            <el-pagination class="my-pagination" v-model:currentPage="currentPage" :page-size="64" layout="prev, pager, next" :total="sheetList.total" @current-change="currentChange" />
+            <div v-if="sheetList.playlists.length">
+                <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0" :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage" />
+            </div>
         </div>
     </div>
 </template>
@@ -204,7 +206,7 @@ onMounted(async () => {
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            border-radius: 15px;
+            border-radius: 10px;
 
             &::after {
                 content: '';
@@ -216,7 +218,7 @@ onMounted(async () => {
                 height: 100%;
                 background-color: rgba(44, 44, 44, 0.5);
                 backdrop-filter: blur(20px);
-                border-radius: 15px;
+                border-radius: 10px;
                 overflow: hidden;
             }
         }
@@ -366,31 +368,26 @@ onMounted(async () => {
             }
         }
     }
-
-    .my-pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 20px 0 10px 0;
-
-    }
-
-    &:deep(.el-pagination) {
-        --el-pagination-hover-color: rgb(248, 60, 60);
-        --el-pagination-bg-color: transparent;
-        --el-pagination-text-color: #302424c2;
-        --el-pagination-font-size: 18px;
-        font-weight: 700;
-
-        button:disabled {
-            background-color: transparent;
-        }
-    }
 }
 
 .hight-light {
     border-radius: 3px;
     background-color: rgb(245, 204, 211);
     color: #F84E4E;
+}
+
+.pagination {
+    width: 100%;
+    @include _flex(center, center);
+    margin-top: 15px;
+}
+
+:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
+    background-color: pink !important; //修改默认的背景色
+    cursor: pointer;
+}
+
+:deep(.el-pagination) {
+    --el-pagination-hover-color: pink !important;
 }
 </style>

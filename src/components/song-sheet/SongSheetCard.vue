@@ -58,7 +58,7 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 <style lang='scss' scoped>
 ul {
     background-color: v-bind(back);
-    border-radius: 15px;
+    border-radius: 10px;
 
     &:deep(.el-image) {
 

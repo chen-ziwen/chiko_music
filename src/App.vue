@@ -18,20 +18,22 @@ router.beforeEach((to, from, next) => {
 
 // 项目加载时触发
 onMounted(async () => {
-  const { data } = await loginStatus();
-  console.log('login status', data);
-
-  if (data.account.status >= 0) {
-    play.$patch({
-      loginStatu: true,
-    });
-  } else {
-    play.$patch({
-      loginStatu: false,
-    });
+  try {
+    const { data } = await loginStatus();
+    console.log('login status', data);
+    if (data.account.status >= 0) {
+      play.$patch({
+        loginStatu: true,
+      });
+    } else {
+      play.$patch({
+        loginStatu: false,
+      });
+    }
+    storage.set('loginStatu', play.loginStatu);
+  } catch (e) {
+    console.log(e, "登录状态请求失败");
   }
-
-  storage.set('loginStatu', play.loginStatu);
 })
 
 onUnmounted(() => {

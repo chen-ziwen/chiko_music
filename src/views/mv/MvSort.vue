@@ -27,7 +27,9 @@
             </div>
         </div>
         <MvList :list="mvContnet" :style="{ marginTop: '40px' }" @mvid="turnMvDetail"></MvList>
-        <el-pagination class="my-pagination" v-model:currentPage="currentPage" :page-size="32" layout="prev, pager, next" :total="mvCount" @current-change="currentChange" />
+        <div v-if="mvContnet.length">
+            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage" :page-size="32" :total="mvCount" @current-change="currentChange" />
+        </div>
     </div>
 </template>
 <script lang='ts' setup>
@@ -155,14 +157,17 @@ watch(() => route.query, (val) => {
 </script>
 <style lang='scss' scoped>
 .mv-sort {
-    // height: 500px;
-    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 0 auto 20px;
 
     .mv-tags {
+        padding: 15px 0px 0px;
+        margin: 15px;
 
         .tag-all {
             display: flex;
-            margin: 20px 0px;
+            margin-bottom: 20px;
 
             &:not(:last-of-type) {
                 align-items: center;
@@ -196,7 +201,7 @@ watch(() => route.query, (val) => {
                 width: 90px;
 
                 &:not(:last-of-type) {
-                    border-right: 1px solid rgb(203, 203, 203);
+                    border-right: 1px solid rgb(217, 217, 217);
                 }
 
                 .tag-label {
@@ -207,26 +212,6 @@ watch(() => route.query, (val) => {
             }
         }
     }
-
-    .my-pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 20px 0 10px 0;
-
-    }
-
-    &:deep(.el-pagination) {
-        --el-pagination-hover-color: rgb(248, 60, 60);
-        --el-pagination-bg-color: transparent;
-        --el-pagination-text-color: #302424c2;
-        --el-pagination-font-size: 18px;
-        font-weight: 700;
-
-        button:disabled {
-            background-color: transparent;
-        }
-    }
 }
 
 .high {
@@ -235,5 +220,21 @@ watch(() => route.query, (val) => {
     border-radius: 20px;
     background-color: #f9d4d4;
     transition: all 0.25s ease-in-out;
+}
+
+.pagination {
+    width: 100%;
+    @include _flex(center, center);
+    margin: 15px;
+    padding-bottom: 15px;
+}
+
+:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
+    background-color: pink !important; //修改默认的背景色
+    cursor: pointer;
+}
+
+:deep(.el-pagination) {
+    --el-pagination-hover-color: pink !important;
 }
 </style>
