@@ -53,7 +53,7 @@ const jumpPage = (id: number) => {
 </script>
 <style lang='scss' scoped>
 ul {
-    margin: 0 -5px;
+    margin: 0 -3px;
 
     li {
         display: inline-block;
