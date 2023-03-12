@@ -35,7 +35,7 @@ onMounted(() => {
     banners();
     setTimeout(() => {
         carousel.value.setActiveItem(0); //解决第一张不显示问题
-    }, 500);
+    }, 100);
 })
 </script>
 

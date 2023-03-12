@@ -29,19 +29,16 @@
                     <li>
                         <router-link :to="{ name: 'newdisc' }" active-class="router-style">新碟</router-link>
                     </li>
-
-                    <!-- <li>
-                        <router-link :to="{ name: 'test' }" active-class="router-style">测试</router-link>
-                    </li> -->
                 </ul>
                 <div class="nav-right">
-                    <el-icon :size="28" class="el-search">
-                        <search />
-                    </el-icon>
-                    <span class="nav-login" @click="login">登陆</span>
-                    <div class="search-music-box" v-if="false">
-                        <SearchMusic></SearchMusic>
+                    <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => searchBox = false">
+                        <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
+                        <i class="iconfont icon-sousuo" @click="searchBox = !searchBox"></i>
+                        <div class="search-music-box" v-if="searchBox && searchContent">
+                            <SearchMusic></SearchMusic>
+                        </div>
                     </div>
+                    <span class="nav-login" @click="login">登陆</span>
                 </div>
 
             </div>
@@ -50,13 +47,23 @@
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { Search } from '@element-plus/icons-vue';
 import SearchMusic from '../common/SearchMusic.vue';
 const router = useRouter();
+const inputValue = ref('');
+const searchBox = ref<boolean>(false);
+const searchContent = ref<boolean>(false);
+const login = () => router.push('/login');
 
-const login = () => {
-    router.push('/login')
+// 获得焦点
+const getFocus = () => {
+    searchContent.value = true;
+}
+
+// 失去焦点
+const outFocus = () => {
+    searchContent.value = false;
 }
 </script>
 
@@ -97,7 +104,6 @@ const login = () => {
                 margin-left: 30px;
             }
 
-
             >a {
                 display: inline-block;
                 padding: 0 20px;
@@ -117,36 +123,70 @@ const login = () => {
         position: relative;
         @include _flex(center, center);
 
-        &:deep(.el-icon) {
-            color: #ffffff;
+        .input-box {
+            position: relative;
+            width: 2em;
+            height: 2rem;
+            transition: all .2s ease-out;
 
-            &:hover {
-                color: #ff0000;
+            .input {
+                width: 100%;
+                height: 100%;
+                outline: none;
+                border: none;
+                padding-left: 35px;
+                padding-right: 10px;
+                box-sizing: border-box;
+                border-radius: 15px;
+                background-color: #080F31;
+
+            }
+
+            .icon-sousuo {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                font-size: 22px;
+                cursor: pointer;
+                color: #ffffff;
+                transform: translate(10px, -50%);
+
+                &:hover {
+                    color: #ff0000;
+                }
             }
         }
 
-        .el-search {
-            display: inline-block;
-            cursor: pointer;
-            padding-right: 15px;
-            border-right: 1px dotted rgb(180, 177, 177);
-        }
-
         .nav-login {
-            padding: 0px 25px 0px 15px;
-            display: inline-block;
-            line-height: 100%;
+            margin: 0px 25px 0px 15px;
             cursor: pointer;
-            color: white;
+            color: #ffffff;
         }
 
         .search-music-box {
             position: absolute;
-            right: 0px;
-            top: 60px;
-            transform: translateX(30%);
+            left: 0;
+            top: 35px;
+            width: 15rem;
+            max-height: 20rem; // 真正使用的时候需要
+            height: 200px; // 测试使用的时候需要
+            border-radius: 5px;
+            background-color: #ffffff;
         }
     }
+}
 
+// 点击变大
+.search-box {
+    width: 15rem !important;
+    height: 2rem !important;
+
+    .input {
+        background: #ffffff !important;
+    }
+
+    .icon-sousuo {
+        color: #080F31 !important;
+    }
 }
 </style>

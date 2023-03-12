@@ -117,7 +117,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .mv {
     .module-gap {
-        margin: 20px 0px;
+        margin: 25px 0px;
     }
 }
 </style>

@@ -6,8 +6,7 @@
 </script>
 <style lang='scss' scoped>
 .search-music {
-    width: 400px;
-    height: 600px;
-    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
 }
 </style>
