@@ -20,11 +20,19 @@ import type { SingerListType, SearchHotDetail, RecommendList } from "@/models";
 export function getSearchSong(keywords: string, limit?: number, offset?: number, type?: number) {
     return http.get<{ result: any }>('/cloudsearch', { keywords, limit, offset, type })
 }
+
 /**
- * @function 获取歌曲的播放地址(重要)
+ * @function 默认搜索关键词
  */
-export function getSongUrl(id: number, br?: number) {
-    return http.get<any>('/song/url', { id, br })
+export function getSearchDefault() {
+    return http.get<any>('/search/default');
+}
+
+/**
+ *@function  搜索列表简略
+ */
+export function getSearchHot() {
+    return http.get<any>('/search/hot');
 }
 
 /** 
@@ -37,6 +45,7 @@ export function getSearchHotDetail() {
     //await 返回值是promise,调用reslove函数时,reslove函数的参数
 }
 
+
 /**
  * @function 获取搜索建议,搜索结果同时包含单曲,歌手,歌单,mv信息
  * @param keywords 关键词
@@ -44,6 +53,14 @@ export function getSearchHotDetail() {
 export function getSearchSuggest(keywords: string) {
     return http.get<any>('/search/suggest', { keywords })
 }
+
+/**
+ * @function 获取歌曲的播放地址(重要)
+ */
+export function getSongUrl(id: number, br?: number) {
+    return http.get<any>('/song/url', { id, br })
+}
+
 
 /**
  * @function 获取歌曲评论

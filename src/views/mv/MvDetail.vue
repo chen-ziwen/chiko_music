@@ -56,8 +56,8 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="info ellipsis">
-                                <h2 class="flex-row ellipsis">
+                            <div class="info text-hidden">
+                                <h2 class="flex-row text-hidden">
                                     <i class="iconfont icon-MV"></i> {{ item.name }}
                                 </h2>
                                 <div class="author">

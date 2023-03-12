@@ -36,7 +36,7 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
-import { MvType, useMv } from '@/util';
+import { MvType, useMv, scrollTop } from '@/util';
 import MvList from '@/components/mv/MvList.vue';
 import router from '@/router';
 
@@ -51,6 +51,7 @@ interface Params {
 
 const route = useRoute();
 const currentPage = ref<number>(1);
+const scroll = scrollTop();
 
 const tagType: TagType = {
     // 地区
@@ -101,7 +102,8 @@ const checkTags = (name: string, tag: string) => {
     } else if (name == 'order') {
         params.value.order = tag;
     }
-    getMvTagContent(params.value)
+    getMvTagContent(params.value);
+    scroll(5);
 }
 
 // 选中高亮
@@ -122,6 +124,7 @@ const currentChange = async (page: number) => {
         params.value.offset = (page - 1) * (params.value.limit as number);
         const { data } = await getMvAllUp(params.value);
         mvContnet.value = useMv(data);
+        scroll(5);
     } catch (e) {
         console.log(e, 'mv页数切换失败');
     }
@@ -201,7 +204,7 @@ watch(() => route.query, (val) => {
                 width: 90px;
 
                 &:not(:last-of-type) {
-                    border-right: 1px solid rgb(217, 217, 217);
+                    border-right: 1px solid $color;
                 }
 
                 .tag-label {

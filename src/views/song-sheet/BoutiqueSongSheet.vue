@@ -1,5 +1,5 @@
 <template>
-    <div class="boutique-song-list" @click="pop = false">
+    <div class="boutique-song-list">
         <div class="module-gap">
             <ContentBox title="精品歌单" back="#ffffff">
                 <span class="high-tags" @click.stop="pop = !pop">
@@ -7,7 +7,7 @@
                     {{ nameKey }}
                 </span>
                 <Transition name="pop">
-                    <ul class="boutique-list" v-if="pop">
+                    <ul class="boutique-list" v-if="pop" v-close-outside="() => pop = false">
                         <li class="boutique-tag" v-for="(name, index) of boutique" :key="index + name" @click="turnSheet(name)">
                             <span class="checked-tag" :class="hightlight(name)">{{ name }}</span>
                         </li>
@@ -73,6 +73,7 @@ const turnSheet = async (name: string) => {
         boSheet.total = total;
         nameKey.value = name; // 选中高亮
         scroll.value.topWay() // 精品歌单置顶
+        pop.value = false; // 关闭弹窗
     }
     catch (e) {
         console.log(e, '精歌单请求失败')

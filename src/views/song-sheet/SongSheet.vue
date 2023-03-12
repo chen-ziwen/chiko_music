@@ -1,5 +1,5 @@
 <template>
-    <div class="song-sheet" @click="pop = false" v-loading="!loading" element-loading-background="rgba(254,236,239, 1)">
+    <div class="song-sheet" v-loading="!loading" element-loading-background="rgba(254,236,239, 1)">
         <div class="boutique" @click="boutique" v-if="!page?.none && loading">
             <div class="page-img-back" :style="{ backgroundImage: `url(${page.coverImgUrl})` }"></div>
             <div class="content-box">
@@ -27,7 +27,7 @@
                     </li>
                 </ul>
                 <Transition name="pop">
-                    <div class="tags-position" v-if="pop">
+                    <div class="tags-position" v-if="pop" v-close-outside="() => pop = false">
                         <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
                             <span class="tags-hight-light">{{ item.name }}</span>
                             <ul class="tags-common-type">
@@ -53,6 +53,7 @@ import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { onMounted, reactive, ref, computed, watch, toRef, onActivated } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { scrollTop } from '@/util';
 interface HotTags {
     id: number;
     name: string;
@@ -82,6 +83,7 @@ const allTags = ref<AllTags[]>([]); // 全部标签
 const loading = ref<boolean>(false);
 const route = useRoute();
 const router = useRouter();
+const scroll = scrollTop();
 
 const sheetList = reactive({
     playlists: [],
@@ -160,7 +162,7 @@ const currentChange = async (page: number) => {
     const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 64, (page - 1) * 64); // offset n-1*64
     sheetList.playlists = playlists;
     sheetList.total = total;
-    document.documentElement.scrollTop = 0;
+    scroll(5);
 }
 const boutique = () => {
     router.push({
