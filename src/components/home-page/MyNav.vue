@@ -31,9 +31,9 @@
                     </li>
                 </ul>
                 <div class="nav-right">
-                    <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => searchBox = false">
+                    <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => { searchBox = false, searchContent = false }">
                         <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
-                        <i class="iconfont icon-sousuo" @click="searchBox = !searchBox"></i>
+                        <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = true"></i>
                         <div class="search-music-box" v-if="searchBox && searchContent">
                             <SearchMusic></SearchMusic>
                         </div>
@@ -63,7 +63,9 @@ const getFocus = () => {
 
 // 失去焦点
 const outFocus = () => {
-    searchContent.value = false;
+    if (!searchBox.value) {
+        searchContent.value = false;
+    }
 }
 </script>
 

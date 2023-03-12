@@ -34,7 +34,7 @@
                 </template>
             </ContentBox>
             <div v-if="videoInfo.commentTotal">
-                <el-pagination class="pagination" layout="prev, pager, next" background :total="videoInfo.commentTotal || 0" :page-size="20" @current-change="currentChange" v-model:currentPage=page />
+                <el-pagination class="pagination" layout="prev, pager, next" background :total="videoInfo.commentTotal || 0" :page-size="20" @current-change="currentChange" v-model:currentPage="page" :hide-on-single-page="true" />
             </div>
         </div>
         <div class="mv-detail-right">

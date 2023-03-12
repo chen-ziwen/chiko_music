@@ -32,7 +32,7 @@
                 <SongList :sheetList="sheetDetail.partsheet" @keeplist="keepsheet"></SongList>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="30" @current-change="choose" v-model:currentPage=page />
+                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="30" @current-change="choose" v-model:currentPage="page" :hide-on-single-page="true" />
             </div>
         </div>
         <div class="music-singer-right">

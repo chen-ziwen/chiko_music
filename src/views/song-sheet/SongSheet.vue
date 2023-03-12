@@ -41,7 +41,7 @@
             </div>
             <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
             <div v-if="sheetList.playlists.length">
-                <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0" :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage" />
+                <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0" :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage" :hide-on-single-page="true" />
             </div>
         </div>
     </div>
