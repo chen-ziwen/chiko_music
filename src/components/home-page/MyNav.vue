@@ -158,7 +158,7 @@ const outFocus = () => {
         }
 
         .nav-login {
-            margin: 0px 25px 0px 15px;
+            margin: 0px 25px 2px 15px;
             cursor: pointer;
             color: #ffffff;
         }
@@ -176,7 +176,7 @@ const outFocus = () => {
     }
 }
 
-// 点击变大
+// 点击搜索框变大
 .search-box {
     width: 15rem !important;
     height: 2rem !important;
