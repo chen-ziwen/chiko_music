@@ -87,10 +87,10 @@
     flex-wrap: nowrap;
 }
 
-.ellipsis {
+.text-hidden {
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 * {
@@ -112,11 +112,6 @@ body {
     padding-right: 0 !important;
 }
 
-.text-hidden {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
 
 /* ::-webkit-scrollbar 滚动条整体部分，可以设置宽度啥的

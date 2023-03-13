@@ -1,13 +1,4 @@
-export interface SearchHotDetail {
-    alg: string;
-    content?: string;
-    iconTpe: number;
-    iconUrl: string;
-    score: number;
-    searchWord: string;
-    source: number;
-    url: string;
-}
+
 // 精品歌单 creator
 interface AvatarDetail {
     identityLevel: number,

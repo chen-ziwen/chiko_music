@@ -133,6 +133,15 @@ const mainRouter = [
                 },
                 component: () => import('@/views/new-disc/NewDisc.vue')
             },
+            {
+                path: 'searchpage',
+                name: 'searchpage',
+                meta: {
+                    title: '资源搜索',
+                    keepAlive: false
+                },
+                component: () => import('@/views/search/SearchPage.vue')
+            },
             // {
             //     path: 'test',
             //     name: 'test',

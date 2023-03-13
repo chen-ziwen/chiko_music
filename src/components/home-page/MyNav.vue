@@ -26,8 +26,11 @@
                     <li>
                         <router-link :to="{ name: 'mv' }" active-class="router-style">MV</router-link>
                     </li>
-                    <li>
+                    <!-- <li>
                         <router-link :to="{ name: 'newdisc' }" active-class="router-style">新碟</router-link>
+                    </li> -->
+                    <li>
+                        <a href="https://github.com/chen-ziwen/chiko_music" target="_blank">GitHub</a>
                     </li>
                 </ul>
                 <div class="nav-right">
@@ -35,12 +38,11 @@
                         <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
                         <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = true"></i>
                         <div class="search-music-box" v-if="searchBox && searchContent">
-                            <SearchMusic></SearchMusic>
+                            <SearchMusic :item="hotSearchList" @close="searchBox = false"></SearchMusic>
                         </div>
                     </div>
                     <span class="nav-login" @click="login">登陆</span>
                 </div>
-
             </div>
         </div>
     </nav>
@@ -49,16 +51,26 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import SearchMusic from '../common/SearchMusic.vue';
+import SearchMusic from '@/components/search/SearchMusic.vue';
+import { getSearchHotDetail, getSearchSuggest } from '@/api';
+import type { SearchHotDetailType, SearchSuggestType } from '@/models';
 const router = useRouter();
 const inputValue = ref('');
 const searchBox = ref<boolean>(false);
 const searchContent = ref<boolean>(false);
 const login = () => router.push('/login');
+const hotSearchList = ref<SearchHotDetailType[]>([]);
+const searchSuggest = ref<SearchSuggestType>({});
+const searchStatus = ref<boolean>(true); // 搜索状态
 
 // 获得焦点
-const getFocus = () => {
+const getFocus = async () => {
     searchContent.value = true;
+    // 如果热搜列表长度为0的时候请求，不做重复请求
+    if (!hotSearchList.value.length) {
+        await useGetSearchHotDetail();
+        console.log(hotSearchList.value, 'chufale');
+    }
 }
 
 // 失去焦点
@@ -67,6 +79,40 @@ const outFocus = () => {
         searchContent.value = false;
     }
 }
+
+const useGetSearchHotDetail = async () => {
+    try {
+        const { data } = await getSearchHotDetail();
+        hotSearchList.value = data;
+    } catch (e) {
+        console.log(e, '热搜列表请求失败');
+
+    }
+}
+
+const useGetSearchSuggest = async (key: string) => {
+    try {
+        const { result } = await getSearchSuggest(key);
+        if (Object.keys(result).length > 0) {
+            searchSuggest.value = {};
+            // 对获取的信息进行排序
+            for (let item of result.order) {
+                searchSuggest.value[item as keyof SearchSuggestType] = result[item];
+            }
+            console.log('search', searchSuggest.value);
+        } else {
+            searchStatus.value = false;
+            // 没有请求到数据的时候不显示搜索建议
+            // 当搜索框为空时不显示搜索建议
+        }
+    } catch (e) {
+        console.log(e, '搜索建议请求失败');
+    }
+}
+
+useGetSearchSuggest('弄鱼')
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -169,11 +215,22 @@ const outFocus = () => {
             position: absolute;
             left: 0;
             top: 35px;
-            width: 15rem;
+            min-width: 10rem;
             max-height: 20rem; // 真正使用的时候需要
-            height: 200px; // 测试使用的时候需要
+            // height: 200px; // 测试使用的时候需要
             border-radius: 5px;
             background-color: #ffffff;
+            overflow: hidden scroll;
+            transition: all .3s ease-out; // 宽度变化动画
+
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: #d4d4d4;
+                border-radius: 10px;
+            }
         }
     }
 }

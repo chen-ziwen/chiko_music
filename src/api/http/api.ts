@@ -1,5 +1,5 @@
 import http from "./http";
-import type { SingerListType, SearchHotDetail, RecommendList } from "@/models";
+import type { SingerListType, SearchHotDetailType, RecommendList } from "@/models";
 
 //获取到的参数先用any表示,后续在去给她们添加类型。
 // 不需要登陆的接口
@@ -39,7 +39,7 @@ export function getSearchHot() {
  * @function 获取热搜列表
  */
 export function getSearchHotDetail() {
-    return http.get<{ data: SearchHotDetail[] }>('search/hot/detail')
+    return http.get<{ data: SearchHotDetailType[] }>('search/hot/detail')
     //{ data: SearchHotDetail[] } 在定义的| get<T>():promise<T> |泛型中 它是promise的reslove(参数)中的参数
     //async的返回值为promise 
     //await 返回值是promise,调用reslove函数时,reslove函数的参数
