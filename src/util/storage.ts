@@ -2,8 +2,9 @@
 // localStorage 缓存数据
 export class useStorage {
     public readonly set: (name: string, data: any) => void;
-    public readonly get: (name: string, typedata?: any) => void;
-    public readonly remove: (name: string) => void;
+    public readonly get: (name: string) => any;
+    // public readonly remove: (name: string, list: any[]) => void;
+    public readonly clear: (name: string) => void;
     constructor() {
         this.set = (name, data) => {
             let cloneData = data;
@@ -16,22 +17,20 @@ export class useStorage {
             }
             window.localStorage.setItem(name, cloneData);
         };
-        this.get = (name, typeData = null) => {
+        this.get = (name) => {
             if (!name) {
-                console.log('storge的get方法参数name不能为空');
-                return;
+                return console.log('storge的get方法参数name不能为空');
             }
-            let keepData = window.localStorage.getItem(name) ?? typeData;
             // ?? 判断符只会判断null和undefined,左边不等于这两个返回左边，否则返回右边
-            if (keepData) {
-                return JSON.parse(keepData)
+            const data = window.localStorage.getItem(name);
+            if (data) {
+                return JSON.parse(data);
             }
-            return keepData;
+            return data;
         };
-        this.remove = (name) => {
+        this.clear = (name) => {
             if (!name) {
-                console.log('storge的remove方法参数name不能为空');
-                return;
+                return console.log('storge的remove方法参数name不能为空');
             }
             window.localStorage.removeItem(name)
         }

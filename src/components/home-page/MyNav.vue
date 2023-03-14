@@ -38,7 +38,7 @@
                         <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
                         <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = true"></i>
                         <div class="search-music-box" v-if="searchBox && searchContent">
-                            <SearchMusic :item="hotSearchList" @close="searchBox = false"></SearchMusic>
+                            <SearchMusic :search-history="serchHistory" :item="hotSearchList" @close="searchBox = false" @searchword="search"></SearchMusic>
                         </div>
                     </div>
                     <span class="nav-login" @click="login">登陆</span>
@@ -49,7 +49,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useStorage } from '@/util';
 import { useRouter } from 'vue-router';
 import SearchMusic from '@/components/search/SearchMusic.vue';
 import { getSearchHotDetail, getSearchSuggest } from '@/api';
@@ -62,6 +63,8 @@ const login = () => router.push('/login');
 const hotSearchList = ref<SearchHotDetailType[]>([]);
 const searchSuggest = ref<SearchSuggestType>({});
 const searchStatus = ref<boolean>(true); // 搜索状态
+const storage = new useStorage();
+const serchHistory = ref<string[]>([]);
 
 // 获得焦点
 const getFocus = async () => {
@@ -86,7 +89,6 @@ const useGetSearchHotDetail = async () => {
         hotSearchList.value = data;
     } catch (e) {
         console.log(e, '热搜列表请求失败');
-
     }
 }
 
@@ -110,8 +112,25 @@ const useGetSearchSuggest = async (key: string) => {
     }
 }
 
-useGetSearchSuggest('弄鱼')
 
+const getHistorySearch = (searchWord?: string) => {
+    if (!storage.get('searchHistory')) {
+        storage.set('searchHistory', []);
+    } else {
+        if (searchWord) {
+            storage.set('searchHistory', [...new Set([...storage.get('searchHistory'), searchWord])]);
+        }
+    }
+    serchHistory.value = storage.get('searchHistory');
+}
+
+const search = (key: string) => {
+    getHistorySearch(key);
+}
+
+onMounted(() => {
+    getHistorySearch(); // 初始化请求搜索历史
+})
 
 </script>
 
