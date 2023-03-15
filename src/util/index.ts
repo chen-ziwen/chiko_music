@@ -8,3 +8,4 @@ export * from './way';  // 一些简单的小方法集合
 export * from './song'; // 对歌曲的数据进行处理
 export * from './mv'; // 对mv的数据进行集中处理
 export * from './time'; // 集合时间的函数
+export * from './useStorage';

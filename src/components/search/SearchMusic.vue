@@ -2,7 +2,7 @@
     <div class="history-search-box">
         <ul class="history-search" v-if="searchHistory.length">
             <li class="tag-title">历史搜索</li>
-            <li class="history-box" v-for="item of searchHistory" :key="item">
+            <li class="history-box" v-for="item of searchHistory" :key="item" @click="deleteHistorySearch(item)">
                 {{ item }}
             </li>
         </ul>
@@ -23,7 +23,10 @@
     </div>
 </template>
 <script lang='ts' setup>
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { searchStorage as storage } from '@/util';
+
 
 interface HotSearchProps {
     item: {
@@ -32,11 +35,11 @@ interface HotSearchProps {
         score: number;
         searchWord: string;
     }[];
-    searchHistory: string[];
 }
 const props = defineProps<HotSearchProps>();
 const emits = defineEmits(['close', 'searchword'])
 const router = useRouter();
+const searchHistory = ref<string[]>([]);
 
 const judgeChange = (index: number) => {
     if (index <= 2) {
@@ -52,9 +55,31 @@ const turnSearchPage = (searchWord: string) => {
             searchWord
         }
     });
-    emits('searchword', searchWord);
+    getHistorySearch(searchWord)
     emits('close'); // 关闭弹窗
 }
+
+// 查询搜索历史
+const getHistorySearch = (searchWord?: string) => {
+    storage.addSingleSearch('searchHistory', searchWord);
+    searchHistory.value = storage.get('searchHistory');
+}
+
+// 删除某一条信息
+const deleteHistorySearch = (searchWord: string) => {
+    storage.deleteSingleSearch('searchHistory', searchWord);
+    searchHistory.value = storage.get('searchHistory');
+}
+
+// 清空搜索历史
+const clearHistorySearch = () => {
+    storage.clear('searchHistory');
+    searchHistory.value = storage.get('searchHistory');
+}
+
+onMounted(() => {
+    getHistorySearch(); // 初始化请求搜索历史
+})
 
 </script>
 <style lang='scss' scoped>

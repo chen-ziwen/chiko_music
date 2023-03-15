@@ -1,14 +1,6 @@
 import http from "./http";
 import type { SingerListType, SearchHotDetailType, RecommendList } from "@/models";
 
-//获取到的参数先用any表示,后续在去给她们添加类型。
-// 不需要登陆的接口
-
-
-//   注：关于`offset`，你可以这样理解，假设你当前的歌单有100首歌
-// 你传入limit=10&offset=0等价于limit=10，你会得到第1-10首歌曲
-// 你传入limit=10&offset=1，你会得到第2-11首歌曲
-// 如果你设置limit=10&offset=2，你就会得到第3-12首歌曲
 
 /**
  * @function 搜索歌曲
@@ -40,9 +32,6 @@ export function getSearchHot() {
  */
 export function getSearchHotDetail() {
     return http.get<{ data: SearchHotDetailType[] }>('search/hot/detail')
-    //{ data: SearchHotDetail[] } 在定义的| get<T>():promise<T> |泛型中 它是promise的reslove(参数)中的参数
-    //async的返回值为promise 
-    //await 返回值是promise,调用reslove函数时,reslove函数的参数
 }
 
 
@@ -472,4 +461,18 @@ export function getPlaylistSubscribers(id: number, limit?: number, offset?: numb
 // 最新mv
 export function getMvFirst(limit?: number, area?: string) {
     return http.get<any>('/mv/first', { limit, area })
+}
+
+/**
+ * @function 获取每日推荐歌单（调用此接口，可获得每日推荐歌单）
+ */
+export function getRecommendResource() {
+    return http.get<any>('/recommend/resource')
+}
+
+/**
+ * @function 获取每日推荐歌曲（调用此接口，可获得每日推荐歌曲）
+ */
+export function getRecommendSongs() {
+    return http.get<any>('/recommend/songs')
 }
