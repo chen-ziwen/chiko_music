@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import {  ref } from 'vue';
 import { useRouter } from 'vue-router';
 import SearchMusic from '@/components/search/SearchMusic.vue';
 import { getSearchHotDetail, getSearchSuggest } from '@/api';
@@ -62,7 +62,6 @@ const login = () => router.push('/login');
 const hotSearchList = ref<SearchHotDetailType[]>([]);
 const searchSuggest = ref<SearchSuggestType>({});
 const searchStatus = ref<boolean>(true); // 搜索状态
-
 
 // 获得焦点
 const getFocus = async () => {
@@ -109,8 +108,6 @@ const useGetSearchSuggest = async (key: string) => {
         console.log(e, '搜索建议请求失败');
     }
 }
-
-
 
 
 </script>

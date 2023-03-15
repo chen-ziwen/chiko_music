@@ -127,6 +127,8 @@ onMounted(() => {
 
                     .hot-icon {
                         width: 22px;
+                        height: 13px;
+                        object-fit: contain;
                     }
 
                     .searchword,
