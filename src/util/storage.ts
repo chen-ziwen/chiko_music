@@ -2,8 +2,7 @@
 // localStorage 缓存数据
 export class useStorage {
     public readonly set: (name: string, data: any) => void;
-    public readonly get: (name: string, def?: any) => any;
-    // public readonly remove: (name: string, list: any[]) => void;
+    public readonly get: (name: string) => any;
     public readonly clear: (name: string) => void;
     constructor() {
         this.set = (name, data) => {

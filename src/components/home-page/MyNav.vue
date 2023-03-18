@@ -35,10 +35,10 @@
                 </ul>
                 <div class="nav-right">
                     <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => { searchBox = false, searchContent = false }">
-                        <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
+                        <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" @keydown.enter="turnSearchPage(inputValue)" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
                         <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = true"></i>
                         <div class="search-music-box" v-if="searchBox && searchContent">
-                            <SearchMusic :item="hotSearchList" @close="searchBox = false"></SearchMusic>
+                            <SearchMusic ref="searchmusic" :suggest="searchSuggest" :item="hotSearchList" :status="searchStatus" @close="searchBox = false"></SearchMusic>
                         </div>
                     </div>
                     <span class="nav-login" @click="login">登陆</span>
@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import {  ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import SearchMusic from '@/components/search/SearchMusic.vue';
 import { getSearchHotDetail, getSearchSuggest } from '@/api';
@@ -58,10 +58,11 @@ const router = useRouter();
 const inputValue = ref('');
 const searchBox = ref<boolean>(false);
 const searchContent = ref<boolean>(false);
-const login = () => router.push('/login');
 const hotSearchList = ref<SearchHotDetailType[]>([]);
 const searchSuggest = ref<SearchSuggestType>({});
 const searchStatus = ref<boolean>(true); // 搜索状态
+const searchmusic = ref<any>(null); // 获取组件实例
+const login = () => router.push('/login');
 
 // 获得焦点
 const getFocus = async () => {
@@ -80,6 +81,7 @@ const outFocus = () => {
     }
 }
 
+// 热搜列表
 const useGetSearchHotDetail = async () => {
     try {
         const { data } = await getSearchHotDetail();
@@ -89,6 +91,7 @@ const useGetSearchHotDetail = async () => {
     }
 }
 
+// 搜索建议
 const useGetSearchSuggest = async (key: string) => {
     try {
         const { result } = await getSearchSuggest(key);
@@ -98,17 +101,37 @@ const useGetSearchSuggest = async (key: string) => {
             for (let item of result.order) {
                 searchSuggest.value[item as keyof SearchSuggestType] = result[item];
             }
-            console.log('search', searchSuggest.value);
+            searchStatus.value = false; // 不显示热搜
         } else {
-            searchStatus.value = false;
             // 没有请求到数据的时候不显示搜索建议
             // 当搜索框为空时不显示搜索建议
+            searchStatus.value = true;
         }
     } catch (e) {
+        searchStatus.value = true;
         console.log(e, '搜索建议请求失败');
     }
 }
 
+const turnSearchPage = (searchWord: string) => {
+    if (searchWord) {
+        router.push({
+            name: 'searchpage',
+            query: {
+                searchWord
+            }
+        });
+        searchBox.value = false // 关闭弹窗
+        if (searchmusic.value) {
+            searchmusic.value.getHistorySearch(searchWord);
+        }
+    }
+}
+
+// 当搜索框文字更新时触发
+watch(inputValue, async (val) => {
+    await useGetSearchSuggest(val);
+})
 
 </script>
 
@@ -214,11 +237,10 @@ const useGetSearchSuggest = async (key: string) => {
             top: 35px;
             min-width: 10rem;
             max-height: 20rem; // 真正使用的时候需要
-            // height: 200px; // 测试使用的时候需要
             border-radius: 5px;
             background-color: #ffffff;
             overflow: hidden scroll;
-            transition: all .3s ease-out; // 宽度变化动画
+            transition: all 0.5s; // 宽度变化动画
 
             &::-webkit-scrollbar {
                 width: 6px;
@@ -227,6 +249,13 @@ const useGetSearchSuggest = async (key: string) => {
             &::-webkit-scrollbar-thumb {
                 background-color: #d4d4d4;
                 border-radius: 10px;
+            }
+
+            .suggset-search {
+                background-color: red;
+                width: inherit;
+                height: inherit;
+
             }
         }
     }

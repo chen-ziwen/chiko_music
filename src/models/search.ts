@@ -16,8 +16,8 @@ export interface SearchHotDetailType {
 }
 
 export interface SearchSuggestType {
-    albums?: [];
-    artists?: [];
-    songs?: [];
-    playlists?: []
+    albums?: { name: string }[];
+    artists?: { name: string }[];
+    songs?: { name: string }[];
+    playlists?: { name: string }[]
 }

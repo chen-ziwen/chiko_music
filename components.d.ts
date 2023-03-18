@@ -12,6 +12,8 @@ declare module 'vue' {
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElSlider: typeof import('element-plus/es')['ElSlider']
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
     ListModule: typeof import('./src/components/common/ListModule.vue')['default']
     LoadScroll: typeof import('./src/components/common/LoadScroll.vue')['default']
     MvList: typeof import('./src/components/mv/MvList.vue')['default']

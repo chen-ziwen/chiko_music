@@ -1,9 +1,12 @@
 <template>
-    <div class="history-search-box">
+    <div class="history-search-box" v-if="status">
         <ul class="history-search" v-if="searchHistory.length">
-            <li class="tag-title">历史搜索</li>
-            <li class="history-box" v-for="item of searchHistory" :key="item" @click="deleteHistorySearch(item)">
-                {{ item }}
+            <li class="tag-title">搜索历史
+                <i class="iconfont icon-lajitong" title="清空搜索记录" @click.stop="clearHistorySearch"></i>
+            </li>
+            <li class="history-box" v-for="item of searchHistory" :key="item" @click="turnSearchPage(item)">
+                <span class="keyword">{{ item }}</span>
+                <i class="iconfont icon-cuowu" @click.stop="deleteHistorySearch(item)" title="删除记录"></i>
             </li>
         </ul>
         <ul class="search-music">
@@ -21,13 +24,21 @@
             </li>
         </ul>
     </div>
+    <div class="suggest-search" v-else>
+        <div class="info-type" v-for="item, index in suggest">
+            <i class="iconfont" :class="fontIcon[index].icon"></i>
+            {{ fontIcon[index].name }}
+            <p class="keyword-info" v-for="i in item" @click="turnSearchPage(i.name)">
+                {{ i.name }}
+            </p>
+        </div>
+    </div>
 </template>
 <script lang='ts' setup>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { searchStorage as storage } from '@/util';
-
-
+import { SearchSuggestType } from '@/models'
 interface HotSearchProps {
     item: {
         content?: string;
@@ -35,11 +46,34 @@ interface HotSearchProps {
         score: number;
         searchWord: string;
     }[];
+    suggest: SearchSuggestType;
+    status: boolean;
 }
-const props = defineProps<HotSearchProps>();
+const props = withDefaults(defineProps<HotSearchProps>(), {
+    status: true,
+});
 const emits = defineEmits(['close', 'searchword'])
 const router = useRouter();
 const searchHistory = ref<string[]>([]);
+
+const fontIcon = {
+    albums: {
+        icon: 'icon-zhuanji',
+        name: '专辑',
+    },
+    artists: {
+        icon: 'icon-User',
+        name: '歌手',
+    },
+    playlists: {
+        icon: 'icon-gedan1',
+        name: '歌单'
+    },
+    songs: {
+        icon: 'icon-music_play',
+        name: '歌曲'
+    },
+}
 
 const judgeChange = (index: number) => {
     if (index <= 2) {
@@ -55,11 +89,11 @@ const turnSearchPage = (searchWord: string) => {
             searchWord
         }
     });
-    getHistorySearch(searchWord)
+    getHistorySearch(searchWord);
     emits('close'); // 关闭弹窗
 }
 
-// 查询搜索历史
+// 添加搜索历史
 const getHistorySearch = (searchWord?: string) => {
     storage.addSingleSearch('searchHistory', searchWord);
     searchHistory.value = storage.get('searchHistory');
@@ -74,11 +108,16 @@ const deleteHistorySearch = (searchWord: string) => {
 // 清空搜索历史
 const clearHistorySearch = () => {
     storage.clear('searchHistory');
+    storage.set('searchHistory', []);
     searchHistory.value = storage.get('searchHistory');
 }
 
 onMounted(() => {
     getHistorySearch(); // 初始化请求搜索历史
+})
+
+defineExpose({
+    getHistorySearch,
 })
 
 </script>
@@ -96,7 +135,6 @@ onMounted(() => {
             font-size: 15px;
             margin: 15px 0 15px 20px;
         }
-
 
         .search-box {
             height: 50px;
@@ -169,10 +207,16 @@ onMounted(() => {
         color: #666666;
 
         .tag-title {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+
+            .icon-lajitong {
+                margin: 0 5px;
+                cursor: pointer;
+            }
         }
 
         .history-box {
+            position: relative;
             display: inline-block;
             padding: 5px 15px;
             margin: 0 6px 6px 0;
@@ -184,8 +228,51 @@ onMounted(() => {
             &:hover {
                 background-color: #f2f2f2;
             }
+
+            &:hover .icon-cuowu {
+                display: inline-block;
+            }
+
+            .keyword {
+                margin-right: 5px;
+            }
+
+            .icon-cuowu {
+                position: absolute;
+                right: 5px;
+                top: 50%;
+                font-size: 12px;
+                display: none;
+                transform: translateY(-50%) scale(0.8);
+            }
         }
     }
 
+}
+
+.suggest-search {
+    width: 100%;
+    height: 100%;
+    font-size: 15px;
+    box-sizing: border-box;
+    padding: 15px 15px 0 15px;
+    color: #898989;
+
+    .info-type {
+        margin-bottom: 12px;
+
+        .keyword-info {
+            margin: 5px;
+            padding: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+            color: #383838;
+            font-size: 13px;
+
+            &:hover {
+                background-color: #f2f2f2;
+            }
+        }
+    }
 }
 </style>

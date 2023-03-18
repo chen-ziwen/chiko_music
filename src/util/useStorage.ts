@@ -9,7 +9,7 @@ function findDeletSearch(list: string[], fun: any) {
 
 class useSearchStorage extends useStorage {
     deleteSingleSearch(storage: string, key: string) {
-        const keylist = this.get(storage, []) as [];
+        const keylist = this.get(storage);
         findDeletSearch(keylist, (item: any) => {
             return item === key;
         })
