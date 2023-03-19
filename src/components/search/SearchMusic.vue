@@ -112,6 +112,7 @@ const clearHistorySearch = () => {
     searchHistory.value = storage.get('searchHistory');
 }
 
+
 onMounted(() => {
     getHistorySearch(); // 初始化请求搜索历史
 })

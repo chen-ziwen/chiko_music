@@ -54,6 +54,7 @@ import { useRouter } from 'vue-router';
 import SearchMusic from '@/components/search/SearchMusic.vue';
 import { getSearchHotDetail, getSearchSuggest } from '@/api';
 import type { SearchHotDetailType, SearchSuggestType } from '@/models';
+import { Debounce } from '@/util';
 const router = useRouter();
 const inputValue = ref('');
 const searchBox = ref<boolean>(false);
@@ -62,6 +63,7 @@ const hotSearchList = ref<SearchHotDetailType[]>([]);
 const searchSuggest = ref<SearchSuggestType>({});
 const searchStatus = ref<boolean>(true); // 搜索状态
 const searchmusic = ref<any>(null); // 获取组件实例
+const debounce = new Debounce();
 const login = () => router.push('/login');
 
 // 获得焦点
@@ -101,7 +103,10 @@ const useGetSearchSuggest = async (key: string) => {
             for (let item of result.order) {
                 searchSuggest.value[item as keyof SearchSuggestType] = result[item];
             }
-            searchStatus.value = false; // 不显示热搜
+            // 如果搜索框有显示 则显示搜索结果
+            if (inputValue.value) {
+                searchStatus.value = false;
+            }
         } else {
             // 没有请求到数据的时候不显示搜索建议
             // 当搜索框为空时不显示搜索建议
@@ -112,6 +117,7 @@ const useGetSearchSuggest = async (key: string) => {
         console.log(e, '搜索建议请求失败');
     }
 }
+const debounceSearchSuggest = debounce.use(useGetSearchSuggest, 300) // 对搜索限制 300ms 最多触发一次
 
 const turnSearchPage = (searchWord: string) => {
     if (searchWord) {
@@ -129,8 +135,12 @@ const turnSearchPage = (searchWord: string) => {
 }
 
 // 当搜索框文字更新时触发
-watch(inputValue, async (val) => {
-    await useGetSearchSuggest(val);
+watch(inputValue, (val) => {
+    if (val) {
+        debounceSearchSuggest(val);
+    } else {
+        searchStatus.value = true;
+    }
 })
 
 </script>

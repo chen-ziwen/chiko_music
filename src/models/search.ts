@@ -1,8 +1,10 @@
-export interface cloudSearch {
-
+export interface TagSearch<T> {
+    albums: T;
+    artists: T;
+    playlists: T;
+    songs: T;
+    mv: T;
 }
-
-
 
 export interface SearchHotDetailType {
     alg: string;
