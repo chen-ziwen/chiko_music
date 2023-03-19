@@ -3,7 +3,7 @@
         <li class="mv-list-li" v-for="item in list" :key="item.id + item.info" @click="sendId(item.id)">
             <div class="mv-content">
                 <div class="mv-message">
-                    <el-image class="mv-pic" :src="item.imgurl"></el-image>
+                    <el-image class="mv-pic" :src="item.imgurl" fit="cover"></el-image>
                     <div class="mv-tips">
                         <span class="aritst-name"> {{ item.artistName }}</span>
                         <span class="mv-time">{{ item.duration }}</span>
