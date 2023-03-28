@@ -140,7 +140,6 @@ async function playlistDetail(id: number) {
         }
         // 分页的每一页歌曲
         sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
-        // console.log(id, "====>");
 
     } catch (e) {
         console.log(e, id, '歌单列表请求错误');

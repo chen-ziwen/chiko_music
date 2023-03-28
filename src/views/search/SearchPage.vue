@@ -2,21 +2,21 @@
     <div class="search-page">
         我是搜索歌曲页面
         <div class="module-checked">
-            <el-tabs v-model="checkedname" type="card" class="demo-tabs" @tab-click="checkedClick">
+            <el-tabs v-model="checkedname" type="card" class="demo-tabs" @tab-click="search">
                 <el-tab-pane label="单曲" name="songs">
-                    <!-- <SongList v-if="delSong.length" :sheetList="delSong" @keeplist="keepsheet"></SongList> -->
+                    <SongList v-if="songsList?.length" :sheetList="songsList"></SongList>
                 </el-tab-pane>
                 <el-tab-pane label="专辑" name="albums">
-                    <!-- <SingerAlbum v-if="artAlbum.length" :data="artAlbum"></SingerAlbum> -->
+                    <SingerAlbum v-if="artAlbum?.length" :data="artAlbum"></SingerAlbum>
                 </el-tab-pane>
                 <el-tab-pane label="歌手" name="artists">
-                    <!-- <SingerMsg v-if="artDesc.intro.length" :data="artDesc.intro" :text="artDesc.brief"></SingerMsg> -->
+                    <SingerSheet v-if="singerList?.length" :singer-list="singerList"></SingerSheet>
                 </el-tab-pane>
                 <el-tab-pane label="歌单" name="playlists">
-                    <!-- <SingerMsg v-if="artDesc.intro.length" :data="artDesc.intro" :text="artDesc.brief"></SingerMsg> -->
+                    <SongSheetCard v-if="sheetList?.length" :sheet="sheetList"></SongSheetCard>
                 </el-tab-pane>
                 <el-tab-pane label="MV" name="mv">
-                    <!-- <MvList v-if="artMv.length" :list="artMv" @mvid="turnMvDetail"></MvList> -->
+                    <MvList v-if="artMv.length" :list="artMv"></MvList>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -25,15 +25,16 @@
 <script lang='ts' setup>
 import { watch, ref, reactive } from 'vue';
 import { useRoute } from 'vue-router';
-import { getSearchSong } from '@/api';
+import { getSearchSong, getSongDetail } from '@/api';
 import { useSong, useMv, MvType } from '@/util';
-import type { SingerDetail, SongList as SongListType, SingerAlbumType, SingerListType, TagSearch } from '@/models'
-import SingerMsg from '@/components/singer/SingerMsg.vue';
+import type { SongList as SongListType, SingerAlbumType, RecommendList, SingerListType, TagSearch } from '@/models'
 import SongList from '@/components/song-sheet/SongList.vue';
 import SingerAlbum from '@/components/singer/SingerAlbum.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
+import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import MvList from '@/components/mv/MvList.vue';
 const route = useRoute();
+const loading = ref<boolean>(false);
 
 const checkedname = ref<string>('hot');
 const params = {
@@ -43,55 +44,73 @@ const params = {
     type: 1 // 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单,  1004: MV
 }
 const searchType: TagSearch<number> = {
-    albums: 10,
     songs: 1,
+    albums: 10,
     artists: 100,
     playlists: 1000,
     mv: 1004,
 }
 
-const songs = reactive<SongListType[]>([]);
-const artDesc: { intro: [], brief: string } = reactive({ intro: [], brief: '暂无数据' });
+const songsList = ref<SongListType[]>([]);
 const artAlbum = ref<SingerAlbumType[]>([]);
 const singerList = ref<SingerListType[]>();
+const sheetList = ref<RecommendList[]>();
 const artMv = ref<MvType[]>([]);
 
-const result = ref<any>();
+const search = (name: { paneName: string }) => {
+    const type = searchType[name.paneName as keyof TagSearch<number>]; // 输出
+    params.type = type;
+    getSearchSong(params).then(res => {
+        if (res.code == 200) {
+            switch (type) {
+                case 1:
+                    const songs = res.result.songs;
+                    const keys: string[] = [];
+                    songs.forEach((item: { id: string }) => {
+                        keys.push(item.id)
+                    });
+                    getSong(keys);
+                    break;
+                case 10:
+                    artAlbum.value = res.result.albums;
+                    break;
+                case 100:
+                    singerList.value = res.result.artists;
+                    break;
+                case 1000:
+                    sheetList.value = res.result.playlists;
+                    break;
+                case 1004:
+                    artMv.value = useMv(res.result.mvs);
+                    break;
+            }
+        }
+    })
+};
 
-// 获取搜索歌曲
-const useGetSearchSong = async () => {
+const getSong = async (keys: string[]) => {
+    loading.value = true;
+    const timestamp = new Date().getTime();
+    let ids = keys.join(',');
     try {
-        const { result } = await getSearchSong(params);
-        result.value = result;
-        console.log('result', result);
+        const { songs } = await getSongDetail(ids, timestamp);
+        songsList.value = songs.map((item: SongListType) => {
+            if (item.id) {
+                return useSong(item);
+            }
+        })
     } catch (e) {
-        console.log(e);
+        console.log(e, '获取单曲失败');
     }
 }
 
-const checkedClick = (name: { paneName: string }) => {
-    const tag = searchType[name.paneName as keyof TagSearch<number>]; // 输出
-    switch (tag) {
-        case 1:
-            break;
-        case 10:
-            break;
-        case 100:
-            break;
-        case 1000:
-            break;
-        case 1004:
-            break;
-    }
-}
 
 watch(() => route.query.searchWord, async (current) => {
-    const key = current as unknown as any;
+    const key = current as unknown as string;
     if (current) {
         params.keywords = key;
-        await useGetSearchSong();
     }
-}, { immediate: true })
+}, { immediate: true });
 </script>
 <style lang='scss' scoped>
 .module-checked {

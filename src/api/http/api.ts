@@ -10,7 +10,7 @@ import type { SingerListType, SearchHotDetailType, RecommendList } from "@/model
  * @param type 搜索类型；默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合, 2000:声音(搜索声音返回字段格式会不一样)
  */
 export function getSearchSong(params: { keywords: string, limit?: number, offset?: number, type?: number }) {
-    return http.get<{ result: any }>('/cloudsearch', params);
+    return http.get<any>('/cloudsearch', params);
 }
 
 /**
@@ -435,7 +435,7 @@ export function getDetailDynamic(id: number) {
  * @function 获取歌曲详情
  * @param ids 音乐 id, 如 `ids=347230`
  */
-export function getSongDetail(ids: string) {
+export function getSongDetail(ids: string, timestamp?: number | string) {
     return http.get<any>('/song/detail', { ids })
 }
 
