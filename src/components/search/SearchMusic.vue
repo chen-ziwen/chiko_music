@@ -3,7 +3,7 @@
         <input class="input" type="text" @click="getSearchContent" @keydown.enter="turnSearchPage(inputValue)" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
         <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = !searchBox, searchContent = false"></i>
         <div class="search-content-box" v-show="searchBox && searchContent">
-            <div class="history-search-box" v-if="searchStatus">
+            <div class="history-search-box" v-if="searchSuggestStatus">
                 <ul class="history-search" v-if="searchHistory.length">
                     <li class="tag-title">搜索历史
                         <i class="iconfont icon-lajitong" title="清空搜索记录" @click.stop="clearHistorySearch"></i>
@@ -53,7 +53,7 @@ const searchBox = ref<boolean>(false);
 const searchContent = ref<boolean>(false);
 const hotSearchList = ref<SearchHotDetailType[]>([]);
 const searchSuggest = ref<SearchSuggestType>({});
-const searchStatus = ref<boolean>(true); // 搜索状态
+const searchSuggestStatus = ref<boolean>(true); // 搜索状态
 const debounce = new Debounce();
 const searchHistory = ref<string[]>([]);
 
@@ -133,15 +133,15 @@ const useGetSearchSuggest = async (key: string) => {
             }
             // 如果有搜索内容，显示搜索结果，否则显示推荐列表
             if (inputValue.value) {
-                searchStatus.value = false;
+                searchSuggestStatus.value = false;
             }
         } else {
             // 没有请求到数据的时候不显示搜索建议
             // 当搜索框为空时不显示搜索建议
-            searchStatus.value = true;
+            searchSuggestStatus.value = true;
         }
     } catch (e) {
-        searchStatus.value = true;
+        searchSuggestStatus.value = true;
         console.log(e, '搜索建议请求失败');
     }
 };
@@ -163,10 +163,11 @@ const turnSearchPage = (searchWord: string) => {
 
 // 当搜索框文字更新时触发
 watch(inputValue, (val) => {
+    searchContent.value = true;
     if (val) {
         debounceSearchSuggest(val);
     } else {
-        searchStatus.value = true;
+        searchSuggestStatus.value = true;
     }
 })
 

@@ -23,7 +23,7 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { watch, ref, reactive } from 'vue';
+import { watch, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { usePlay } from '@/store/play';
 import { getSearchSong, getSongDetail } from '@/api';
@@ -36,7 +36,6 @@ import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import MvList from '@/components/mv/MvList.vue';
 const route = useRoute();
 const router = useRouter();
-const loading = ref<boolean>(false);
 const play = usePlay();
 
 const checkedname = ref<string>('songs');
@@ -61,7 +60,7 @@ const sheetList = ref<RecommendList[]>();
 const artMv = ref<MvType[]>([]);
 
 const search = (pane: { paneName: string }) => {
-    const type = searchType[pane.paneName as keyof TagSearch<number>]; // 输出
+    const type = searchType[pane.paneName as keyof TagSearch<number>];
     params.type = type;
     getSearchSong(params).then(res => {
         if (res.code == 200) {
@@ -79,8 +78,6 @@ const search = (pane: { paneName: string }) => {
                     break;
                 case 100:
                     singerList.value = res.result.artists;
-                    console.log(singerList.value);
-
                     break;
                 case 1000:
                     sheetList.value = res.result.playlists;
@@ -94,7 +91,6 @@ const search = (pane: { paneName: string }) => {
 };
 
 const getSong = async (keys: string[]) => {
-    loading.value = true;
     const timestamp = new Date().getTime();
     let ids = keys.join(',');
     try {
@@ -107,7 +103,7 @@ const getSong = async (keys: string[]) => {
     } catch (e) {
         console.log(e, '获取单曲失败');
     }
-}
+};
 
 const keepsheet = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(songsList.value));
@@ -115,19 +111,18 @@ const keepsheet = (index: number) => {
         currentindex: index,
         playList: songArr,
     })
-}
+};
 
-// 跳转到mv详情
+
 const turnMvDetail = (id: number) => {
     router.push({ name: 'mvdetail', query: { mvid: id } })
-}
-
+};
 
 watch(() => route.query.searchWord, async (current) => {
     const key = current as unknown as string;
     if (current) {
+        checkedname.value = 'songs'; // 搜索关键词改变时，回到第一页
         params.keywords = key;
-        checkedname.value = 'songs';
         search({ paneName: 'songs' });
     }
 }, { immediate: true });
