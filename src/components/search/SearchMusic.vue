@@ -156,8 +156,10 @@ const turnSearchPage = (searchWord: string) => {
             }
         });
         inputValue.value = searchWord; // 点击搜索时 将搜索值赋值给input
-        searchContent.value = false // 关闭弹窗
         getHistorySearch(searchWord); // 保存搜索值
+        setTimeout(() => {
+            searchContent.value = false // 延时关闭弹窗
+        }, 150);
     }
 };
 
