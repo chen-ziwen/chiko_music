@@ -21,7 +21,7 @@ class useSearchStorage extends useStorage {
             this.set(storage, []);
         } else {
             if (val) {
-                this.set(storage, [val, ...new Set([...this.get(storage)])]);
+                this.set(storage, [...new Set([val, ...this.get(storage)])]);
             }
         }
     }

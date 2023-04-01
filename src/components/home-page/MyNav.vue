@@ -34,114 +34,19 @@
                     </li>
                 </ul>
                 <div class="nav-right">
-                    <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => { searchBox = false, searchContent = false }">
-                        <input class="input" type="text" @focusin="getFocus" @focusout="outFocus" @keydown.enter="turnSearchPage(inputValue)" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
-                        <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = true"></i>
-                        <div class="search-music-box" v-if="searchBox && searchContent">
-                            <SearchMusic ref="searchmusic" :suggest="searchSuggest" :item="hotSearchList" :status="searchStatus" @close="searchBox = false"></SearchMusic>
-                        </div>
-                    </div>
-                    <span class="nav-login" @click="login">登陆</span>
+                    <SearchMusic></SearchMusic>
                 </div>
+                <span class="nav-login" @click="login">登陆</span>
             </div>
         </div>
     </nav>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import SearchMusic from '@/components/search/SearchMusic.vue';
-import { getSearchHotDetail, getSearchSuggest } from '@/api';
-import type { SearchHotDetailType, SearchSuggestType } from '@/models';
-import { Debounce } from '@/util';
 const router = useRouter();
-const inputValue = ref('');
-const searchBox = ref<boolean>(false);
-const searchContent = ref<boolean>(false);
-const hotSearchList = ref<SearchHotDetailType[]>([]);
-const searchSuggest = ref<SearchSuggestType>({});
-const searchStatus = ref<boolean>(true); // 搜索状态
-const searchmusic = ref<any>(null); // 获取组件实例
-const debounce = new Debounce();
 const login = () => router.push('/login');
-
-// 获得焦点
-const getFocus = async () => {
-    searchContent.value = true;
-    // 如果热搜列表长度为0的时候请求，不做重复请求
-    if (!hotSearchList.value.length) {
-        await useGetSearchHotDetail();
-        console.log(hotSearchList.value, 'chufale');
-    }
-}
-
-// 失去焦点
-const outFocus = () => {
-    if (!searchBox.value) {
-        searchContent.value = false;
-    }
-}
-
-// 热搜列表
-const useGetSearchHotDetail = async () => {
-    try {
-        const { data } = await getSearchHotDetail();
-        hotSearchList.value = data;
-    } catch (e) {
-        console.log(e, '热搜列表请求失败');
-    }
-}
-
-// 搜索建议
-const useGetSearchSuggest = async (key: string) => {
-    try {
-        const { result } = await getSearchSuggest(key);
-        if (Object.keys(result).length > 0) {
-            searchSuggest.value = {};
-            // 对获取的信息进行排序
-            for (let item of result.order) {
-                searchSuggest.value[item as keyof SearchSuggestType] = result[item];
-            }
-            // 如果搜索框有显示 则显示搜索结果
-            if (inputValue.value) {
-                searchStatus.value = false;
-            }
-        } else {
-            // 没有请求到数据的时候不显示搜索建议
-            // 当搜索框为空时不显示搜索建议
-            searchStatus.value = true;
-        }
-    } catch (e) {
-        searchStatus.value = true;
-        console.log(e, '搜索建议请求失败');
-    }
-}
-const debounceSearchSuggest = debounce.use(useGetSearchSuggest, 300) // 对搜索限制 300ms 最多触发一次
-
-const turnSearchPage = (searchWord: string) => {
-    if (searchWord) {
-        router.push({
-            name: 'searchpage',
-            query: {
-                searchWord
-            }
-        });
-        searchBox.value = false // 关闭弹窗
-        if (searchmusic.value) {
-            searchmusic.value.getHistorySearch(searchWord);
-        }
-    }
-}
-
-// 当搜索框文字更新时触发
-watch(inputValue, (val) => {
-    if (val) {
-        debounceSearchSuggest(val);
-    } else {
-        searchStatus.value = true;
-    }
-})
 
 </script>
 
@@ -200,88 +105,12 @@ watch(inputValue, (val) => {
     .nav-right {
         position: relative;
         @include _flex(center, center);
-
-        .input-box {
-            position: relative;
-            width: 2em;
-            height: 2rem;
-            transition: all .2s ease-out;
-
-            .input {
-                width: 100%;
-                height: 100%;
-                outline: none;
-                border: none;
-                padding-left: 35px;
-                padding-right: 10px;
-                box-sizing: border-box;
-                border-radius: 15px;
-                background-color: #080F31;
-
-            }
-
-            .icon-sousuo {
-                position: absolute;
-                top: 50%;
-                left: 0;
-                font-size: 22px;
-                cursor: pointer;
-                color: #ffffff;
-                transform: translate(10px, -50%);
-
-                &:hover {
-                    color: #ff0000;
-                }
-            }
-        }
-
-        .nav-login {
-            margin: 0px 25px 2px 15px;
-            cursor: pointer;
-            color: #ffffff;
-        }
-
-        .search-music-box {
-            position: absolute;
-            left: 0;
-            top: 35px;
-            min-width: 10rem;
-            max-height: 20rem; // 真正使用的时候需要
-            border-radius: 5px;
-            background-color: #ffffff;
-            overflow: hidden scroll;
-            transition: all 0.5s; // 宽度变化动画
-
-            &::-webkit-scrollbar {
-                width: 6px;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background-color: #d4d4d4;
-                border-radius: 10px;
-            }
-
-            .suggset-search {
-                background-color: red;
-                width: inherit;
-                height: inherit;
-
-            }
-        }
-    }
-}
-
-// 点击搜索框变大
-.search-box {
-    width: 15rem !important;
-    height: 2rem !important;
-
-    .input {
-        background: #ffffff !important;
     }
 
-    .icon-sousuo {
-        color: #080F31 !important;
+    .nav-login {
+        margin: 0px 25px 2px 15px;
+        cursor: pointer;
+        color: #ffffff;
     }
 }
 </style>

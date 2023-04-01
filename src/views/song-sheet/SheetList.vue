@@ -220,7 +220,6 @@ watch(() => route.query.sheetid, (id) => {
     // 跳转歌单时，将分页定位到第一页
     page.value = 1;
     let sheetId = id as unknown as number;
-    storage.set('idsss', sheetId)
     originContent(sheetId);
 }, { immediate: true })
 
@@ -273,6 +272,7 @@ watch(() => route.query.sheetid, (id) => {
         }
 
         &-head {
+            margin-bottom: 20px;
             @include _flex(center, center);
             // background-color: #fcfcfc;
 

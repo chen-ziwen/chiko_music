@@ -1,22 +1,22 @@
 <template>
     <div class="search-page">
-        我是搜索歌曲页面
+        <h2 class="search-words">搜索关键词：{{ params.keywords }}</h2>
         <div class="module-checked">
-            <el-tabs v-model="checkedname" type="card" class="demo-tabs" @tab-click="search">
+            <el-tabs v-model="checkedname" class="demo-tabs" @tab-click="search">
                 <el-tab-pane label="单曲" name="songs">
-                    <SongList v-if="songsList?.length" :sheetList="songsList"></SongList>
+                    <SongList v-if="songsList?.length" :sheetList="songsList" @keeplist="keepsheet"></SongList>
                 </el-tab-pane>
                 <el-tab-pane label="专辑" name="albums">
                     <SingerAlbum v-if="artAlbum?.length" :data="artAlbum"></SingerAlbum>
                 </el-tab-pane>
                 <el-tab-pane label="歌手" name="artists">
-                    <SingerSheet v-if="singerList?.length" :singer-list="singerList"></SingerSheet>
+                    <SingerSheet v-if="singerList?.length" :singer-list="singerList" type="square"></SingerSheet>
                 </el-tab-pane>
                 <el-tab-pane label="歌单" name="playlists">
-                    <SongSheetCard v-if="sheetList?.length" :sheet="sheetList"></SongSheetCard>
+                    <SongSheetCard v-if="sheetList?.length" :sheet="sheetList" :back-show="false"></SongSheetCard>
                 </el-tab-pane>
                 <el-tab-pane label="MV" name="mv">
-                    <MvList v-if="artMv.length" :list="artMv"></MvList>
+                    <MvList v-if="artMv.length" :list="artMv" @mvid="turnMvDetail"></MvList>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -24,7 +24,8 @@
 </template>
 <script lang='ts' setup>
 import { watch, ref, reactive } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { usePlay } from '@/store/play';
 import { getSearchSong, getSongDetail } from '@/api';
 import { useSong, useMv, MvType } from '@/util';
 import type { SongList as SongListType, SingerAlbumType, RecommendList, SingerListType, TagSearch } from '@/models'
@@ -34,9 +35,11 @@ import SingerSheet from '@/components/singer/SingerSheet.vue';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import MvList from '@/components/mv/MvList.vue';
 const route = useRoute();
+const router = useRouter();
 const loading = ref<boolean>(false);
+const play = usePlay();
 
-const checkedname = ref<string>('hot');
+const checkedname = ref<string>('songs');
 const params = {
     keywords: '海阔天空',
     limit: 30,
@@ -57,8 +60,8 @@ const singerList = ref<SingerListType[]>();
 const sheetList = ref<RecommendList[]>();
 const artMv = ref<MvType[]>([]);
 
-const search = (name: { paneName: string }) => {
-    const type = searchType[name.paneName as keyof TagSearch<number>]; // 输出
+const search = (pane: { paneName: string }) => {
+    const type = searchType[pane.paneName as keyof TagSearch<number>]; // 输出
     params.type = type;
     getSearchSong(params).then(res => {
         if (res.code == 200) {
@@ -76,6 +79,8 @@ const search = (name: { paneName: string }) => {
                     break;
                 case 100:
                     singerList.value = res.result.artists;
+                    console.log(singerList.value);
+
                     break;
                 case 1000:
                     sheetList.value = res.result.playlists;
@@ -104,21 +109,47 @@ const getSong = async (keys: string[]) => {
     }
 }
 
+const keepsheet = (index: number) => {
+    const songArr = JSON.parse(JSON.stringify(songsList.value));
+    play.$patch({
+        currentindex: index,
+        playList: songArr,
+    })
+}
+
+// 跳转到mv详情
+const turnMvDetail = (id: number) => {
+    router.push({ name: 'mvdetail', query: { mvid: id } })
+}
+
 
 watch(() => route.query.searchWord, async (current) => {
     const key = current as unknown as string;
     if (current) {
         params.keywords = key;
+        checkedname.value = 'songs';
+        search({ paneName: 'songs' });
     }
 }, { immediate: true });
+
 </script>
 <style lang='scss' scoped>
-.module-checked {
-    margin: 15px 30px;
-    background-color: #ffffff;
-
-    &:deep(.el-tabs) {
-        --el-color-primary: #f87a8f;
+.search-page {
+    .search-words {
+        margin: 25px 0;
     }
+
+    .module-checked {
+        &:deep(.el-tabs) {
+            --el-color-primary: #f87a8f;
+            --el-border-color-light: transparent;
+
+            .el-tabs__header {
+                margin: 0 !important;
+                background-color: $color;
+            }
+        }
+    }
+
 }
 </style>

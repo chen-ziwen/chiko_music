@@ -33,7 +33,7 @@ const turnSheet = (id: number) => {
 .singer-album {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin: 25px 0 0 -25px;
 
     .singer-album-list {
         display: flex;

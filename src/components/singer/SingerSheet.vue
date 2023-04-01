@@ -1,6 +1,6 @@
 <template>
-    <ul>
-        <li v-for="data in singerList" :key="data.id" class="recommend-singer-show-li">
+    <ul class="singer-sheet">
+        <li class="singer-sheet-list" v-for="data in singerList" :key="data.id">
             <div class="singer-message" @click="jumpPage(data.id)">
                 <el-image class="singer-img" :class="picType" :src="data?.picUrl + '?param=250y250'">
                     <template #placeholder>
@@ -13,7 +13,7 @@
                 </el-image>
                 <span>{{ data.name }}</span>
                 <span>
-                    单曲数 <span>{{ data.musicSize }}</span>
+                    单曲数 <span>{{ data.musicSize || data.albumSize }}</span>
                 </span>
             </div>
         </li>
@@ -52,10 +52,10 @@ const jumpPage = (id: number) => {
 
 </script>
 <style lang='scss' scoped>
-ul {
-    margin: 0 -3px;
+.singer-sheet {
+    margin: 25px -5px 0;
 
-    li {
+    .singer-sheet-list {
         display: inline-block;
         box-sizing: border-box;
         width: calc(10% - 30px);
@@ -73,7 +73,7 @@ ul {
             width: 100%;
             flex-direction: column;
             @include _flex(center, center);
-            margin: 10px 0;
+            margin-bottom: 10px;
 
             .singer-img {
                 width: 85px;

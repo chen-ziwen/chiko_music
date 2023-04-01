@@ -34,7 +34,7 @@ const sendId = (id: number | string) => {
 .mv-list {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 25px -15px 0;
+    margin: 25px -15px 0;
 
     .mv-list-li {
         position: relative;

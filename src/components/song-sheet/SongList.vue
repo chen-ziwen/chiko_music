@@ -86,7 +86,6 @@ const judgeNan = (num: number, index: number) => {
 .sheet {
     box-sizing: border-box;
     width: 100%;
-    margin-top: 20px;
 
     table {
         display: block;

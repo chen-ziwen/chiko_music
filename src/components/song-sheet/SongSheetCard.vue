@@ -1,6 +1,6 @@
 <template>
-    <ul>
-        <li :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
+    <ul class="song-sheet-card">
+        <li class="song-sheet-card-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-pic-box">
                 <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=300y300'" fit="fill">
                     <template #placeholder>
@@ -56,7 +56,8 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 </script>
 
 <style lang='scss' scoped>
-ul {
+.song-sheet-card {
+    margin: 25px 0 15px;
     background-color: v-bind(back);
     border-radius: 10px;
 
@@ -67,11 +68,11 @@ ul {
         }
     }
 
-    li {
+    .song-sheet-card-list {
         position: relative;
         display: inline-block;
         // width: calc(12.5% - 30px); // 分8块
-        margin: 10px 15px 10px 15px;
+        margin: 0 15px 10px 15px;
         vertical-align: top;
         cursor: pointer;
 
