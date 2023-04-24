@@ -28,7 +28,8 @@
         </div>
         <MvList :list="mvContnet" :style="{ marginTop: '40px' }" @mvid="turnMvDetail"></MvList>
         <div v-if="mvContnet.length">
-            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage" :page-size="32" :total="mvCount" @current-change="currentChange" :hide-on-single-page="true" />
+            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage"
+                :page-size="32" :total="mvCount" @current-change="currentChange" :hide-on-single-page="true" />
         </div>
     </div>
 </template>
@@ -95,26 +96,16 @@ const mvCount = ref<number>(0); // 给初始值 不然会报错
 
 // 选中不同标签时，更新param请求参数
 const checkTags = (name: string, tag: string) => {
-    if (name == 'area') {
-        params.value.area = tag
-    } else if (name == 'type') {
-        params.value.type = tag
-    } else if (name == 'order') {
-        params.value.order = tag;
-    }
+    params.value[name] = tag;
     getMvTagContent(params.value);
     scroll(5);
 }
 
 // 选中高亮
 const checkHigh = (name: string, tag: string) => {
-    const high = { area: '', type: '', order: '' }
-    if (name == 'area' && params.value.area == tag) {
-        high.area = "high"
-    } else if (name == 'type' && params.value.type == tag) {
-        high.type = "high"
-    } else if (name == 'order' && params.value.order == tag) {
-        high.order = "high"
+    const high: { [key: string]: string } = { area: '', type: '', order: '' }
+    if (params.value[name] == tag) {
+        high[name] = "high"
     }
     return high;
 }
@@ -137,7 +128,6 @@ async function getMvTagContent(param: Params) {
         const { data, count } = await getMvAllUp(param);
         mvContnet.value = useMv(data);
         mvCount.value = count;
-
     } catch (e) {
         console.log(e, 'mv请求失败');
     }
@@ -148,14 +138,12 @@ const turnMvDetail = (id: number) => {
     router.push({ name: 'mvdetail', query: { mvid: id } })
 }
 
-
 watch(() => route.query, (val) => {
     if (route.name == 'mvsort') {
         params.value = val as Params
         getMvTagContent(params.value);
     }
 }, { immediate: true })
-
 
 </script>
 <style lang='scss' scoped>
