@@ -57,7 +57,7 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 
 <style lang='scss' scoped>
 .song-sheet-card {
-    margin: 25px 0 15px;
+    margin: 10px 0;
     background-color: v-bind(back);
     border-radius: 10px;
 

@@ -25,10 +25,12 @@ import type { SingerListType } from "@/models";
 import { useRouter } from "vue-router";
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 interface SingerSheet {
+    gap: string;
     singerList: SingerListType[];
     type?: "square" | "round";
 }
 const props = withDefaults(defineProps<SingerSheet>(), {
+    gap: '25px -5px 0',
     type: "round"
 });
 const router = useRouter();
@@ -53,7 +55,7 @@ const jumpPage = (id: number) => {
 </script>
 <style lang='scss' scoped>
 .singer-sheet {
-    margin: 25px -5px 0;
+    margin: v-bind(gap);
 
     .singer-sheet-list {
         display: inline-block;
