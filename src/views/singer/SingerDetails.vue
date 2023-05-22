@@ -84,8 +84,8 @@ let albumOffset = 0;
 let albumMore = false;
 
 // 判断时候登录 如果未登录 相似歌手无法读取
-const checkedClick = (name: { paneName: string }) => {
-    if (name.paneName == 'like' && !play.loginStatu) {
+const checkedClick = (pane: { paneName: string }) => {
+    if (pane.paneName == 'like' && !play.loginStatu) {
         router.push({ name: 'login' })
     }
 }
