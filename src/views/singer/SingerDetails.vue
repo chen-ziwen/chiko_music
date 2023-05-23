@@ -211,7 +211,7 @@ watch(() => route.query.singerid, (id) => {
     display: flex;
     flex-direction: column;
     width: 100%;
-    background-color: #ffffff;
+    background-color: #fff;
     margin: 20px 0;
     border-radius: 10px;
 
