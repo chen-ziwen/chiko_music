@@ -1,5 +1,5 @@
 import axios, { type AxiosRequestConfig } from "axios";
-
+import { isDev } from '../mode';
 interface API {
     // Promise的泛型T代表promise变成成功态之后resolve的值，也就是请求到的数据的类型.
     //get函数<T>的这个T 类似于声明有一个泛型，必须写.
@@ -7,8 +7,10 @@ interface API {
     post<T>(url: string, params?: any): Promise<T>
 }
 
+const baseURl = isDev ? 'http://127.0.0.1:3000/' : 'http://114.116.47.111:3000/';
+
 const instance = axios.create({
-    baseURL: 'https://chiko-music.vercel.app',  //'https://chiko-music.vercel.app', //默认地址
+    baseURL: baseURl,  //'https://chiko-music.vercel.app', //默认地址
     timeout: 5000, //请求超时五秒
     withCredentials: true, // 让cookie可以跨域请求
     // params: { realIP: "58.23.138.35" }, // 添加公共的参数,就是每个接口都需要的参数
