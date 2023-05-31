@@ -14,7 +14,7 @@
 ### 歌手
 ![56168abfcd4dfb0570da2af8ef60cf6a](https://user-images.githubusercontent.com/85820568/200761893-863e4c59-9fa6-492e-b942-b601a74e5254.png)
 ## 目录结构
-暂无（开发完成会提供，好长时间没开发这个项目了 最近再做别的项目 这个项目大体完成）
+暂无（开发完成会提供，好长时间没开发这个项目了 最近再做别的项目 这个项目大体完成！）
 ## 安装运行
 ```git
 $ git clone https://github.com/Binaryify/NeteaseCloudMusicApi
