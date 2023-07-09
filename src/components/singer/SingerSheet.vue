@@ -25,9 +25,9 @@ import type { SingerListType } from "@/models";
 import { useRouter } from "vue-router";
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 interface SingerSheet {
-    gap: string;
     singerList: SingerListType[];
     type?: "square" | "round";
+    gap?: string;
 }
 const props = withDefaults(defineProps<SingerSheet>(), {
     gap: '25px -5px 0',

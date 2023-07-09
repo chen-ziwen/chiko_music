@@ -3,19 +3,19 @@
     <div class="ran-list">
         <div class="module-gap">
             <list-module head="官方特色榜" gapColor="red">
-                <RankShow :rank-sheet="mainSheetRank" @sheetid="sheetID"></RankShow>
+                <RankShow :rank-sheet="sheet.mainSheetRank" @sheetid="playSong"></RankShow>
             </list-module>
         </div>
         <div class="module-gap">
             <list-module head="全球媒体榜" gapColor="blue">
-                <SongSheetCard :sheet="otherSheetRank" textdir="center" :item="7" :back-show="false"></SongSheetCard>
+                <SongSheetCard :sheet="sheet.otherSheetRank" textdir="center" :item="7" :back-show="false"></SongSheetCard>
             </list-module>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, ref, onMounted } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { getToplist, getPlaylistTrackAll } from '@/api/http/api';
 import { RecommendList } from '@/models/detail';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
@@ -24,12 +24,10 @@ import RankShow from '@/components/rank/RankShow.vue';
 import { usePlay } from '@/store/play';
 import { useSong } from "@/util";
 
-const sheetType = reactive({
+const sheet = reactive({
     mainSheetRank: [] as RecommendList[],
     otherSheetRank: [] as RecommendList[],
 })
-const { mainSheetRank, otherSheetRank } = toRefs(sheetType);
-const delSong = reactive<Record<string, any>[]>([]);
 const play = usePlay();
 
 async function getToplistMsg() {
@@ -37,9 +35,9 @@ async function getToplistMsg() {
         const { list } = await getToplist();
         const idList: number[] = [];
         let index = 0;
-        mainSheetRank.value = list.slice(0, 4);
-        otherSheetRank.value = list.slice(4, list.length);
-        while (index < mainSheetRank.value.length) {
+        sheet.mainSheetRank = list.slice(0, 4);
+        sheet.otherSheetRank = list.slice(4, list.length);
+        while (index < sheet.mainSheetRank.length) {
             idList.push(list[index].id)
             index++;
         }
@@ -48,39 +46,27 @@ async function getToplistMsg() {
             const time = new Date().getTime();
             const res = await getPlaylistTrackAll(ids, 5, undefined, time);
             return res.songs; // 拿到songs列表
-        }))
-
+        }));
         for (let i = 0; i < result.length; i++) {
-            mainSheetRank.value[i].songList = [];// 初始化数组
-            const newsong = result[i].slice(0, 5); // 切割出5条数据
-            for (let j = 0; j < newsong.length; j++) {
-                mainSheetRank.value[i].songList[j] = useSong(newsong[j]); // 每一条数据都处理一下
-                mainSheetRank.value[i].songList[j].index = j + 1; // 加入索引值
+            sheet.mainSheetRank[i].songList = [];// 初始化数组
+            const rankShow = result[i].slice(0, 5); // 切割出5条数据
+            for (let j = 0; j < rankShow.length; j++) {
+                sheet.mainSheetRank[i].songList[j] = useSong(rankShow[j]); // 每一条数据都处理一下
+                sheet.mainSheetRank[i].songList[j].index = j + 1;
             }
         }
-    }
-    catch (e) {
-        console.log('请求失败', e)
+    } catch (e) {
+        console.log('请求失败', e);
     }
 }
 
 
 // 当点击不同歌单时，得重新赋值歌单列表
-const sheetID = async (id: number, index: number) => {
-    delSong.length = 0;
-    let i = 0;
-    let nowTime = new Date().getTime();
-    const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
-    while (i < songs.length) {
-        songs[i].index = i;
-        delSong.push(useSong(songs[i])) // 将数据进行过滤和处理
-        i++;
-    }
-
-    const songArr = JSON.parse(JSON.stringify(delSong));
+const playSong = async (index: number, order: number) => {
+    const songList = sheet.mainSheetRank[index].songList;
     play.$patch({
-        currentindex: index,
-        playList: songArr,
+        currentindex: order,
+        playList: songList,
     })
 }
 onMounted(getToplistMsg)

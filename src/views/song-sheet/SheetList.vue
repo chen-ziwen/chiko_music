@@ -390,7 +390,6 @@ watch(() => route.query.sheetid, (id) => {
     &-right {
         display: inline-block;
         width: 30%;
-        // padding: 15px;
         padding-left: 15px;
         overflow: hidden;
 

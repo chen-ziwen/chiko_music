@@ -200,7 +200,7 @@ watch(() => route.query.albumid, (id) => {
 <style lang="scss" scoped>
 .music-singer {
     width: $width;
-    margin: 0 auto;
+    margin: 15px auto;
     box-sizing: border-box;
     display: flex;
 
@@ -209,6 +209,7 @@ watch(() => route.query.albumid, (id) => {
         padding: 15px;
         overflow: hidden;
         background-color: white;
+        border-radius: 10px;
 
         .pagination {
             width: 100%;
@@ -243,6 +244,7 @@ watch(() => route.query.albumid, (id) => {
         }
 
         &-head {
+            margin-bottom: 20px;
             @include _flex(center, center);
             // background-color: #fcfcfc;
 
@@ -348,7 +350,7 @@ watch(() => route.query.albumid, (id) => {
     &-right {
         display: inline-block;
         width: 30%;
-        padding: 15px;
+        padding: 0 0 0 15px;
         overflow: hidden;
 
         .box-list {

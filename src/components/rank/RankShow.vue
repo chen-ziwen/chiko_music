@@ -1,7 +1,7 @@
 <template>
     <ul class="ranks">
-        <li class="rank-list" v-for="(item, index) in rankSheet" :key="item.id + index">
-            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=400y400'" fit="fill" @click="sheetid(item.id)">
+        <li class="rank-list" v-for="(item, index) in rankSheet" :key="item.id">
+            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=400y400'" fit="fill" @click="turnPage(item.id)">
                 <template #placeholder>
                     <div class="image-slot">
                         <el-icon>
@@ -15,7 +15,7 @@
                 <span class="count-num">{{ changeNum(item.playCount) }}</span>
             </div>
             <ul class="songs" v-loading="!item.songList">
-                <li class="song-list" v-for="data in item.songList" @click="choseSong(item.id, data.index - 1)">
+                <li class="song-list" v-for="(data, order) in item.songList" @click="choseSong(index, order)">
                     <div class="song-msg">
                         <span class="song-index">{{ data.index }}</span>
                         <span class="song-name" :class="checked(data.index, data.id)">{{ data.name }}</span>
@@ -50,10 +50,10 @@ const checked = (index: number, id: number) => {
     return;
 }
 
-const choseSong = (id: number, index: number) => {
-    emits("sheetid", id, index)
+const choseSong = (index: number, order: number) => {
+    emits("sheetid", index, order)
 }
-const sheetid = (id: number) => {
+const turnPage = (id: number) => {
     router.push({ name: 'sheetlist', query: { sheetid: id } })
 }
 </script>
