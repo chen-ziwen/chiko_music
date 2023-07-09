@@ -1,5 +1,5 @@
 <template>
-    <div class="mv-sort container">
+    <div class="mv-sort">
         <div class="mv-tags">
             <div class="tag-all">
                 <i class="tag-text">地区 : </i>
@@ -26,10 +26,9 @@
                 </ul>
             </div>
         </div>
-        <MvList :list="mvContnet" :style="{ marginTop: '40px' }" @mvid="turnMvDetail"></MvList>
+        <MvList :list="mvContnet" @mvid="turnMvDetail"></MvList>
         <div v-if="mvContnet.length">
-            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage"
-                :page-size="32" :total="mvCount" @current-change="currentChange" :hide-on-single-page="true" />
+            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage" :page-size="32" :total="mvCount" @current-change="currentChange" :hide-on-single-page="true" />
         </div>
     </div>
 </template>
@@ -148,13 +147,14 @@ watch(() => route.query, (val) => {
 </script>
 <style lang='scss' scoped>
 .mv-sort {
-    background-color: #ffffff;
+    margin: 20px 0px;
+    padding: 10px 15px;
+    box-sizing: border-box;
     border-radius: 10px;
-    margin: 0 auto 20px;
+    background-color: #ffffff;
 
     .mv-tags {
-        padding: 15px 0px 0px;
-        margin: 15px;
+        padding: 10px 15px 0px 15px;
 
         .tag-all {
             display: flex;
@@ -216,8 +216,6 @@ watch(() => route.query, (val) => {
 .pagination {
     width: 100%;
     @include _flex(center, center);
-    margin: 15px;
-    padding-bottom: 15px;
 }
 
 :deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {

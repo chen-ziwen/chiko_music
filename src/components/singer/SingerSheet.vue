@@ -27,10 +27,8 @@ import { Picture as IconPicture } from '@element-plus/icons-vue'
 interface SingerSheet {
     singerList: SingerListType[];
     type?: "square" | "round";
-    gap?: string;
 }
 const props = withDefaults(defineProps<SingerSheet>(), {
-    gap: '25px -5px 0',
     type: "round"
 });
 const router = useRouter();
@@ -55,15 +53,12 @@ const jumpPage = (id: number) => {
 </script>
 <style lang='scss' scoped>
 .singer-sheet {
-    margin: v-bind(gap);
-
     .singer-sheet-list {
+        width: 10%;
         display: inline-block;
         box-sizing: border-box;
-        width: calc(10% - 30px);
-        margin: 0px 15px 15px 15px;
+        padding: 10px 15px;
         vertical-align: top;
-        cursor: pointer;
 
 
         &:hover .singer-img {
@@ -76,6 +71,7 @@ const jumpPage = (id: number) => {
             flex-direction: column;
             @include _flex(center, center);
             margin-bottom: 10px;
+            cursor: pointer;
 
             .singer-img {
                 width: 85px;

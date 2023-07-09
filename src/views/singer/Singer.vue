@@ -1,5 +1,5 @@
 <template>
-    <div class="music-singer container">
+    <div class="music-singer">
         <!-- 我是歌手页面 -->
         <div class="singer-tags">
             <div class="tag-all">
@@ -28,7 +28,7 @@
             </div>
         </div>
         <LoadScroll @load-scorll="loadScroll" :distance="100">
-            <SingerSheet :singer-list="singerList" type="square" gap="25px 10px"></SingerSheet>
+            <SingerSheet :singer-list="singerList" type="square"></SingerSheet>
         </LoadScroll>
     </div>
 </template>
@@ -75,7 +75,7 @@ const params: Params = reactive({
     limit: 40, // 一次性请求数量
     offset: 0, // 换页偏移值
     type: -1,  // 语种
-    area: -1,  // 男女歌手
+    area: -1,  // 歌手
     initial: -1, // 26字母
 })
 
@@ -107,25 +107,29 @@ const { langs, singer, ens } = tagType // 三个歌手类别
 
 // 选中不同标签时，更新param请求参数
 const checkTags = (name: string, tag: number) => {
-    if (name == 'langs') {
-        params.area = tag
-    } else if (name == 'singer') {
-        params.type = tag
-    } else if (name == 'ens') {
-        params.initial = tag;
+    switch (name) {
+        case 'langs':
+            params.area = tag;
+            break;
+        case 'singer':
+            params.type = tag;
+            break;
+        case 'ens':
+            params.initial = tag;
+            break;
     }
     alongSingerList(params);
 }
 
 // 选中高亮
 const checkHigh = (name: string, tag: number) => {
-    const high = { langs: '', singer: '', ens: '' }
+    const high = { langs: '', singer: '', ens: '' };
     if (name == 'langs' && params.area == tag) {
-        high.langs = "high"
+        high.langs = "high";
     } else if (name == 'singer' && params.type == tag) {
-        high.singer = "high"
+        high.singer = "high";
     } else if (name == 'ens' && params.initial == tag) {
-        high.ens = "high"
+        high.ens = "high";
     }
     return high;
 }
@@ -149,8 +153,6 @@ const getSingerList = async (parm: Params) => {
         singerMore = more;
         if (singerMore) {
             params.offset += 40; // 滚动一次 增加40条数据
-        } else {
-            params.offset = 0;
         }
     } catch (e) {
         console.log(e, '歌手列表请求失败');
@@ -174,13 +176,14 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .music-singer {
-    background-color: #ffffff;
+    margin: 20px 0px;
+    padding: 10px 15px;
+    box-sizing: border-box;
     border-radius: 10px;
-    margin: 0 auto 20px;
+    background-color: #ffffff;
 
     .singer-tags {
-        padding: 15px 0px 0px;
-        margin: 20px;
+        padding: 10px 15px 0px 15px;
 
         .tag-all {
             display: flex;
@@ -217,8 +220,7 @@ onMounted(() => {
 
         .ens {
             li {
-                margin-bottom: 15px;
-
+                margin-bottom: 10px;
             }
         }
     }

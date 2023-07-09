@@ -9,7 +9,6 @@ declare module 'vue' {
     ContentBox: typeof import('./src/components/common/ContentBox.vue')['default']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
-    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElImage: typeof import('element-plus/es')['ElImage']
     ElPagination: typeof import('element-plus/es')['ElPagination']

@@ -51,7 +51,7 @@
 import { getPlaylistHot, getTopPlaylistDetail, getPlaylistCatlist, getHighquality, getHighQualityTags } from '@/api/http/api';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
-import { onMounted, reactive, ref, computed, watch, toRef, onActivated } from 'vue';
+import { onMounted, reactive, ref, watch, toRef, onActivated } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { scrollTop } from '@/util';
 interface HotTags {
@@ -68,7 +68,7 @@ interface AllTags {
         type: number;
         category: number;
         hot: boolean;
-    }[]
+    }[];
 }
 interface HightPage {
     coverImgUrl: string;
@@ -88,7 +88,7 @@ const scroll = scrollTop();
 const sheetList = reactive({
     playlists: [],
     total: 0
-})
+});
 const hightSheet = reactive({
     page: {} as HightPage,
     hightlists: [],
@@ -101,20 +101,20 @@ const pop = ref<boolean>(false);
 const page = toRef(hightSheet, "page");
 
 const hightlight = (name: string) => {
+    let cN = '';
     if (name == nameKey.value) {
-        return 'hight-light';
+        cN = 'hight-light';
     }
-    return;
+    return cN;
 }
 
 async function getTags() {
-    // 获取热门歌单标签
-    const { tags } = await getPlaylistHot();
+    const { tags } = await getPlaylistHot(); // 获取热门歌单标签
     hotTags.value = tags.map((x: HotTags) => x.name);
 }
-// 获取精品标签
+
 async function getTopTags() {
-    const { tags } = await getHighQualityTags();
+    const { tags } = await getHighQualityTags(); // 获取精品标签
     TopTags.value = tags.map((x: HotTags) => x.name); // 拿到精品标签数组
 }
 
@@ -122,15 +122,15 @@ async function getTopTags() {
 async function getAllTags() {
     try {
         const { sub, categories } = await getPlaylistCatlist();
-        // 分成一个大数组，大数组中包含类别对象，对象中包括分类名和类型数组集合
         let tagList: AllTags[] = [];
         // 对标签进行分类
-        for (let i = 0; i < sub.length; i++) {
-            let tags = { name: sub[i].name, hot: sub[i].hot, category: sub[i].category, type: sub[i].type };
-            if (!tagList[sub[i].category]) {
-                tagList[sub[i].category] = { name: categories[sub[i].category], list: [tags] }
+        for (let item of sub) {
+            const { name, hot, category, type } = item;
+            let tags = { name, hot, category, type };
+            if (!tagList[category]) {
+                tagList[category] = { name: categories[category], list: [tags] }
             } else {
-                tagList[sub[i].category].list.push(tags)
+                tagList[category].list.push(tags);
             }
         }
         allTags.value = tagList;
@@ -148,40 +148,40 @@ const tagsList = async (name: string) => {
     } else {
         page.value = { coverImgUrl: 'none', name: '暂无', copywriter: '暂无', none: true };
     }
-    nameKey.value = name; // 保存name
     sheetList.playlists = playlists;
     sheetList.total = total;
+    nameKey.value = name; // 保存name
     currentPage.value = 1; // 当卡页重置为1
     if (pop.value) {
         pop.value = !pop.value; // 关闭标签弹窗
     }
 }
 
-//全部标签 跳转页面时，进行请求
+// 全部标签 跳转页面时，进行请求
 const currentChange = async (page: number) => {
     const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 64, (page - 1) * 64); // offset n-1*64
     sheetList.playlists = playlists;
     sheetList.total = total;
     scroll(5);
 }
+
 const boutique = () => {
     router.push({
         name: 'boutiquesongsheet', query: { name: nameKey.value }
-    })
+    });
 }
 
-// 当name 发生变化时，重新获取所有的数据
+// tag变化 重新请求
 watch(() => route.query.name, (name) => {
-    if (!name) return; // 必须加 避免切换时name为undefined
+    if (!name) return;
     tagsList(name as string);
 })
 
-// 按 await顺序初始化标签
 onMounted(async () => {
     try {
         await getAllTags(); // 全部标签
         await getTopTags(); // 精品标签
-        await getTags();// 等getTags之行完 在去执行tagsList
+        await getTags();// tagsList和getTags不能并行 getTags必须先请求
         await tagsList(route.query.name as string || hotTags.value[0]); // 如果namekey为空，就拿第一项初始化
         loading.value = true;
     }
@@ -289,16 +289,16 @@ onMounted(async () => {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 5px;
-            margin-bottom: 20px;
+            padding: 5px 10px 12px 10px;
+            box-sizing: border-box;
             color: #373737;
 
             .tags-position {
+                width: 600px;
+                height: 400px;
                 position: absolute;
                 left: 0;
                 top: 40px;
-                width: 600px;
-                height: 400px;
                 z-index: 99;
                 background: #ffffff;
                 box-shadow: 0 0 5px #4f4f4f;
@@ -342,13 +342,15 @@ onMounted(async () => {
             }
 
             .choose-key {
-                font-size: 20px;
+                display: flex;
+                align-items: center;
                 border-radius: 20px;
                 border: 1px solid rgb(170, 170, 170);
-                padding: 0px 20px;
+                padding: 0px 15px;
                 user-select: none;
                 color: #656464;
                 cursor: pointer;
+                font-size: 20px;
 
                 &:hover {
                     background-color: #ffe1ed;

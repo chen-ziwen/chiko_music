@@ -51,7 +51,7 @@ ul {
         display: inline-block;
         box-sizing: border-box;
         width: 50%;
-        padding: 10px 15px 10px 15px;
+        padding: 10px 15px;
 
         span {
             display: inline-block;

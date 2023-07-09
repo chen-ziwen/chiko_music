@@ -2,14 +2,14 @@
 <template>
     <div class="ran-list">
         <div class="module-gap">
-            <list-module head="官方特色榜" gapColor="red">
+            <ListModule head="官方特色榜" gapColor="red">
                 <RankShow :rank-sheet="sheet.mainSheetRank" @sheetid="playSong"></RankShow>
-            </list-module>
+            </ListModule>
         </div>
         <div class="module-gap">
-            <list-module head="全球媒体榜" gapColor="blue">
+            <ListModule head="全球媒体榜" gapColor="blue">
                 <SongSheetCard :sheet="sheet.otherSheetRank" textdir="center" :item="7" :back-show="false"></SongSheetCard>
-            </list-module>
+            </ListModule>
         </div>
     </div>
 </template>
@@ -60,7 +60,6 @@ async function getToplistMsg() {
     }
 }
 
-
 // 当点击不同歌单时，得重新赋值歌单列表
 const playSong = async (index: number, order: number) => {
     const songList = sheet.mainSheetRank[index].songList;
@@ -69,6 +68,7 @@ const playSong = async (index: number, order: number) => {
         playList: songList,
     })
 }
+
 onMounted(getToplistMsg)
 </script>
 

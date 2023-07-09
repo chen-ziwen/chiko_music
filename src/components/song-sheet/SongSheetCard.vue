@@ -57,12 +57,10 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 
 <style lang='scss' scoped>
 .song-sheet-card {
-    margin: 10px 0;
     background-color: v-bind(back);
     border-radius: 10px;
 
     &:deep(.el-image) {
-
         img {
             border-radius: 5px;
         }
@@ -71,8 +69,7 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
     .song-sheet-card-list {
         position: relative;
         display: inline-block;
-        // width: calc(12.5% - 30px); // 分8块
-        margin: 0 15px 10px 15px;
+        padding: 10px 15px;
         vertical-align: top;
         cursor: pointer;
 
@@ -140,9 +137,9 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
         .play-count {
             z-index: 10;
             position: absolute;
-            right: 4px;
-            top: 4px;
-            padding: 4px;
+            right: 18px;
+            top: 13px;
+            padding: 3px;
             font-size: 13px;
             border-radius: 4px;
             background-color: rgba(0, 0, 0, 0.5);

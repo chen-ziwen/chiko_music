@@ -30,11 +30,14 @@ const sendId = (id: number | string) => {
     emits('mvid', id);
 }
 </script>
+
 <style lang='scss' scoped>
 .mv-list {
     display: flex;
     flex-wrap: wrap;
-    margin: 25px -15px 0;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    margin: 0 -25px;
 
     .mv-list-li {
         position: relative;
@@ -54,7 +57,7 @@ const sendId = (id: number | string) => {
             .mv-message {
                 position: relative;
                 width: 260px;
-                height: 150px;
+                height: 160px;
                 box-shadow: 0 0 8px black;
 
                 &:hover .bofang-btn {

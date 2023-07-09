@@ -53,22 +53,22 @@ const turnSheet = (index: number, id: number) => {
         playList: props.newSheet,
     })
 }
+
 const playing = (index: number, id: number) => {
     if (index === play.currentindex && play.playing && id == play.currentPlay.id) {
         return "icon-zanting1"
     }
     return "icon-bofang1"
-};
+}
+
 </script>
 <style lang='scss' scoped>
 ul {
     li {
-        display: inline-block;
-        box-sizing: border-box;
         width: 33.3%;
-        padding: 10px 15px 10px 15px;
-        // vertical-align: top;
-        cursor: pointer;
+        display: inline-block;
+        padding: 10px 15px;
+        box-sizing: border-box;
 
         span {
             display: inline-block;
@@ -82,13 +82,11 @@ ul {
 
         .newsong {
             display: flex;
+            cursor: pointer;
 
             .new-img-box {
                 position: relative;
 
-                // &:hover .bofang-btn {
-                //    display: flex;
-                // }
                 .new-img {
                     width: 100px;
                     height: 100px;
@@ -99,6 +97,8 @@ ul {
                 }
 
                 .bofang-btn {
+                    width: 40px;
+                    height: 40px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -107,11 +107,8 @@ ul {
                     bottom: 50%;
                     transform: translate(50%, 50%);
                     border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
                     background-color: rgba(239, 237, 237, 0.8);
                     z-index: 10;
-                    // display: none;
 
                     .bofang {
                         color: rgb(249, 43, 43, 0.8);
@@ -153,4 +150,5 @@ ul {
 
 .image-slot {
     @include _imgslot(100px, 100px, 16px);
-}</style>
+}
+</style>

@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Recommend>(), {
     fontSize: 26,
     fontWeight: 700,
     color: '#000000',
-    gap: 10,
+    gap: 15,
 });
 
 const fontSize = computed(() => props.fontSize + 'px');
@@ -41,7 +41,7 @@ const gap = computed(() => props.gap + 'px');
         .m-title {
             display: inline-block;
             text-align: start;
-            margin: 25px 0px 10px v-bind(gap);
+            margin: 20px 0px 10px v-bind(gap);
             font-size: v-bind(fontSize);
             font-weight: v-bind('props.fontWeight');
             font-family: Arial, Helvetica, sans-serif;

@@ -16,7 +16,7 @@
         <div class="sheet" v-if="sheetlist">
             <ContentBox title="推荐歌单" back="#ffffff">
                 <template v-if="sheetlist && sheetlist.length > 0">
-                    <SongSheetCard :sheet="sheetlist" :backShow="false"></SongSheetCard>
+                    <SongSheetCard :sheet="sheetlist" :backShow="false" :item="8"></SongSheetCard>
                 </template>
             </ContentBox>
         </div>
@@ -48,7 +48,7 @@ import SingerSheet from "@/components/singer/SingerSheet.vue";
 import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
 import MvSheet from "@/components/mv/MvSheet.vue";
 import { getRecommendList, getSongDetail, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
-import type { RecommendList, Newsong, SingerListType, SongList } from "@/models";
+import type { RecommendList, SingerListType, SongList } from "@/models";
 import { useSong } from "@/util";
 
 const sheetlist = ref<RecommendList[]>();
@@ -66,17 +66,16 @@ async function topArtists() {
 }
 
 function Personalized() {
-    getPersonalizedNewsong(12)
-        .then(res => {
-            const newIds: number[] = [];
-            res.result.forEach((x: SongList) => {
-                newIds.push(x.id)
-            })
-            const ids: string = newIds.join(',');
-            SongDetail(ids);
-        }).catch((e) => {
-            console.log(e, '推荐歌单请求失败');
-        });
+    getPersonalizedNewsong(12).then(res => {
+        const newIds: number[] = [];
+        res.result.forEach((x: SongList) => {
+            newIds.push(x.id)
+        })
+        const ids: string = newIds.join(',');
+        SongDetail(ids);
+    }).catch((e) => {
+        console.log(e, '推荐歌单请求失败');
+    });
 }
 
 const SongDetail = (ids: string) => {
@@ -85,7 +84,7 @@ const SongDetail = (ids: string) => {
     getSongDetail(ids).then(res => {
         res.songs.forEach((x: SongList) => {
             if (x.id) {
-                songs.push(useSong(x))
+                songs.push(useSong(x));
             }
         })
         newsong.value = songs;
@@ -93,10 +92,11 @@ const SongDetail = (ids: string) => {
         console.log(e, '歌曲列表请求失败');
     });
 }
+
 async function PersonalizedMv() {
     let { result } = await getPersonalizedMv();
-    recommendMv.value = result
-};
+    recommendMv.value = result;
+}
 
 onMounted(() => {
     getRecommend();

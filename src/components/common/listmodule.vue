@@ -39,9 +39,10 @@ function triggerFun() {
 </script>
 <style lang='scss' scoped>
 .list-module {
-    width: calc(100% - 35px);
+    width: 100%;
     border-radius: 15px;
     padding: 15px;
+    box-sizing: border-box;
     background-color: white;
 
     .list-head {
