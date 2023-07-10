@@ -69,7 +69,7 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
     .song-sheet-card-list {
         position: relative;
         display: inline-block;
-        padding: 10px 15px;
+        margin: 10px 15px;
         vertical-align: top;
         cursor: pointer;
 
@@ -137,8 +137,8 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
         .play-count {
             z-index: 10;
             position: absolute;
-            right: 18px;
-            top: 13px;
+            right: 4px;
+            top: 4px;
             padding: 3px;
             font-size: 13px;
             border-radius: 4px;
