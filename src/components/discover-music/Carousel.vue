@@ -20,14 +20,13 @@
 import { onMounted, ref } from 'vue';
 import { getBanner } from '@/api/http/api';
 import { Picture as IconPicture } from '@element-plus/icons-vue';
-const myBanner = ref<any>();
+const myBanner = ref<any[]>();
 const carousel = ref();
 async function banners() {
     try {
         let { banners } = await getBanner();
         myBanner.value = banners;
-    }
-    catch (e) {
+    } catch (e) {
         console.log('banner获取失败');
     }
 }
