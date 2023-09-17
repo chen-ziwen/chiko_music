@@ -18,7 +18,7 @@
                 </div>
                 <div class="newsong-text">
                     <span>{{ data.name }}</span>
-                    <span>{{ data.artists }}</span>
+                    <span>{{ changeData(data.artists) }}</span>
                 </div>
                 <div class="newsong-text-time">
                     <span>{{ changetime(data.duration) }}</span>
@@ -29,7 +29,7 @@
 </template>
 <script lang='ts' setup>
 import { Picture as IconPicture } from '@element-plus/icons-vue'
-import { changetime} from '@/util';
+import { changetime, changeData } from '@/util';
 import { useRouter } from 'vue-router';
 
 interface MvSheet {

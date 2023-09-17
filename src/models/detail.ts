@@ -13,7 +13,7 @@ export interface Creator {
 // 歌曲列表
 export interface SongList {
     id: number;
-    singer: any[];
+    singer: string;
     name: string;
     album: string;
     duration: number;
