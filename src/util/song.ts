@@ -3,7 +3,7 @@ import { formatSecond, imgurl } from '@/util';
 
 interface SongList {
     id: number;
-    singer: any[];
+    singer: string;
     name: string;
     album: string;
     duration: number;
@@ -18,7 +18,7 @@ interface SongList {
 export const useSong = (songList: any) => {
     const songMsg: SongList = {
         id: songList.id,
-        singer: songList.ar || songList.artists,
+        singer: filterSinger(songList.ar || songList.artists),
         name: songList.name,
         album: songList.al ? songList.al.name : songList.album.name,
         duration: formatSecond(songList.dt || songList.duration),
@@ -31,3 +31,9 @@ export const useSong = (songList: any) => {
     return songMsg;
 }
 
+function filterSinger(singer: { name: string }[]) {
+    if (!singer) {
+        return '';
+    }
+    return singer.map((item: any) => item.name).join('/');
+}

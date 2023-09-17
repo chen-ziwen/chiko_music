@@ -20,7 +20,7 @@
                         <img :src="imgurl(item.image, '35')">
                         <span>{{ item.name }}</span>
                     </td>
-                    <td>{{ changeData(item.singer) }}</td>
+                    <td>{{ item.singer }}</td>
                     <td>{{ item.album }}</td>
                     <td>{{ formatSecondTime(item.duration) }}</td>
                 </tr>
@@ -40,14 +40,6 @@ interface sheetProps {
 const props = defineProps<sheetProps>();
 const emits = defineEmits(['keeplist']);
 const play = usePlay();
-
-function changeData(msg: any) {
-    if (!msg) {
-        return '暂无数据'
-    }
-    let newData = msg.map((item: any) => item.name)
-    return newData.join(' / ')
-}
 
 const playing = (index: number, id: number) => {
     if (index === play.currentindex && play.playing && id == play.currentPlay.id) {

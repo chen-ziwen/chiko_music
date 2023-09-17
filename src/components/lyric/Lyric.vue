@@ -14,14 +14,32 @@
     </div>
 </template>
 <script lang='ts' setup>
+import { ref, nextTick } from 'vue';
 import Scroll from './Scroll.vue';
 
 interface LyricProps {
     currentLyricNum: number;
-    currentLyric: Record<string, any>;
+    currentLyric: any;
 }
-
 const props = defineProps<LyricProps>();
+
+const lyricList = ref<InstanceType<typeof Scroll> | null>(null);
+const lyricLine = ref<HTMLElement[]>([]);
+
+// let a = setInterval(() => {
+//     nextTick(() => {
+//         // if (lyricLine.value) {
+//         console.log('66666', lyricLine.value, props.currentLyric);
+//         // }
+//     })
+// }, 2000)
+
+
+defineExpose({
+    lyricLine,
+    lyricList,
+})
+
 
 </script>
 <style lang='scss' scoped>

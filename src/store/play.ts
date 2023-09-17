@@ -49,7 +49,7 @@ export const usePlay = defineStore({
 
     /* state.$dispath({  
       count: count+1,
-      name: '陈子文'
+      name: ''
     })
     */
 })

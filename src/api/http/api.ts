@@ -476,3 +476,13 @@ export function getRecommendResource() {
 export function getRecommendSongs() {
     return http.get<any>('/recommend/songs')
 }
+
+
+/**
+ * @function 获取歌词
+ */
+
+export function getLyric(id: number) {
+    return http.get<any>('/lyric', { id });
+}
+

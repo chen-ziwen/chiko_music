@@ -18,7 +18,7 @@
                 </div>
                 <div class="newsong-text">
                     <span>{{ data.name }}</span>
-                    <span>{{ changeData(data.singer) }}</span>
+                    <span>{{ data.singer }}</span>
                 </div>
                 <div class="newsong-text-time">
                     <span>{{ formatSecondTime(data.duration) }}</span>
@@ -28,7 +28,7 @@
     </ul>
 </template>
 <script lang='ts' setup>
-import { changeData, formatSecondTime } from '@/util';
+import { formatSecondTime } from '@/util';
 import type { SongList } from '@/models/detail';
 import { usePlay } from '@/store/play';
 import { Picture as IconPicture } from '@element-plus/icons-vue'

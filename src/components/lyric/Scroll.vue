@@ -4,14 +4,14 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { watch, onMounted, shallowRef } from "vue";
+import { watch, onMounted, shallowRef, toRef } from "vue";
 import BetterScroll from "@better-scroll/core";
 
 interface BetterScrollProps {
     probeType?: number;
     click?: boolean;
     listenScroll?: boolean;
-    data: [];
+    data: any;
     pullup?: boolean;
     beforeScroll?: boolean;
     refrehDelay?: number;
@@ -28,8 +28,10 @@ const props = withDefaults(defineProps<BetterScrollProps>(), {
     pullup: false,
     beforeScroll: false,
     refrehDelay: 20,
-    direction: DIRECTION_V
+    direction: "vertical"
 });
+
+const data = toRef(props, "data");
 
 const emits = defineEmits(['scroll', 'scrollEnd', 'beforeScrollStart'])
 
@@ -46,7 +48,7 @@ function initScroll() {
     });
 
     if (props.listenScroll) {
-        scroll.on('scroll', (val) => {
+        scroll.on('scroll', (val: any) => {
             emits('scroll', val);
         })
     }
@@ -75,18 +77,25 @@ function enable() {
 function refresh() {
     scroll && scroll.refresh()
 };
-function scrollTo() {
-    scroll && scroll.scrollTo.apply(scroll, arguments)
+function scrollTo(...args: any) {
+    scroll && scroll.scrollTo.apply(scroll, args)
 };
-function scrollToElement() {
-    scroll && scroll.scrollToElement.apply(scroll, arguments)
+function scrollToElement(...args: any) {
+    scroll && scroll.scrollToElement.apply(scroll, args)
 };
 
 
-watch(props.data, () => setTimeout(refresh, props.refrehDelay));
+watch(data, () => setTimeout(refresh, props.refrehDelay));
 
 onMounted(() => setTimeout(initScroll, 20));
 
+defineExpose({
+    disable,
+    enable,
+    refresh,
+    scrollTo,
+    scrollToElement,
+})
 
 </script>
 <style lang='scss' scoped></style>

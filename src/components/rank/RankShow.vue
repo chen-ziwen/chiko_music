@@ -20,7 +20,7 @@
                         <span class="song-index">{{ data.index }}</span>
                         <span class="song-name" :class="checked(data.index, data.id)">{{ data.name }}</span>
                     </div>
-                    <span class="singer-name">{{ changeData(data.singer) }}</span>
+                    <span class="singer-name">{{ data.singer}}</span>
                 </li>
             </ul>
         </li>
@@ -32,7 +32,7 @@ import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from '@/models/detail';
 import { useRouter } from 'vue-router';
 import { usePlay } from '@/store/play';
-import { changeData, changeNum } from '@/util';
+import {  changeNum } from '@/util';
 
 interface RanShow {
     rankSheet: RecommendList[]

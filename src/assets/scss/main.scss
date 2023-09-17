@@ -22,3 +22,13 @@ $margin_I: 25px 0px 25px 15px;
   color: var(--el-text-color-secondary);
   font-size: $size;
 }
+
+@keyframes rotate {
+  0% {
+    transform: rotateZ(-360deg)
+  }
+
+  100% {
+    transform: rotateZ(0deg)
+  }
+}
