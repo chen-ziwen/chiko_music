@@ -3,7 +3,7 @@
         <Scroll class="lyric" ref="lyricList" :data="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
                 <div v-if="currentLyric">
-                    <p ref="lyricLine" class="lyric-text" v-for="(item, index) of currentLyric.lines" :key="index" :class="currentLyricNum === index ? 'active' : ''">
+                    <p v-for="(item, index) of currentLyric.lines" :ref="(el: any) => lyricLine.push(el)" class="lyric-text" :key="index" :class="currentLyricNum === index ? 'active' : ''">
                         {{ item.txt }}
                     </p>
                 </div>
@@ -14,33 +14,20 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { ref, nextTick } from 'vue';
+import { ref } from 'vue';
 import Scroll from './Scroll.vue';
 
 interface LyricProps {
     currentLyricNum: number;
     currentLyric: any;
 }
-const props = defineProps<LyricProps>();
-
+defineProps<LyricProps>();
 const lyricList = ref<InstanceType<typeof Scroll> | null>(null);
 const lyricLine = ref<HTMLElement[]>([]);
-
-// let a = setInterval(() => {
-//     nextTick(() => {
-//         // if (lyricLine.value) {
-//         console.log('66666', lyricLine.value, props.currentLyric);
-//         // }
-//     })
-// }, 2000)
-
-
 defineExpose({
     lyricLine,
     lyricList,
 })
-
-
 </script>
 <style lang='scss' scoped>
 .lyric-box {
@@ -62,7 +49,7 @@ defineExpose({
                 font-size: 14px;
                 font-weight: 300;
 
-                &:active {
+                &.active {
                     color: red;
                 }
             }

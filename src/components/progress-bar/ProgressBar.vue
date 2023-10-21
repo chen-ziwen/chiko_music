@@ -63,6 +63,7 @@ import { getLyric } from '@/api';
 import Lyric from "lyric-parser";
 import CLyric from "@/components/lyric/Lyric.vue";
 
+
 const play = usePlay();
 const currentPlay = computed(() => play.currentPlay);
 const lyricRef = ref<InstanceType<typeof CLyric> | null>(null);
@@ -80,7 +81,6 @@ const mutedAll = reactive({
 });
 const songReady = ref<boolean>(false);
 const showLyric = ref<boolean>(false);
-const showPlayList = ref<boolean>(false);
 let timeout: number;
 
 // 获取当前播放的进度，计算出进度条的百分比
@@ -97,6 +97,7 @@ const muted = computed(() => isMuted.value ? "icon-jingyin" : "icon-shengyin");
 const pattern = computed(() => {
     switch (play.playType) {
         case 0:
+        default:
             return {
                 icon: 'icon-liebiaoxunhuan',
                 name: '列表循环'
@@ -110,11 +111,6 @@ const pattern = computed(() => {
             return {
                 icon: 'icon-suiji',
                 name: '随机播放'
-            }
-        default:
-            return {
-                icon: 'icon-liebiaoxunhuan',
-                name: '列表循环'
             }
     }
 })
@@ -337,7 +333,7 @@ watch(() => play.playing, (isPlaying) => {
         height: 100vh;
         background: rgba(255, 255, 255, 1);
         position: fixed;
-        top: 0px;
+        top: 0;
         left: 0;
         padding-top: 100px;
 

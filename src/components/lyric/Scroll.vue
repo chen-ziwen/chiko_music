@@ -11,7 +11,7 @@ interface BetterScrollProps {
     probeType?: number;
     click?: boolean;
     listenScroll?: boolean;
-    data: any;
+    data: [] | null;
     pullup?: boolean;
     beforeScroll?: boolean;
     refrehDelay?: number;
@@ -28,7 +28,8 @@ const props = withDefaults(defineProps<BetterScrollProps>(), {
     pullup: false,
     beforeScroll: false,
     refrehDelay: 20,
-    direction: "vertical"
+    data: null,
+    direction: 'vertical'
 });
 
 const data = toRef(props, "data");
@@ -85,7 +86,9 @@ function scrollToElement(...args: any) {
 };
 
 
-watch(data, () => setTimeout(refresh, props.refrehDelay));
+watch(data, () => setTimeout(() => {
+    refresh()
+}, props.refrehDelay));
 
 onMounted(() => setTimeout(initScroll, 20));
 
