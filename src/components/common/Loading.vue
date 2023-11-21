@@ -1,5 +1,7 @@
 <template>
-    <div class="loading"></div>
+    <div class="loading">
+        
+    </div>
 </template>
 <script lang='ts' setup>
 

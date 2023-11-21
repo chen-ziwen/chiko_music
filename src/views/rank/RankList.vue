@@ -33,16 +33,16 @@ const play = usePlay();
 async function getToplistMsg() {
     try {
         const { list } = await getToplist();
-        const idList: number[] = [];
+        const ids: number[] = [];
         let index = 0;
         sheet.mainSheetRank = list.slice(0, 4);
         sheet.otherSheetRank = list.slice(4, list.length);
         while (index < sheet.mainSheetRank.length) {
-            idList.push(list[index].id)
+            ids.push(list[index].id)
             index++;
         }
         // 利用promise.all一次性请求
-        const result = await Promise.all(idList.map(async ids => {
+        const result = await Promise.all(ids.map(async ids => {
             const time = new Date().getTime();
             const res = await getPlaylistTrackAll(ids, 5, undefined, time);
             return res.songs; // 拿到songs列表
@@ -69,7 +69,7 @@ const playSong = async (index: number, order: number) => {
     })
 }
 
-onMounted(getToplistMsg)
+onMounted(getToplistMsg);
 </script>
 
 <style lang="scss" scoped>

@@ -1,18 +1,18 @@
 <template>
-    <div class="talk-box-list">
+    <div class="talk-box-list" v-for="{ user: { nickname, avatarUrl }, commentId, timeStr, content, beReplied } in data" :key="commentId">
         <div class="user-box">
-            <img class="talk-user-avatar" :src="avatar" :title="name" />
+            <img class="talk-user-avatar" :src="avatarUrl" :title="nickname" />
             <div class="talk-detail">
-                <span class="talk-user-name">{{ name }}</span>
-                <span class="talk-time">{{ time }}</span>
+                <span class="talk-user-name">{{ nickname }}</span>
+                <span class="talk-time">{{ timeStr }}</span>
             </div>
             <slot></slot>
         </div>
         <div class="talk-list">
             {{ content }}
             <template v-if="beReplied?.length">
-                <div class="content" v-for="item of beReplied" :key="item.beRepliedCommentId">
-                    <span class="deepColor">@{{ item.user.nickname }}：</span>{{ item.content }}
+                <div class="content" v-for="data of beReplied" :key="data.beRepliedCommentId">
+                    <span class="deepColor">@{{ data.user.nickname }}：</span>{{ data.content }}
                 </div>
             </template>
         </div>
@@ -20,13 +20,19 @@
 </template>
 <script lang='ts' setup>
 interface TalkBoxListProps {
-    avatar: string;
-    name: string;
-    time: string;
-    content: string;
-    beReplied?: Record<string, any>[];
+    data: {
+        user: {
+            nickname: string;
+            avatarUrl: string;
+        };
+        content: string;
+        timeStr: string;
+        commentId: number;
+        beReplied?: Record<string, any>[];
+    }[]
 }
-const props = defineProps<TalkBoxListProps>();
+defineProps<TalkBoxListProps>();
+
 </script>
 <style lang='scss' scoped>
 .talk-box-list {

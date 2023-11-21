@@ -146,11 +146,11 @@ async function startSheet(id: number) {
         console.error('请求繁忙', e);
     }
 }
+
 //控制分页功能
 function choose(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
-    // 切换分页时 屏幕回到顶部
     scroll(5);
 }
 

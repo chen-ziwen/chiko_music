@@ -65,7 +65,7 @@ const mainRouter = [
                 name: 'sheetlist',
                 meta: {
                     title: '歌单详情',
-                    keepAlive: true,
+                    keepAlive: false,
                 },
                 component: () => import('@/views/song-sheet/SheetList.vue')
             },

@@ -3,9 +3,11 @@
         <Scroll class="lyric" ref="lyricList" :data="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
                 <div v-if="currentLyric">
-                    <p v-for="(item, index) of currentLyric.lines" :ref="(el: any) => lyricLine.push(el)" class="lyric-text" :key="index" :class="currentLyricNum === index ? 'active' : ''">
-                        {{ item.txt }}
-                    </p>
+                    <template v-for="(item, index) of currentLyric.lines" :key="index">
+                        <p ref="lyricLine" class="lyric-text" :class="currentLyricNum === index ? 'active' : ''">
+                            {{ item.txt }}
+                        </p>
+                    </template>
                 </div>
                 <div class="no-lyric" v-else>暂无歌词，请您欣赏</div>
             </div>
@@ -14,7 +16,7 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { ref } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import Scroll from './Scroll.vue';
 
 interface LyricProps {
@@ -24,6 +26,12 @@ interface LyricProps {
 defineProps<LyricProps>();
 const lyricList = ref<InstanceType<typeof Scroll> | null>(null);
 const lyricLine = ref<HTMLElement[]>([]);
+
+nextTick(() => {
+    console.log("lyric-line", lyricLine.value);
+})
+
+
 defineExpose({
     lyricLine,
     lyricList,

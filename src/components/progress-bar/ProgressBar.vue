@@ -1,6 +1,7 @@
 <template>
-    <div class="progress-bar" v-if="Object.keys(currentPlay).length > 0">
-        <audio ref="audio" class="audio" :src="currentPlay?.url" @playing="audioReady" @pause="audioPaused" @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
+    <div class="progress-bar">
+        <audio ref="audio" class="audio" :src="currentPlay?.url" @playing="audioReady" @pause="audioPaused"
+            @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
                 <el-image class="picture" :src="currentPlay.image" fit="fill">
@@ -56,13 +57,12 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { ref, shallowRef, watch, computed, nextTick, reactive, onMounted } from 'vue';
+import { ref, shallowRef, watch, computed, nextTick, reactive, onMounted, toRefs } from 'vue';
 import { usePlay, playState } from '@/store/play';
 import { formatSecondTime, randomNum } from '@/util';
 import { getLyric } from '@/api';
 import Lyric from "lyric-parser";
 import CLyric from "@/components/lyric/Lyric.vue";
-
 
 const play = usePlay();
 const currentPlay = computed(() => play.currentPlay);
@@ -86,7 +86,7 @@ let timeout: number;
 // 获取当前播放的进度，计算出进度条的百分比
 const timeupdate = (e: any) => {
     currentTime.value = e.target.currentTime;
-    percent.value = (e.target.currentTime / currentPlay.value.duration) * 100;
+    percent.value = Math.ceil(e.target.currentTime / currentPlay.value.duration * 100);
 }
 
 // 切换播放和暂停图标
@@ -98,20 +98,11 @@ const pattern = computed(() => {
     switch (play.playType) {
         case 0:
         default:
-            return {
-                icon: 'icon-liebiaoxunhuan',
-                name: '列表循环'
-            }
+            return { icon: 'icon-liebiaoxunhuan', name: '列表循环' };
         case 1:
-            return {
-                icon: 'icon-danquxunhuan',
-                name: '单曲循环'
-            }
+            return { icon: 'icon-danquxunhuan', name: '单曲循环' };
         case 2:
-            return {
-                icon: 'icon-suiji',
-                name: '随机播放'
-            }
+            return { icon: 'icon-suiji', name: '随机播放' };
     }
 })
 // 切换歌曲播放状态
@@ -123,16 +114,16 @@ const changeState = () => {
 
 const randomStyle = computed(() => {
     if (play.playType == 2) {
-        return 'random'
+        return 'random';
     }
     return '';
 })
 
 // 歌曲能播放的处理
 const audioReady = () => {
-    clearTimeout(timeout);  // 关闭定时器
+    timeout && clearTimeout(timeout);
     songReady.value = true;
-    play.playing = true; // 触发播放
+    play.playing = true;
     if (currentLyric.value && !isPureMusic.value) {
         currentLyric.value.seek(currentTime.value * 1000);
     }
@@ -140,7 +131,7 @@ const audioReady = () => {
 // 歌曲不能播放时候的处理
 const audioError = () => {
     songReady.value = true;
-    clearTimeout(timeout);
+    timeout && clearTimeout(timeout);
 }
 
 // 当暂停的时候，将播放状态设置为false
@@ -165,6 +156,7 @@ const audioEnded = () => {
 
 // 来回切换播放状态
 const togglePlay = () => {
+    console.log('songReady', songReady.value);
     if (!songReady.value) return;
     play.playing = !play.playing;
     if (currentLyric.value) {
@@ -268,6 +260,8 @@ async function getLyricInfo(id: number) {
 function lyricHandle({ lineNum, txt }: { lineNum: number, txt: string }) {
     if (!lyricRef.value?.lyricLine) return;
     currentLyricNum.value = lineNum;
+    console.log('lineNum', lineNum);
+
     playingLyric.value = txt;
     if (lineNum > 10) {
         const lineEl = lyricRef.value?.lyricLine[lineNum - 10];
@@ -312,6 +306,8 @@ watch(currentPlay, (newSong, oldSong) => {
 });
 
 watch(() => play.playing, (isPlaying) => {
+    console.log(songReady.value, audio.value);
+
     if (!songReady.value || !audio.value) return;
     isPlaying ? audio.value.play() : audio.value.pause();
 });

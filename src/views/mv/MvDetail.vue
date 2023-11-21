@@ -24,17 +24,15 @@
                 </div>
             </div>
             <ContentBox title="精彩评论" :font-size="18" :gap="-5" color="#4C4949" v-if="hotComments.length">
-                <template v-for="{ user: { nickname, avatarUrl }, commentId, content, timeStr, beReplied } in hotComments" :key="commentId">
-                    <TalkList :name="nickname" :avatar="avatarUrl" :time="timeStr" :content="content" :be-replied="beReplied"></TalkList>
-                </template>
+                <TalkList :data="hotComments"></TalkList>
             </ContentBox>
             <ContentBox title="最新评论" :font-size="18" :gap="-5" color="#4C4949" v-if="newComments.length">
-                <template v-for="{ user: { nickname, avatarUrl }, commentId, content, timeStr, beReplied } in newComments" :key="commentId">
-                    <TalkList :name="nickname" :avatar="avatarUrl" :time="timeStr" :content="content" :be-replied="beReplied"></TalkList>
-                </template>
+                <TalkList :data="newComments"></TalkList>
             </ContentBox>
             <div v-if="videoInfo.commentTotal">
-                <el-pagination class="pagination" layout="prev, pager, next" background :total="videoInfo.commentTotal || 0" :page-size="20" @current-change="currentChange" v-model:currentPage="page" :hide-on-single-page="true" />
+                <el-pagination class="pagination" layout="prev, pager, next" background :total="videoInfo.commentTotal || 0"
+                    :page-size="20" @current-change="currentChange" v-model:currentPage="page"
+                    :hide-on-single-page="true" />
             </div>
         </div>
         <div class="mv-detail-right">
@@ -61,7 +59,8 @@
                                     <i class="iconfont icon-MV"></i> {{ item.name }}
                                 </h2>
                                 <div class="author">
-                                    By.<span v-for="author of item.artists" :key="author.id"><small> {{ author.name }}</small></span>
+                                    By.<span v-for="author of item.artists" :key="author.id"><small> {{ author.name
+                                    }}</small></span>
                                 </div>
                             </div>
                         </li>
@@ -196,7 +195,6 @@ const turnMvDetail = (id: number) => {
     router.push({ name: 'mvdetail', query: { mvid: id } })
 }
 
-
 watch(() => route.query.mvid, (mvid) => {
     if (mvid) {
         const id = mvid as unknown as number;
@@ -211,6 +209,7 @@ watch(() => route.query.mvid, (mvid) => {
         }
     }
 }, { immediate: true })
+
 </script>
 <style lang='scss' scoped>
 .mv-detail {

@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --port 3001",
+    "start": "vite --port 3001",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -22,7 +22,6 @@
   "devDependencies": {
     "@types/lodash-es": "^4.17.7",
     "@vitejs/plugin-vue": "^2.2.0",
-    "node-sass": "^7.0.1",
     "sass": "^1.50.0",
     "sass-loader": "^12.6.0",
     "typescript": "^4.5.4",

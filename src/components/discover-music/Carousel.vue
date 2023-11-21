@@ -2,7 +2,7 @@
     <div class="my-carousel">
         <el-carousel :interval="5000" type="card" height="260px" indicator-position="none" ref="carousel" :autoplay="true">
             <el-carousel-item v-for="data, index in myBanner" :key="index">
-                <el-image style="width: 100%; height: 260px;" :src="data?.imageUrl" fit="fill">
+                <el-image style="width: 100%; height: 260px;" :src="data.imageUrl" fit="fill">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -20,22 +20,20 @@
 import { onMounted, ref } from 'vue';
 import { getBanner } from '@/api/http/api';
 import { Picture as IconPicture } from '@element-plus/icons-vue';
-const myBanner = ref<any[]>();
+const myBanner = ref<{ imageUrl: string }[]>();
 const carousel = ref();
 async function banners() {
     try {
         let { banners } = await getBanner();
         myBanner.value = banners;
     } catch (e) {
-        console.log('banner获取失败');
+        console.log(e, 'banner get fail =====>');
     }
 }
-onMounted(() => {
-    banners();
-    setTimeout(() => {
-        carousel.value.setActiveItem(0); //解决第一张不显示问题
-    }, 200);
-})
+onMounted(async () => {
+    await banners();
+    carousel.value.setActiveItem(0); // 解决第一张不显示问题
+});
 </script>
 
 <style lang="scss" scoped>

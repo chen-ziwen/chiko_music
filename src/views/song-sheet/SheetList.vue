@@ -17,7 +17,8 @@
                         </li>
                         <li>
                             <span v-show="sheetDetail.detail.tags.length">标签&nbsp;:</span>
-                            <span v-for="(tag, index) of sheetDetail.detail.tags" :key="index" @click="commonSheet(tag)">{{ tag }}</span>
+                            <span v-for="(tag, index) of sheetDetail.detail.tags" :key="index" @click="commonSheet(tag)">{{
+                                tag }}</span>
                         </li>
                         <li>
                             <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
@@ -35,13 +36,15 @@
                 <SongList :sheetList="sheetDetail.partsheet" @keeplist="keepsheet"></SongList>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choose" v-model:currentPage="page" :hide-on-single-page="true" />
+                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
+                    :page-size="50" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
             </div>
         </div>
         <div class="music-singer-right">
             <div class="common-style" v-show="sheetAbout.aboutList.length > 0">
                 <ListModule head="歌单推荐" gap-color="red">
-                    <div class="sheet-commond" v-for="item in sheetAbout.aboutList" :key="item.id" @click="turnSheet(item.id)">
+                    <div class="sheet-commond" v-for="item in sheetAbout.aboutList" :key="item.id"
+                        @click="turnSheet(item.id)">
                         <img class="sheet-img" :src="item.coverImgUrl">
                         <span class="sheet-name">{{ item.name }}</span>
                     </div>
@@ -56,9 +59,7 @@
             </div>
             <div class="common-style" v-show="sheetAbout.comments.length > 0">
                 <ListModule head="精彩评论" gap-color="green">
-                    <template v-for="{ user: { nickname, avatarUrl }, commentId, content, timeStr, } in sheetAbout.comments" :key="commentId">
-                        <TalkList :name="nickname" :avatar="avatarUrl" :time="timeStr" :content="content"></TalkList>
-                    </template>
+                    <TalkList :data="sheetAbout.comments"></TalkList>
                 </ListModule>
             </div>
         </div>
@@ -83,20 +84,19 @@ import TalkList from '@/components/common/TalkList.vue';
 import { usePlay, playState } from '@/store/play';
 
 interface sheetAbout {
-    subscribers: Record<string, any>[];
-    comments: Record<string, any>[];
-    aboutList: Record<string, any>[];
+    subscribers: any[];
+    comments: any[];
+    aboutList: any[];
 };
 interface sheetDetail {
-    detail: Record<string, any>;
+    detail: any;
     creator: Record<string, string>;
-    sheetList: Record<string, any>[];
+    sheetList: any[];
     partsheet: any;
 }
 const route = useRoute();
 const router = useRouter();
 const scroll = new ScrollTop().scroll;
-const storage = new useStorage();
 const centerDialog = ref(false);
 const play = usePlay();
 const page = ref<number>(1);
@@ -111,11 +111,10 @@ const sheetDetail = reactive<sheetDetail>({
     sheetList: [],
     partsheet: [],
 });
-const delSong = reactive<Record<string, any>[]>([]);
+const delSong = reactive<any[]>([]);
 
 async function playlistDetail(id: number) {
     try {
-        // 先将歌单列表数组清空
         sheetDetail.sheetList.length = 0;
         delSong.length = 0;
         let nowTime = new Date().getTime();
@@ -127,24 +126,18 @@ async function playlistDetail(id: number) {
         sheetDetail.detail = playlist;
         sheetDetail.creator = playlist?.creator;
         const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
-        //给每一首歌添加一个顺序索引
         while (i < songs.length) {
             songs[i].index = i;
-            delSong.push(useSong(songs[i])) // 将数据进行过滤和处理
+            delSong.push(useSong(songs[i]));
             i++;
         }
-
-        //将大数组切割成指定大小的数组集合
         for (let i = 0; i < delSong.length; i += 50) {
             sheetDetail.sheetList.push(delSong.slice(i, i + 50))
         }
-        // 分页的每一页歌曲
         sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
-
     } catch (e) {
         console.log(e, id, '歌单列表请求错误');
     }
-
 }
 
 //把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论，相关歌单，歌单收藏
@@ -164,11 +157,10 @@ async function startSheet(id: number) {
         console.error('请求繁忙', e);
     }
 }
-//控制分页功能
-function choose(val: number) {
+
+function choice(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
-    // 切换分页时 屏幕回到顶部
     scroll(5);
 }
 
@@ -217,8 +209,7 @@ const playAll = () => {
 
 watch(() => route.query.sheetid, (id) => {
     if (!id) return;
-    // 跳转歌单时，将分页定位到第一页
-    page.value = 1;
+    page.value = 1;     // 跳转歌单时，将分页定位到第一页
     let sheetId = id as unknown as number;
     originContent(sheetId);
 }, { immediate: true })

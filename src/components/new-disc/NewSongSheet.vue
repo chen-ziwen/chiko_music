@@ -47,6 +47,9 @@ const turnSheet = (index: number, id: number) => {
     } else {
         play.playing = true;
     }
+
+    console.log('newSheet', props.newSheet);
+
     // 存储最新的歌曲列表和当前播放索引
     play.$patch({
         currentindex: index,
