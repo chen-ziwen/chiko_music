@@ -67,7 +67,7 @@ import CLyric from "@/components/lyric/Lyric.vue";
 const play = usePlay();
 const currentPlay = computed(() => play.currentPlay);
 const lyricRef = ref<InstanceType<typeof CLyric> | null>(null);
-const currentLyric = ref<any>(null);
+const currentLyric = ref<any>({});
 const currentLyricNum = ref<number>(0);
 const isPureMusic = ref<boolean>(false);
 const playingLyric = ref<string>('');
@@ -251,16 +251,16 @@ async function getLyricInfo(id: number) {
             }
         }
     } catch (e) {
-        currentLyric.value = null;
+        currentLyric.value = {};
         playingLyric.value = '';
         currentLyricNum.value = 0;
     }
 }
 
 function lyricHandle({ lineNum, txt }: { lineNum: number, txt: string }) {
-    if (!lyricRef.value?.lyricLine) return;
+    if (!lyricRef.value) return;
     currentLyricNum.value = lineNum;
-    console.log('lineNum', lineNum);
+    // console.log('lineNum', lineNum);
 
     playingLyric.value = txt;
     if (lineNum > 10) {
@@ -307,6 +307,7 @@ watch(currentPlay, (newSong, oldSong) => {
 
 watch(() => play.playing, (isPlaying) => {
     console.log(songReady.value, audio.value);
+    console.log('lyric', currentLyric.value);
 
     if (!songReady.value || !audio.value) return;
     isPlaying ? audio.value.play() : audio.value.pause();

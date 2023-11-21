@@ -2,13 +2,12 @@
     <div class="lyric-box">
         <Scroll class="lyric" ref="lyricList" :data="currentLyric && currentLyric.lines">
             <div class="lyric-wrapper">
-                <div v-if="currentLyric">
-                    <template v-for="(item, index) of currentLyric.lines" :key="index">
-                        <p ref="lyricLine" class="lyric-text" :class="currentLyricNum === index ? 'active' : ''">
-                            {{ item.txt }}
-                        </p>
-                    </template>
-                </div>
+                <template v-if="currentLyric">
+                    <p v-for="(item, index) of currentLyric.lines" :key="item.time" ref="lyricLine" class="lyric-text"
+                        :class="currentLyricNum === index ? 'active' : ''">
+                        {{ item.txt }}
+                    </p>
+                </template>
                 <div class="no-lyric" v-else>暂无歌词，请您欣赏</div>
             </div>
         </Scroll>
@@ -23,13 +22,19 @@ interface LyricProps {
     currentLyricNum: number;
     currentLyric: any;
 }
-defineProps<LyricProps>();
+const props = defineProps<LyricProps>();
 const lyricList = ref<InstanceType<typeof Scroll> | null>(null);
 const lyricLine = ref<HTMLElement[]>([]);
 
-nextTick(() => {
-    console.log("lyric-line", lyricLine.value);
+watch(() => props.currentLyric, (val) => {
+    nextTick(() => {
+        console.log('currentLyric ==========>', val, lyricLine.value, lyricList.value);
+    })
+
 })
+// nextTick(() => {
+//     console.log("lyric-line", lyricLine.value);
+// })
 
 
 defineExpose({
