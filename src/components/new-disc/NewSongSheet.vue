@@ -48,8 +48,6 @@ const turnSheet = (index: number, id: number) => {
         play.playing = true;
     }
 
-    console.log('newSheet', props.newSheet);
-
     // 存储最新的歌曲列表和当前播放索引
     play.$patch({
         currentindex: index,
@@ -59,9 +57,9 @@ const turnSheet = (index: number, id: number) => {
 
 const playing = (index: number, id: number) => {
     if (index === play.currentindex && play.playing && id == play.currentPlay.id) {
-        return "icon-zanting1"
+        return "icon-zanting1";
     }
-    return "icon-bofang1"
+    return "icon-bofang1";
 }
 
 </script>

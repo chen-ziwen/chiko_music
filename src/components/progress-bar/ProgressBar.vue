@@ -1,7 +1,6 @@
 <template>
-    <div class="progress-bar">
-        <audio ref="audio" class="audio" :src="currentPlay?.url" @playing="audioReady" @pause="audioPaused"
-            @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
+    <div class="progress-bar" v-show="currentPlay?.id">
+        <audio ref="audio" class="audio" :src="currentPlay?.url" @playing="audioReady" @pause="audioPaused" @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
                 <el-image class="picture" :src="currentPlay.image" fit="fill">
@@ -34,7 +33,7 @@
             </div>
         </div>
         <transition name="slide-fade">
-            <div class="player-page" v-show="showLyric">
+            <div class="player-page" v-if="showLyric">
                 <div class="container">
                     <div class="page-left">
                         <div class="cover-image" :class="play.playing ? 'playing' : ''">
@@ -57,7 +56,7 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { ref, shallowRef, watch, computed, nextTick, reactive, onMounted, toRefs } from 'vue';
+import { ref, shallowRef, watch, computed, nextTick, reactive, onMounted } from 'vue';
 import { usePlay, playState } from '@/store/play';
 import { formatSecondTime, randomNum } from '@/util';
 import { getLyric } from '@/api';
@@ -67,7 +66,7 @@ import CLyric from "@/components/lyric/Lyric.vue";
 const play = usePlay();
 const currentPlay = computed(() => play.currentPlay);
 const lyricRef = ref<InstanceType<typeof CLyric> | null>(null);
-const currentLyric = ref<any>({});
+const currentLyric = ref<any>(null);
 const currentLyricNum = ref<number>(0);
 const isPureMusic = ref<boolean>(false);
 const playingLyric = ref<string>('');
@@ -123,44 +122,21 @@ const randomStyle = computed(() => {
 const audioReady = () => {
     timeout && clearTimeout(timeout);
     songReady.value = true;
-    play.playing = true;
     if (currentLyric.value && !isPureMusic.value) {
         currentLyric.value.seek(currentTime.value * 1000);
     }
 }
 // 歌曲不能播放时候的处理
 const audioError = () => {
-    songReady.value = true;
     timeout && clearTimeout(timeout);
+    songReady.value = true;
 }
 
 // 当暂停的时候，将播放状态设置为false
 const audioPaused = () => {
-    play.playing = false; //当歌曲播放完成时也会执行
+    play.playing = false;
     if (currentLyric.value) {
         currentLyric.value.stop();
-    }
-}
-
-// 歌曲完成时，对当前的音乐状态进行判断
-const audioEnded = () => {
-    const type = play.playType;
-    if (type === playState.loop) {
-        loop(); // 单曲循环直接从头开始播
-    } else if (type === playState.listloop) {
-        nextSong(); // 列表循环直接放下一首
-    } else if (type === playState.random) {
-        play.currentindex = randomNum(0, play.playList.length);
-    }
-}
-
-// 来回切换播放状态
-const togglePlay = () => {
-    console.log('songReady', songReady.value);
-    if (!songReady.value) return;
-    play.playing = !play.playing;
-    if (currentLyric.value) {
-        currentLyric.value.togglePlay();
     }
 }
 
@@ -187,19 +163,48 @@ const nextSong = () => {
         togglePlay();
     }
 }
+
 // 单曲循环
 const loop = () => {
     if (!audio.value) return;
     audio.value.currentTime = 0; // 时间归0
-    audio.value.play(); // 重新开始播放
+    play.playing = true;
+    if (currentLyric.value) {
+        currentLyric.value.seek(0);
+    }
 }
 
+// 歌曲完成时，对当前的音乐状态进行判断
+const audioEnded = () => {
+    const type = play.playType;
+    if (type === playState.loop) {
+        loop(); // 单曲循环直接从头开始播
+    } else if (type === playState.listloop) {
+        nextSong(); // 列表循环直接放下一首
+    } else if (type === playState.random) {
+        play.currentindex = randomNum(0, play.playList.length);
+        play.playing = true;
+    }
+}
+
+// 来回切换播放状态
+const togglePlay = () => {
+    if (!songReady.value) return;
+    play.playing = !play.playing;
+    if (currentLyric.value) {
+        currentLyric.value.togglePlay();
+    }
+}
 
 // 拖动进度条触发
 const drapProgress = (val: number) => {
-    if (!audio.value || !songReady.value) return;
-    audio.value.currentTime = (val / 100) * currentPlay.value.duration;
+    if (!audio.value) return;
+    const currentTime = (val / 100) * currentPlay.value.duration;
+    audio.value.currentTime = currentTime;
     percent.value = val;
+    if (currentLyric.value) {
+        currentLyric.value.seek(currentTime * 1000);
+    }
 }
 
 // 修改声音大小
@@ -251,7 +256,7 @@ async function getLyricInfo(id: number) {
             }
         }
     } catch (e) {
-        currentLyric.value = {};
+        currentLyric.value = null;
         playingLyric.value = '';
         currentLyricNum.value = 0;
     }
@@ -260,12 +265,10 @@ async function getLyricInfo(id: number) {
 function lyricHandle({ lineNum, txt }: { lineNum: number, txt: string }) {
     if (!lyricRef.value) return;
     currentLyricNum.value = lineNum;
-    // console.log('lineNum', lineNum);
-
     playingLyric.value = txt;
     if (lineNum > 10) {
         const lineEl = lyricRef.value?.lyricLine[lineNum - 10];
-        if (lyricRef.value.lyricList && lineEl) {
+        if (lyricRef.value.lyricList) {
             nextTick(() => {
                 lyricRef.value?.lyricList!.scrollToElement(lineEl, 1000);
             })
@@ -285,7 +288,7 @@ watch(currentPlay, (newSong, oldSong) => {
         return;
     }
     songReady.value = false;
-    if (currentLyric.vlue) {
+    if (currentLyric.value) {
         currentLyric.value.stop();
         currentLyric.value = null;
         currentTime.value = 0;
@@ -306,9 +309,6 @@ watch(currentPlay, (newSong, oldSong) => {
 });
 
 watch(() => play.playing, (isPlaying) => {
-    console.log(songReady.value, audio.value);
-    console.log('lyric', currentLyric.value);
-
     if (!songReady.value || !audio.value) return;
     isPlaying ? audio.value.play() : audio.value.pause();
 });
@@ -323,7 +323,7 @@ watch(() => play.playing, (isPlaying) => {
     min-width: $width;
     background-color: whitesmoke;
     opacity: .95;
-    z-index: 9999;
+    z-index: 999;
 
     .player-page {
         width: 100%;
@@ -332,7 +332,7 @@ watch(() => play.playing, (isPlaying) => {
         position: fixed;
         top: 0;
         left: 0;
-        padding-top: 100px;
+        padding-top: 150px;
 
         .container {
             display: flex;

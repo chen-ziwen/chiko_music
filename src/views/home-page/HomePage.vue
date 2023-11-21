@@ -4,7 +4,7 @@
     <Main></Main>
     <Footer></Footer>
     <Transition name="pop">
-      <ProgressBar v-show="barShow"></ProgressBar>
+      <ProgressBar v-if="!$route.meta.isLogin"></ProgressBar>
     </Transition>
   </div>
 </template>
@@ -14,20 +14,6 @@ import Nav from '@/components/home-page/Nav.vue';
 import Main from '@/components/home-page/Main.vue';
 import Footer from '@/components/home-page/Footer.vue';
 import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
-import { storeToRefs } from 'pinia';
-import { usePlay } from '@/store/play';
-import { watch } from 'vue';
-const { currentindex, barShow } = storeToRefs(usePlay()) // 不可播放歌曲时隐藏
-
-// 监听歌曲数据是否为空，为空的话，不显示音乐组件
-watch(() => currentindex.value, (num: number) => {
-  if (num >= 0) {
-    barShow.value = true;
-  } else {
-    barShow.value = false;
-  }
-}, { immediate: true })
-
 </script>
 
 <style lang="scss" scoped>

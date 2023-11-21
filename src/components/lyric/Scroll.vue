@@ -4,7 +4,7 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { watch, onMounted, shallowRef, toRef } from "vue";
+import { watch, onMounted, ref, toRef, nextTick } from "vue";
 import BetterScroll from "@better-scroll/core";
 
 interface BetterScrollProps {
@@ -36,7 +36,7 @@ const data = toRef(props, "data");
 
 const emits = defineEmits(['scroll', 'scrollEnd', 'beforeScrollStart'])
 
-const wrapper = shallowRef<HTMLElement>();
+const wrapper = ref<HTMLElement | null>(null);
 let scroll: BetterScroll;
 
 function initScroll() {
@@ -56,7 +56,7 @@ function initScroll() {
 
     if (props.pullup) {
         scroll.on('scrollEnd', () => {
-            if (scroll.y <= (scroll.maxScrollY + 50)) {
+            if (scroll!.y <= (scroll!.maxScrollY + 50)) {
                 emits('scrollEnd');
             }
         })
@@ -86,11 +86,9 @@ function scrollToElement(...args: any) {
 };
 
 
-watch(data, () => setTimeout(() => {
-    refresh()
-}, props.refrehDelay));
+watch(data, () => nextTick(refresh));
 
-onMounted(() => setTimeout(initScroll, 20));
+onMounted(() => nextTick(initScroll));
 
 defineExpose({
     disable,

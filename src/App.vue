@@ -3,41 +3,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
-import { loginStatus } from '@/api';
-import { usePlay } from './store/play';
 import router from './router';
-import { useStorage } from '@/util';
 
-const play = usePlay();
-const storage = new useStorage();
 router.beforeEach((to, from, next) => {
   document.title = <string>to.meta.title;
   next();
-})
-
-// 项目加载时触发
-onMounted(async () => {
-  try {
-    const { data } = await loginStatus();
-    console.log('login status', data);
-    if (data.account.status >= 0) {
-      play.$patch({
-        loginStatu: true,
-      });
-    } else {
-      play.$patch({
-        loginStatu: false,
-      });
-    }
-    storage.set('loginStatu', play.loginStatu);
-  } catch (e) {
-    console.log(e, "登录状态请求失败");
-  }
-})
-
-onUnmounted(() => {
-  play.loginStatu = false;
 })
 
 </script>
