@@ -29,16 +29,18 @@
                 </div>
             </div>
             <template v-if="sheetDetail.partsheet.length">
-                <SongList :sheetList="sheetDetail.partsheet" @keeplist="keepsheet"></SongList>
+                <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="30" @current-change="choose" v-model:currentPage="page" :hide-on-single-page="true" />
+                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
+                    :page-size="30" @current-change="choose" v-model:currentPage="page" :hide-on-single-page="true" />
             </div>
         </div>
         <div class="music-singer-right">
             <div class="common-style" v-show="sheetAbout.hotAlbums.length > 0">
                 <ListModule head="热门专辑" gap-color="red">
-                    <div class="sheet-commond" v-for="item in sheetAbout.hotAlbums" :key="item.id" @click="turnSheet(item.id)">
+                    <div class="sheet-commond" v-for="item in sheetAbout.hotAlbums" :key="item.id"
+                        @click="turnSheet(item.id)">
                         <img class="sheet-img" :src="item.picUrl + '?param=150y150'" :title="item.name">
                         <span class="sheet-name">{{ item.name }}</span>
                     </div>
@@ -165,7 +167,7 @@ function turnSheet(id: number) {
 }
 
 // 将当前歌单列表和当前索引值保存到pinia中
-const keepsheet = (index: number) => {
+const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(delSong));
     play.$patch({
         currentindex: index,

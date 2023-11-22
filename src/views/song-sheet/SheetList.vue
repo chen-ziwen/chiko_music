@@ -33,7 +33,7 @@
                 </div>
             </div>
             <template v-if="sheetDetail.partsheet.length">
-                <SongList :sheetList="sheetDetail.partsheet" @keeplist="keepsheet"></SongList>
+                <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
                 <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
@@ -127,7 +127,7 @@ async function playlistDetail(id: number) {
         sheetDetail.creator = playlist?.creator;
         const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
         while (i < songs.length) {
-            songs[i].index = i;
+            songs[i].idx = i;
             delSong.push(useSong(songs[i]));
             i++;
         }
@@ -140,7 +140,7 @@ async function playlistDetail(id: number) {
     }
 }
 
-//把几个数据不怎么需要处理的接口放在一起请求。分别是歌单评论，相关歌单，歌单收藏
+// 歌单评论，相关歌单，歌单收藏
 async function startSheet(id: number) {
     try {
         const { subscribers } = await getPlaylistSubscribers(id, 30);
@@ -166,30 +166,19 @@ function choice(val: number) {
 
 // 点击跳转歌单页面
 function turnSheet(id: number) {
-    router.push({
-        name: 'sheetlist',
-        query: {
-            sheetid: id,
-        }
-    })
+    router.push({ name: 'sheetlist', query: { sheetid: id } });
 }
 
 function commonSheet(name: string) {
-    router.push({
-        name: 'songsheet',
-        query: {
-            name,
-        }
-    })
+    router.push({ name: 'songsheet', query: { name } });
 }
 // 初始化界面
 function originContent(id: number) {
     startSheet(id);
     playlistDetail(id);
 }
-// 将当前歌单列表和当前索引值保存到pinia中
-const keepsheet = (index: number) => {
-    // 这边delSong数组得深拷贝一下，不然会有关联，歌单id变化会一起变化
+
+const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(delSong));
     play.$patch({
         currentindex: index,
@@ -204,7 +193,10 @@ const playAll = () => {
         currentindex: 0, // 从第一首开始放
         playList: songArr,
         playType: playState.listloop, // 列表循环
-    })
+    });
+    if (!play.playing) {
+        play.playing = !play.playing;
+    }
 }
 
 watch(() => route.query.sheetid, (id) => {

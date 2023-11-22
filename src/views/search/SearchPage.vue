@@ -4,7 +4,7 @@
         <div class="module-checked">
             <el-tabs v-model="checkedname" class="demo-tabs" @tab-click="search">
                 <el-tab-pane label="单曲" name="songs">
-                    <SongList v-if="songsList?.length" :sheetList="songsList" @keeplist="keepsheet"></SongList>
+                    <SongList v-if="songsList?.length" :sheetList="songsList" @playIdx="playIdx"></SongList>
                 </el-tab-pane>
                 <el-tab-pane label="专辑" name="albums">
                     <SingerAlbum v-if="artAlbum?.length" :data="artAlbum"></SingerAlbum>
@@ -105,7 +105,7 @@ const getSong = async (keys: string[]) => {
     }
 };
 
-const keepsheet = (index: number) => {
+const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(songsList.value));
     play.$patch({
         currentindex: index,

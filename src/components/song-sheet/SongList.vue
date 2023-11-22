@@ -11,10 +11,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="sheet-list" v-for="(item, index) in props.sheetList" :key="item.index || index" :class="checked(item.index || index, item.id)" @click="playSong(item.index || index, item.id)">
+                <tr class="sheet-list" v-for="(item, index) in props.sheetList" :key="item.idx || index"
+                    :class="checked(item.idx || index, item.id)" @click="playSong(item.idx || index, item.id)">
                     <td>
-                        <span class="sheet-index">{{ judgeNan(item.index, index) }}</span>
-                        <i class="iconfont icon-show" :class="playing(item.index || index, item.id)"></i>
+                        <span class="sheet-index">{{ judgeNan(item.idx, index) }}</span>
+                        <i class="iconfont icon-show" :class="playing(item.idx || index, item.id)"></i>
                     </td>
                     <td>
                         <img :src="imgurl(item.image, '35')">
@@ -38,29 +39,30 @@ interface sheetProps {
     sheetList: SongList[];
 }
 const props = defineProps<sheetProps>();
-const emits = defineEmits(['keeplist']);
+const emits = defineEmits(['playIdx']);
 const play = usePlay();
 
 const playing = (index: number, id: number) => {
     if (index === play.currentindex && play.playing && id == play.currentPlay.id) {
-        return "icon-bofang"
+        return "icon-bofang";
     }
-    return "icon-zanting"
+    return "icon-zanting";
 };
 
 const checked = (index: number, id: number) => {
     if (index === play.currentindex && play.playing && id === play.currentPlay.id) {
-        return 'checked'
+        return 'checked';
     }
     return;
 }
 
-// 将当前索引值传递到父组件,当索引值相同时则反复切换
+// 切换歌曲
 const playSong = (index: number, id: number) => {
-    if (index == play.currentindex && id == play.currentPlay.id) {
+    if (index == play.currentindex && id == play.currentPlay.id) { // 判断是否时同一首歌
         play.playing = !play.playing;
+    } else {
+        emits("playIdx", index);
     }
-    emits("keeplist", index)
 }
 
 const judgeNan = (num: number, index: number) => {
@@ -70,7 +72,6 @@ const judgeNan = (num: number, index: number) => {
     }
     return n;
 }
-
 
 </script>
 

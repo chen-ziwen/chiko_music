@@ -52,7 +52,7 @@ async function getToplistMsg() {
             const rankShow = result[i].slice(0, 5); // 切割出5条数据
             for (let j = 0; j < rankShow.length; j++) {
                 sheet.mainSheetRank[i].songList[j] = useSong(rankShow[j]); // 每一条数据都处理一下
-                sheet.mainSheetRank[i].songList[j].index = j + 1;
+                sheet.mainSheetRank[i].songList[j].idx = j + 1;
             }
         }
     } catch (e) {
@@ -60,7 +60,6 @@ async function getToplistMsg() {
     }
 }
 
-// 当点击不同歌单时，得重新赋值歌单列表
 const playSong = async (index: number, order: number) => {
     const songList = sheet.mainSheetRank[index].songList;
     play.$patch({

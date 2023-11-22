@@ -11,7 +11,7 @@ interface SongList {
     url: string;
     playCount: string | number;
     score: string | number;
-    index: number;
+    idx: number;
 }
 
 
@@ -26,7 +26,7 @@ export const useSong = (songList: any) => {
         url: `https://music.163.com/song/media/outer/url?id=${songList.id}.mp3`,
         playCount: songList.playCount || "",
         score: songList.score || "",
-        index: songList.index
+        idx: songList.idx
     }
     return songMsg;
 }

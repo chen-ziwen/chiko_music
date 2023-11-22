@@ -44,10 +44,7 @@ const turnSheet = (index: number, id: number) => {
     // 当点击的歌曲为当前播放的歌曲，则来回切换播放状态，否则将状态调整为true
     if (index == play.currentindex && id == play.currentPlay.id) {
         play.playing = !play.playing;
-    } else {
-        play.playing = true;
     }
-
     // 存储最新的歌曲列表和当前播放索引
     play.$patch({
         currentindex: index,

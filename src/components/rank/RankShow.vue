@@ -17,10 +17,10 @@
             <ul class="songs" v-loading="!item.songList">
                 <li class="song-list" v-for="(data, order) in item.songList" @click="choseSong(index, order)">
                     <div class="song-msg">
-                        <span class="song-index">{{ data.index }}</span>
-                        <span class="song-name" :class="checked(data.index, data.id)">{{ data.name }}</span>
+                        <span class="song-index">{{ data.idx }}</span>
+                        <span class="song-name" :class="checked(index, data.idx, data.id)">{{ data.name }}</span>
                     </div>
-                    <span class="singer-name">{{ data.singer}}</span>
+                    <span class="singer-name">{{ data.singer }}</span>
                 </li>
             </ul>
         </li>
@@ -32,7 +32,7 @@ import { Picture as IconPicture } from '@element-plus/icons-vue';
 import type { RecommendList } from '@/models/detail';
 import { useRouter } from 'vue-router';
 import { usePlay } from '@/store/play';
-import {  changeNum } from '@/util';
+import { changeNum } from '@/util';
 
 interface RanShow {
     rankSheet: RecommendList[]
@@ -42,15 +42,16 @@ const props = defineProps<RanShow>();
 const emits = defineEmits(['sheetid']);
 const play = usePlay();
 const router = useRouter();
+let checkedIdx = 0; // 选中排行哪一模块
 
-const checked = (index: number, id: number) => {
-    if (index - 1 === play.currentindex && id === play.currentPlay.id && index <= 5) {
+const checked = (index: number, idx: number, id: number) => {
+    if (index == checkedIdx && idx - 1 === play.currentindex && id === play.currentPlay.id && idx <= 5) {
         return 'checked'
     }
-    return;
 }
 
 const choseSong = (index: number, order: number) => {
+    checkedIdx = index;
     emits("sheetid", index, order)
 }
 const turnPage = (id: number) => {

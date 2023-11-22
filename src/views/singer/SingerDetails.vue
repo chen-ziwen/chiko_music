@@ -15,7 +15,7 @@
         <div class="module-checked">
             <el-tabs v-model="checkedname" type="card" class="demo-tabs" @tab-click="checkedClick">
                 <el-tab-pane label="热门歌曲" name="hot">
-                    <SongList v-if="delSong.length" :sheetList="delSong" @keeplist="keepsheet"></SongList>
+                    <SongList v-if="delSong.length" :sheetList="delSong" @playIdx="playIdx"></SongList>
                     <p v-else>暂无热门歌曲</p>
                 </el-tab-pane>
                 <el-tab-pane label="专辑" name="album">
@@ -149,7 +149,6 @@ const singerMv = async (id: number) => {
     }
 }
 
-
 // 歌手专辑 
 const ArtistAlbum = async (id: number) => {
     try {
@@ -172,9 +171,8 @@ const loadScroll = () => {
         ArtistAlbum(singerId.value)
     }
 }
-// 将当前歌单列表和当前索引值保存到pinia中
-const keepsheet = (index: number) => {
-    // 这边delSong数组得深拷贝一下，不然会有关联，歌单id变化会一起变化
+
+const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(delSong));
     play.$patch({
         currentindex: index,
@@ -187,6 +185,7 @@ const resetAlbun = () => {
     artAlbum.value.splice(0, artAlbum.value.length); // 切换歌手时 清空专辑拼接
     checkedname.value = 'hot'; // 切换歌手id时 切换到第一个页面
 }
+
 // 整体方法执行 
 const changeSingerId = (id: number) => {
     resetAlbun(); // 这个方法的调用必须在ArtistAlbum方法之前

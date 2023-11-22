@@ -1,6 +1,7 @@
 <template>
     <div class="progress-bar" v-show="currentPlay?.id">
-        <audio ref="audio" class="audio" :src="currentPlay?.url" @playing="audioReady" @pause="audioPaused" @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
+        <audio ref="audio" class="audio" :src="currentPlay?.url" @playing="audioReady" @pause="audioPaused"
+            @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
                 <el-image class="picture" :src="currentPlay.image" fit="fill">
@@ -10,7 +11,6 @@
                     <span class="singer-name text-hidden">{{ currentPlay.singer }}</span>
                 </div>
             </div>
-
             <div class="flex-column flex-grow-2 flex-center">
                 <div class="play-btn flex-acenter">
                     <i class="iconfont" :class="[pattern.icon, randomStyle]" :title="pattern.name" @click="changeState"></i>
@@ -24,9 +24,7 @@
                     <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress"></el-slider>
                     <span class="end-time">{{ formatSecondTime(currentPlay.duration) }}</span>
                 </div>
-
             </div>
-
             <div class="right-box el-style flex-grow-1 flex-jcenter">
                 <i class="iconfont audio noshake" :class="muted" @click="changeMuted"></i>
                 <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"></el-slider>
@@ -282,12 +280,11 @@ function lyricHandle({ lineNum, txt }: { lineNum: number, txt: string }) {
     }
 }
 
-// 监听播放状态，判断是否播放或暂停
-watch(currentPlay, (newSong, oldSong) => {
-    if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
-        return;
-    }
-    songReady.value = false;
+// 监听播放的歌曲是否变化 用于外面的播放项
+watch(() => currentPlay.value.id, () => {
+    if (!currentPlay.value.id || !currentPlay.value.url) return;
+    songReady.value = false; // 当前歌曲能播放时 再去切换为true
+    play.playing = true; // 每次切换歌曲 都会变为播放状态
     if (currentLyric.value) {
         currentLyric.value.stop();
         currentLyric.value = null;
@@ -297,7 +294,7 @@ watch(currentPlay, (newSong, oldSong) => {
     };
     nextTick(() => {
         if (!audio.value) return;
-        audio.value.src = newSong.url;
+        audio.value.src = currentPlay.value?.url;
         audio.value.volume = mutedAll.volume / 100;
         audio.value.play();
     });
@@ -305,9 +302,10 @@ watch(currentPlay, (newSong, oldSong) => {
     timeout = window.setTimeout(() => {
         songReady.value = true;
     }, 5000);
-    getLyricInfo(newSong.id);
+    getLyricInfo(currentPlay.value.id);
 });
 
+// 监听播放状态 用于自我切换
 watch(() => play.playing, (isPlaying) => {
     if (!songReady.value || !audio.value) return;
     isPlaying ? audio.value.play() : audio.value.pause();
@@ -328,6 +326,7 @@ watch(() => play.playing, (isPlaying) => {
     .player-page {
         width: 100%;
         height: 100vh;
+        z-index: 9998;
         background: rgba(255, 255, 255, 1);
         position: fixed;
         top: 0;
@@ -412,7 +411,7 @@ watch(() => play.playing, (isPlaying) => {
 
     .info {
         position: relative;
-        z-index: 30;
+        z-index: 9999;
         display: flex;
         width: 85%;
         margin: 0 auto;

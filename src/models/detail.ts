@@ -21,7 +21,7 @@ export interface SongList {
     url: string;
     playCount: string | number;
     score: string | number;
-    index: number;
+    idx: number;
 }
 
 // 歌单列表
