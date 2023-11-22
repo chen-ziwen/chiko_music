@@ -14,7 +14,6 @@ router.beforeEach((to, from, next) => {
 
 <style lang="scss">
 @import "@/assets/css/main.css";
-@import "@/assets/css/router.css";
 // @import '@/assets/CSS/fonticon/iconfont.css';
-@import '@/assets/CSS/fonts.css';
+@import '@/assets/font/fonts.css';
 </style>

@@ -74,7 +74,7 @@ import {
     getCommentPlaylist,
     getPlaylistSubscribers,
 } from '@/api';
-import { ScrollTop, useStorage, imgurl, useSong } from '@/util';
+import { ScrollTop, imgurl, useSong } from '@/util';
 import { useRoute, useRouter } from 'vue-router';
 import { reactive, ref, watch, toRaw, onActivated } from 'vue';
 import SongList from '@/components/song-sheet/SongList.vue';
@@ -111,14 +111,13 @@ const sheetDetail = reactive<sheetDetail>({
     sheetList: [],
     partsheet: [],
 });
-const delSong = reactive<any[]>([]);
+const delSong = ref<any[]>([]);
 
 async function playlistDetail(id: number) {
     try {
         sheetDetail.sheetList.length = 0;
-        delSong.length = 0;
+        delSong.value.length = 0;
         let nowTime = new Date().getTime();
-        let i = 0;
         const { playlist } = await getPlaylistDetail(id, 50, nowTime);
         if (playlist?.description) {
             playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
@@ -126,13 +125,9 @@ async function playlistDetail(id: number) {
         sheetDetail.detail = playlist;
         sheetDetail.creator = playlist?.creator;
         const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
-        while (i < songs.length) {
-            songs[i].idx = i;
-            delSong.push(useSong(songs[i]));
-            i++;
-        }
-        for (let i = 0; i < delSong.length; i += 50) {
-            sheetDetail.sheetList.push(delSong.slice(i, i + 50))
+        delSong.value = useSong(songs);
+        for (let i = 0; i < delSong.value.length; i += 50) {
+            sheetDetail.sheetList.push(delSong.value.slice(i, i + 50))
         }
         sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
     } catch (e) {
@@ -178,17 +173,17 @@ function originContent(id: number) {
     playlistDetail(id);
 }
 
-const playIdx = (index: number) => {
-    const songArr = JSON.parse(JSON.stringify(delSong));
+const playIdx = (idx: number) => {
+    const songArr = JSON.parse(JSON.stringify(delSong.value));
     play.$patch({
-        currentindex: index,
+        currentindex: idx,
         playList: songArr,
     })
 }
 
 // 播放全部
 const playAll = () => {
-    const songArr = JSON.parse(JSON.stringify(delSong));
+    const songArr = JSON.parse(JSON.stringify(delSong.value));
     play.$patch({
         currentindex: 0, // 从第一首开始放
         playList: songArr,

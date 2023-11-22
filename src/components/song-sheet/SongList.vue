@@ -11,11 +11,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="sheet-list" v-for="(item, index) in props.sheetList" :key="item.idx || index"
-                    :class="checked(item.idx || index, item.id)" @click="playSong(item.idx || index, item.id)">
+                <tr class="sheet-list" v-for="item,  in props.sheetList" :key="item.idx"
+                    :class="checked(item.idx - 1, item.id)" @click="playSong(item.idx - 1, item.id)">
                     <td>
-                        <span class="sheet-index">{{ judgeNan(item.idx, index) }}</span>
-                        <i class="iconfont icon-show" :class="playing(item.idx || index, item.id)"></i>
+                        <span class="sheet-index">{{ item.idx }}</span>
+                        <i class="iconfont icon-show" :class="playing(item.idx - 1, item.id)"></i>
                     </td>
                     <td>
                         <img :src="imgurl(item.image, '35')">
@@ -53,7 +53,6 @@ const checked = (index: number, id: number) => {
     if (index === play.currentindex && play.playing && id === play.currentPlay.id) {
         return 'checked';
     }
-    return;
 }
 
 // 切换歌曲
@@ -65,13 +64,13 @@ const playSong = (index: number, id: number) => {
     }
 }
 
-const judgeNan = (num: number, index: number) => {
-    const n = Number((num + 1).toString().padStart(2, '0'));
-    if (isNaN(n)) {
-        return index + 1;
-    }
-    return n;
-}
+// const judgeNan = (num: number, index: number) => {
+//     const n = Number((num + 1).toString().padStart(2, '0'));
+//     if (isNaN(n)) {
+//         return index + 1;
+//     }
+//     return n;
+// }
 
 </script>
 

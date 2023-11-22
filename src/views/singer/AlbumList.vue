@@ -33,7 +33,7 @@
             </template>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
                 <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
-                    :page-size="30" @current-change="choose" v-model:currentPage="page" :hide-on-single-page="true" />
+                    :page-size="30" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
             </div>
         </div>
         <div class="music-singer-right">
@@ -108,28 +108,22 @@ const sheetDetail = reactive<sheetDetail>({
     sheetList: [],
     partsheet: [],
 });
-const delSong = reactive<Whole[]>([]);
+const delSong = ref<Whole[]>([]);
 async function playlistDetail(id: number) {
-    let i = 0;
     // 先将歌单列表数组清空
     sheetDetail.sheetList.length = 0;
-    delSong.length = 0;
-    let nowTime = new Date().getTime();
+    delSong.value.length = 0;
     try {
-        const { songs, album } = await getAlbum(id, nowTime);
+        const { songs, album } = await getAlbum(id, Date.now());
         sheetDetail.detail = album;
         sheetDetail.creator = album.artist;
-        while (i < songs.length) {
-            songs[i].index = i;
-            delSong.push(useSong(songs[i])) // 将数据进行过滤和处理
-            i++;
-        }
-        for (let i = 0; i < delSong.length; i += 30) {
-            sheetDetail.sheetList.push(delSong.slice(i, i + 30))
+        delSong.value = useSong(songs);
+        for (let i = 0; i < delSong.value.length; i += 30) {
+            sheetDetail.sheetList.push(delSong.value.slice(i, i + 30));
         }
         sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
     } catch (e) {
-        console.log(e, id, '歌单列表请求错误');
+        console.log(e, 'album fail =====>');
     }
 }
 
@@ -145,12 +139,12 @@ async function startSheet(id: number) {
             sheetAbout.comments = comments;
         }
     } catch (e) {
-        console.error('请求繁忙', e);
+        console.error(e, "request fail =====>");
     }
 }
 
 //控制分页功能
-function choose(val: number) {
+function choice(val: number) {
     if (!sheetDetail.sheetList) return;
     sheetDetail.partsheet = toRaw(sheetDetail.sheetList[val - 1]);
     scroll(5);
@@ -158,32 +152,21 @@ function choose(val: number) {
 
 // 点击跳转歌单页面
 function turnSheet(id: number) {
-    router.push({
-        name: 'albumlist',
-        query: {
-            albumid: id,
-        }
-    })
+    router.push({ name: 'albumlist', query: { albumid: id } });
 }
 
 // 将当前歌单列表和当前索引值保存到pinia中
 const playIdx = (index: number) => {
-    const songArr = JSON.parse(JSON.stringify(delSong));
-    play.$patch({
-        currentindex: index,
-        playList: songArr,
-    })
+    const songArr = JSON.parse(JSON.stringify(delSong.value));
+    play.$patch({ currentindex: index, playList: songArr });
 }
 
 // 播放全部
 const playAll = () => {
-    const songArr = JSON.parse(JSON.stringify(delSong));
-    play.$patch({
-        currentindex: 0, // 从第一首开始放
-        playList: songArr,
-        playType: playState.listloop, // 列表循环
-    })
+    const songArr = JSON.parse(JSON.stringify(delSong.value));
+    play.$patch({ currentindex: 0, playList: songArr, playType: playState.listloop });
 }
+
 // 初始化界面
 async function originContent(id: number) {
     await playlistDetail(id);

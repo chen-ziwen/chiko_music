@@ -1,9 +1,10 @@
 <template>
-    <ul>
-        <li v-for="(data, index) in mvSheet" :key="index" class="recommend-mv-show-li">
+    <ul class="mv-sheet">
+        <li class="mv-sheet-li" v-for="(data, index) in mvSheet" :key="index">
             <div class="newsong" @click="turnMvDetail(data.id)">
                 <div class="img-box">
-                    <el-image class="mv-img" style="min-width: 120px; min-height: 120px;" :src="data?.picUrl + '?param=120y120'" fit="fill">
+                    <el-image class="mv-img" style="min-width: 120px; min-height: 120px;"
+                        :src="data?.picUrl + '?param=120y120'" fit="fill">
                         <template #placeholder>
                             <div class="image-slot">
                                 <el-icon>
@@ -44,14 +45,13 @@ const turnMvDetail = (id: number) => {
 
 </script>
 <style lang='scss' scoped>
-ul {
+.mv-sheet {
     user-select: none;
 
-    li {
+    .mv-sheet-li {
+        width: calc(50% - 30px);
         display: inline-block;
-        box-sizing: border-box;
-        width: 50%;
-        padding: 10px 15px;
+        margin: var(--main-margin);
 
         span {
             display: inline-block;

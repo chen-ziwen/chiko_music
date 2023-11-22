@@ -1,6 +1,6 @@
 <template>
-    <ul>
-        <li v-for="(data, index) in newSheet" :key="index" class="recommend-new-show-li" @click="turnSheet(index, data.id)">
+    <ul class="new-song-sheet">
+        <li class="new-song-sheet-li" v-for="(data, index) in newSheet" :key="index" @click="tSheet(index, data.id)">
             <div class="newsong">
                 <div class="new-img-box">
                     <el-image class="new-img" :src="data.image + '?param=200y200'" fit="cover">
@@ -39,34 +39,25 @@ interface NewSongSheet {
 const props = defineProps<NewSongSheet>();
 const play = usePlay();
 
-// 选择歌曲
-const turnSheet = (index: number, id: number) => {
-    // 当点击的歌曲为当前播放的歌曲，则来回切换播放状态，否则将状态调整为true
+const tSheet = (index: number, id: number) => {
     if (index == play.currentindex && id == play.currentPlay.id) {
         play.playing = !play.playing;
     }
-    // 存储最新的歌曲列表和当前播放索引
-    play.$patch({
-        currentindex: index,
-        playList: props.newSheet,
-    })
+    play.$patch({ currentindex: index, playList: props.newSheet });
 }
 
-const playing = (index: number, id: number) => {
-    if (index === play.currentindex && play.playing && id == play.currentPlay.id) {
-        return "icon-zanting1";
-    }
-    return "icon-bofang1";
-}
+const playing = (index: number, id: number) => (index === play.currentindex && play.playing && id == play.currentPlay.id) ? "icon-zanting1" : "icon-bofang1";
 
 </script>
 <style lang='scss' scoped>
-ul {
-    li {
-        width: 33.3%;
+.new-song-sheet {
+    width: 100%;
+    height: 100%;
+
+    .new-song-sheet-li {
+        width: calc(33.3% - 30px);
         display: inline-block;
-        padding: 10px 15px;
-        box-sizing: border-box;
+        margin: var(--main-margin);
 
         span {
             display: inline-block;

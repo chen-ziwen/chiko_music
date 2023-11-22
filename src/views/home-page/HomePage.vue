@@ -21,14 +21,4 @@ import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
   background-color: $color;
 }
 
-//出现时弹出
-.pop-enter-active,
-.pop-leave-active {
-  transition: all 0.5s ease-in-out;
-}
-
-.pop-enter-from,
-.pop-leave-to {
-  transform: translateY(80px);
-}
 </style>

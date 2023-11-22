@@ -1,0 +1,16 @@
+/*el-loading style*/
+.el-loading-mask {
+    background-color: #ffffff;
+}
+
+.el-loading-spinner .path {
+    stroke: #4a4a4a;
+}
+
+.el-loading-spinner .el-loading-text {
+    color: #4a4a4a;
+}
+
+.el-dropdown-menu__item .el-icon-user {
+    margin-right: 2px;
+}

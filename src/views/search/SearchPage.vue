@@ -67,10 +67,7 @@ const search = (pane: { paneName: string }) => {
             switch (type) {
                 case 1:
                     const songs = res.result.songs;
-                    const keys: string[] = [];
-                    songs.forEach((item: { id: string }) => {
-                        keys.push(item.id)
-                    });
+                    const keys = songs.map((item: { id: string }) => item.id);
                     getSong(keys);
                     break;
                 case 10:
@@ -91,28 +88,18 @@ const search = (pane: { paneName: string }) => {
 };
 
 const getSong = async (keys: string[]) => {
-    const timestamp = new Date().getTime();
-    let ids = keys.join(',');
     try {
-        const { songs } = await getSongDetail(ids, timestamp);
-        songsList.value = songs.map((item: SongListType) => {
-            if (item.id) {
-                return useSong(item);
-            }
-        })
+        const { songs } = await getSongDetail(keys.join(','), Date.now());
+        songsList.value = useSong(songs)
     } catch (e) {
-        console.log(e, '获取单曲失败');
+        console.log(e, 'song detail fail =====>');
     }
 };
 
 const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(songsList.value));
-    play.$patch({
-        currentindex: index,
-        playList: songArr,
-    })
+    play.$patch({ currentindex: index, playList: songArr });
 };
-
 
 const turnMvDetail = (id: number) => {
     router.push({ name: 'mvdetail', query: { mvid: id } })

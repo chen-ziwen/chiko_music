@@ -25,9 +25,7 @@ import { useRouter } from 'vue-router';
 import { Picture as IconPicture } from '@element-plus/icons-vue';
 const props = defineProps<{ data: SingerAlbumType[] }>();
 const router = useRouter();
-const turnSheet = (id: number) => {
-    router.push({ name: 'albumlist', query: { albumid: id } })
-}
+const turnSheet = (id: number) => router.push({ name: 'albumlist', query: { albumid: id } });
 </script>
 <style lang='scss' scoped>
 .singer-album {

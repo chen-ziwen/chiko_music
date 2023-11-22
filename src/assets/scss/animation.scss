@@ -1,7 +1,8 @@
+// 进入
 .pop-enter-active {
     transition: all .25s ease-in-out;
-
 }
+
 .pop-leave-active {
     transition: all .35s linear;
 }
@@ -10,6 +11,20 @@
     transform: translateY(25px);
     opacity: 0;
 }
+
 .pop-leave-to {
     opacity: 0;
+}
+
+
+
+//出现时弹出
+.pop-enter-active,
+.pop-leave-active {
+    transition: all 0.5s ease-in-out;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+    transform: translateY(80px);
 }

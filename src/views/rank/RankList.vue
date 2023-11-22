@@ -33,30 +33,20 @@ const play = usePlay();
 async function getToplistMsg() {
     try {
         const { list } = await getToplist();
-        const ids: number[] = [];
-        let index = 0;
         sheet.mainSheetRank = list.slice(0, 4);
         sheet.otherSheetRank = list.slice(4, list.length);
-        while (index < sheet.mainSheetRank.length) {
-            ids.push(list[index].id)
-            index++;
-        }
-        // 利用promise.all一次性请求
+        const ids = sheet.mainSheetRank.map((_, index) => list[index].id);
         const result = await Promise.all(ids.map(async ids => {
-            const time = new Date().getTime();
-            const res = await getPlaylistTrackAll(ids, 5, undefined, time);
-            return res.songs; // 拿到songs列表
+            const res = await getPlaylistTrackAll(ids, 5, undefined, Date.now());
+            return res.songs;
         }));
         for (let i = 0; i < result.length; i++) {
-            sheet.mainSheetRank[i].songList = [];// 初始化数组
-            const rankShow = result[i].slice(0, 5); // 切割出5条数据
-            for (let j = 0; j < rankShow.length; j++) {
-                sheet.mainSheetRank[i].songList[j] = useSong(rankShow[j]); // 每一条数据都处理一下
-                sheet.mainSheetRank[i].songList[j].idx = j + 1;
-            }
+            sheet.mainSheetRank[i].songList = [];
+            const rankShow = result[i].slice(0, 5);
+            sheet.mainSheetRank[i].songList = useSong(rankShow);
         }
     } catch (e) {
-        console.log('请求失败', e);
+        console.log(e, 'request fail =====>');
     }
 }
 

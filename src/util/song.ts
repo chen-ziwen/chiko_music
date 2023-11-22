@@ -1,5 +1,5 @@
 
-import { formatSecond, imgurl } from '@/util';
+import { formatSecond } from '@/util';
 
 interface SongList {
     id: number;
@@ -15,20 +15,24 @@ interface SongList {
 }
 
 
-export const useSong = (songList: any) => {
-    const songMsg: SongList = {
-        id: songList.id,
-        singer: filterSinger(songList.ar || songList.artists),
-        name: songList.name,
-        album: songList.al ? songList.al.name : songList.album.name,
-        duration: formatSecond(songList.dt || songList.duration),
-        image: songList.al ? songList.al.picUrl : songList.album.artist.img1v1Url,
-        url: `https://music.163.com/song/media/outer/url?id=${songList.id}.mp3`,
-        playCount: songList.playCount || "",
-        score: songList.score || "",
-        idx: songList.idx
+export const useSong = (songList: any[]) => {
+    const newSongList: SongList[] = [];
+    for (let i = 0; i < songList.length; i++) {
+        const songMsg: SongList = {
+            id: songList[i].id,
+            singer: filterSinger(songList[i].ar || songList[i].artists),
+            name: songList[i].name,
+            album: songList[i].al ? songList[i].al.name : songList[i].album.name,
+            duration: formatSecond(songList[i].dt || songList[i].duration),
+            image: songList[i].al ? songList[i].al.picUrl : songList[i].album.artist.img1v1Url,
+            url: `https://music.163.com/song/media/outer/url?id=${songList[i].id}.mp3`,
+            playCount: songList[i].playCount || "",
+            score: songList[i].score || "",
+            idx: i + 1,
+        }
+        newSongList.push(songMsg);
     }
-    return songMsg;
+    return newSongList;
 }
 
 function filterSinger(singer: { name: string }[]) {

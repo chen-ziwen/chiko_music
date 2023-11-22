@@ -62,8 +62,7 @@ const play = usePlay();
 // tabs选择
 const checkedname = ref<string>('hot');
 const singerId = ref<number>(0);
-
-const delSong = reactive<SongListType[]>([]);
+const delSong = ref<SongListType[]>([]);
 // 歌手详情  (歌曲数、专辑数)
 const artDesc: { intro: [], brief: string } = reactive({ intro: [], brief: '暂无数据' });
 //歌手描述 
@@ -102,7 +101,7 @@ const artistDesc = async (id: number) => {
         artDesc.intro = introduction;
         artDesc.brief = briefDesc;
     } catch (e) {
-        console.log(e, '歌手详情请求失败');
+        console.log(e, 'artist desc fail =====>');
     }
 }
 
@@ -112,19 +111,17 @@ const artDetail = async (id: number) => {
         const { data } = await getArtistDetail(id);
         artDil.value = data.artist;
     } catch (e) {
-        console.log(e, '歌手描述请求失败');
+        console.log(e, 'artist detail fail =====>');
     }
 }
 // 歌手50首热门歌曲
 const singerHotsongs = async (id: number) => {
     try {
-        delSong.splice(0, delSong.length);
+        delSong.value.splice(0, delSong.value.length);
         const { hotSongs } = await getArtists(id);
-        for (let item of hotSongs) {
-            delSong.push(useSong(item))
-        }
+        delSong.value = useSong(hotSongs);
     } catch (e) {
-        console.log(e, '歌手热门歌曲获取失败');
+        console.log(e, 'hot artists =====>');
     }
 }
 
@@ -134,7 +131,7 @@ const simiArtist = async (id: number) => {
         const { artists } = await getSimiArtist(id);
         singerList.value = artists;
     } catch (e) {
-        console.log(e, '相似歌手需要的登陆才能获取');
+        console.log(e, 'simi artist fail =====>');
     }
 }
 
@@ -145,7 +142,7 @@ const singerMv = async (id: number) => {
         artMv.value = useMv(mvs);
     }
     catch (e) {
-        console.log(e, '获取歌手mv失败')
+        console.log(e, 'artist mv fail =====>')
     }
 }
 
@@ -162,7 +159,7 @@ const ArtistAlbum = async (id: number) => {
         }
     }
     catch (e) {
-        console.log(e, '歌手专辑获取失败');
+        console.log(e, 'artist album fail =====>');
     }
 }
 const loadScroll = () => {
@@ -173,7 +170,7 @@ const loadScroll = () => {
 }
 
 const playIdx = (index: number) => {
-    const songArr = JSON.parse(JSON.stringify(delSong));
+    const songArr = JSON.parse(JSON.stringify(delSong.value));
     play.$patch({
         currentindex: index,
         playList: songArr,

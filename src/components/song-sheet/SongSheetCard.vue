@@ -1,6 +1,7 @@
 <template>
     <ul class="song-sheet-card">
-        <li class="song-sheet-card-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet" :key="item.id + index" @click="sheetid(item.id)">
+        <li class="song-sheet-card-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet"
+            :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-pic-box">
                 <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=300y300'" fit="fill">
                     <template #placeholder>
@@ -57,8 +58,6 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
 
 <style lang='scss' scoped>
 .song-sheet-card {
-    background-color: v-bind(back);
-    border-radius: 10px;
 
     &:deep(.el-image) {
         img {
@@ -69,7 +68,7 @@ const showBakc = computed(() => props.backShow ? "block" : "none");
     .song-sheet-card-list {
         position: relative;
         display: inline-block;
-        margin: 10px 15px;
+        margin: var(--main-margin);
         vertical-align: top;
         cursor: pointer;
 

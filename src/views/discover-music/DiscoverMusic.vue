@@ -7,8 +7,8 @@
         <!-- 歌曲 -->
         <div class="song">
             <ContentBox title="新歌首发" back="#ffffff">
-                <template v-if="newsong && newsong.length > 0">
-                    <NewSongSheet :new-sheet="newsong"></NewSongSheet>
+                <template v-if="delSong && delSong.length > 0">
+                    <NewSongSheet :new-sheet="delSong"></NewSongSheet>
                 </template>
             </ContentBox>
         </div>
@@ -53,13 +53,14 @@ import { useSong } from "@/util";
 
 const sheetlist = ref<RecommendList[]>();
 const artist = ref<SingerListType[]>();
-const newsong = ref<SongList[]>();
+const delSong = ref<SongList[]>();
 const recommendMv = ref<any>();
 
 async function getRecommend() {
     let { result } = await getRecommendList(32);
     sheetlist.value = result;
 }
+
 async function topArtists() {
     let { artists } = await getTopArtists(40);
     artist.value = artists;
@@ -67,29 +68,18 @@ async function topArtists() {
 
 function Personalized() {
     getPersonalizedNewsong(12).then(res => {
-        const newIds: number[] = [];
-        res.result.forEach((x: SongList) => {
-            newIds.push(x.id)
-        })
-        const ids: string = newIds.join(',');
+        const ids = res.result.map((x: SongList) => x.id).join(",");
         SongDetail(ids);
     }).catch((e) => {
-        console.log(e, '推荐歌单请求失败');
+        console.log(e, 'new song fail =====>');
     });
 }
 
 const SongDetail = (ids: string) => {
-    const songs: SongList[] = [];
-    // 传入ids 字符串 可以请求到直接播放的
     getSongDetail(ids).then(res => {
-        res.songs.forEach((x: SongList) => {
-            if (x.id) {
-                songs.push(useSong(x));
-            }
-        })
-        newsong.value = songs;
+        delSong.value = useSong(res.songs);
     }).catch((e) => {
-        console.log(e, '歌曲列表请求失败');
+        console.log(e, 'song list fail =====>');
     });
 }
 

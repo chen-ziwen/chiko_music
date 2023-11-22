@@ -1,101 +1,17 @@
+@import "./flex.css";
+@import "./router.css";
+@import "./element-plus.css";
+
+:root {
+    --main-margin: 10px 15px;
+}
 * {
     margin: 0px;
-    padding: 0px;
+    padding: 0px
 }
 
-/* 子模块的盒子全部用这个样式 */
-
-
-.container {
-    width: 1240px;
-    height: auto;
-    margin: 0 auto;
-}
-
-/* flex 简写 */
-
-.flex-layout {
-    display: flex;
-}
-
-.flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.flex-acenter {
-    display: flex;
-    align-items: center;
-}
-
-.flex-jcenter {
-    display: flex;
-    justify-content: center;
-}
-
-
-.flex-start {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-.flex-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.flex-row {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.flex-column {
-    display: flex;
-    flex-direction: column;
-}
-
-.flex-between {
-    display: flex;
-    justify-content: space-between;
-}
-
-.flex-shrink {
-    flex-shrink: 0;
-}
-
-.flex-grow-1 {
-    flex-grow: 1;
-}
-
-.flex-grow-2 {
-    flex-grow: 2;
-}
-
-.flex-grow-3 {
-    flex-grow: 3;
-}
-
-.flex-grow-4 {
-    flex-grow: 4;
-}
-
-.flex-wrap {
-    flex-wrap: nowrap;
-}
-
-.text-hidden {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-* {
-    margin: 0px;
-    padding: 0px;
+i {
+    font-style: normal
 }
 
 a {
@@ -106,41 +22,44 @@ li {
     list-style: none;
 }
 
-/* 解决打开拟态框,关闭拟态框的抖动问题。 */
+
+html,
 body {
+    width: 100vw;
     overflow-y: auto !important;
-    padding-right: 0 !important;
+    overflow-x: hidden;
 }
 
-
-
-/* ::-webkit-scrollbar 滚动条整体部分，可以设置宽度啥的
-
-::-webkit-scrollbar-button 滚动条两端的按钮
-
-::-webkit-scrollbar-track 外层轨道
-
-::-webkit-scrollbar-track-piece 内层轨道，滚动条中间部分(除去)
-
-::-webkit-scrollbar-thumb 滚动条里面可以拖动的那个
-
-::-webkit-scrollbar-corner 边角
-
-::-webkit-resizer 定义右下角拖动块的样式 */
-
-/*el-loading style*/
-.el-loading-mask {
-    background-color: #ffffff;
+::-webkit-scrollbar {
+    width: 0px;
 }
 
-.el-loading-spinner .path {
-    stroke: #4a4a4a;
+::-webkit-scrollbar-track {
+    border-radius: 8px;
 }
 
-.el-loading-spinner .el-loading-text {
-    color: #4a4a4a;
+::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: #ccc;
 }
 
-.el-dropdown-menu__item .el-icon-user {
-    margin-right: 2px;
+::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #999;
+}
+
+/* 子模块的盒子全部用这个样式 */
+.container {
+    width: 1240px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.text-hidden {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

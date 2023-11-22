@@ -2,7 +2,7 @@
     <ul class="singer-sheet">
         <li class="singer-sheet-list" v-for="data in singerList" :key="data.id">
             <div class="singer-message" @click="jumpPage(data.id)">
-                <el-image class="singer-img" :class="picType" :src="data?.picUrl + '?param=250y250'">
+                <el-image class="singer-img" :class="type" :src="data?.picUrl + '?param=250y250'">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>
@@ -20,7 +20,6 @@
     </ul>
 </template>
 <script lang='ts' setup>
-import { computed } from "vue";
 import type { SingerListType } from "@/models";
 import { useRouter } from "vue-router";
 import { Picture as IconPicture } from '@element-plus/icons-vue'
@@ -28,38 +27,20 @@ interface SingerSheet {
     singerList: SingerListType[];
     type?: "square" | "round";
 }
-const props = withDefaults(defineProps<SingerSheet>(), {
+withDefaults(defineProps<SingerSheet>(), {
     type: "round"
 });
 const router = useRouter();
-
-const picType = computed(() => {
-    if (props.type == 'round') {
-        return 'round'
-    }
-    return ''
-})
-
-const jumpPage = (id: number) => {
-    router.push({
-        name: 'singerdetails',
-        query: {
-            singerid: id,
-        }
-    })
-}
-
+const jumpPage = (id: number) => { router.push({ name: 'singerdetails', query: { singerid: id } }) };
 
 </script>
 <style lang='scss' scoped>
 .singer-sheet {
     .singer-sheet-list {
-        width: 10%;
+        width: calc(10% - 30px);
         display: inline-block;
-        box-sizing: border-box;
-        padding: 10px 15px;
+        margin: var(--main-margin);
         vertical-align: top;
-
 
         &:hover .singer-img {
             box-sizing: border-box;
