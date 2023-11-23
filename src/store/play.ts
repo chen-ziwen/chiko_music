@@ -36,20 +36,26 @@ export const usePlay = defineStore({
     // action类似于methods action可以传递参数，去修改state的值，同时可以进行异步的操作
     actions: {
 
+        // 根据索引播放对应歌曲
+        selectPlay(list: SongList[], idx: number) {
+            this.$state.playList = list;
+            this.$state.currentindex = idx;
+            this.$state.playing = true;
+        },
+
+        // 播放全部
+        playAll(list: SongList[]) {
+            this.selectPlay(list, 0);
+            this.$state.playType = playState.listloop;
+        }
     },
-    // getters类似于计算属性，不能传递参数，默认传递state，除非返回一个函数
+    // getters类似于计算属性，不能从外部传递参数，默认带state，除非返回一个函数
     getters: {
-        // 拿到当前索引值的歌曲
         currentPlay(state) {
-            return state.playList[state.currentindex] || {};
+            return state.playList[state.currentindex] || {}; // 拿到当前索引值的歌曲
         }
     },
 
     // dispath 可以同时修改多个，有做优化，同时可以更好区分哪个全局属性
-
-    /* state.$dispath({  
-      count: count+1,
-      name: ''
-    })
-    */
+    // eg. state.$dispath({ name:"chiko", age:18 });
 })

@@ -117,14 +117,14 @@ async function playlistDetail(id: number) {
     try {
         sheetDetail.sheetList.length = 0;
         delSong.value.length = 0;
-        let nowTime = new Date().getTime();
-        const { playlist } = await getPlaylistDetail(id, 50, nowTime);
+        const now = Date.now();
+        const { playlist } = await getPlaylistDetail(id, 50, now);
         if (playlist?.description) {
             playlist.description = playlist.description.replace(/\n{1,}|\r{1,}|\r{1,}\n{1,}/igm, '<br/>');
         }
         sheetDetail.detail = playlist;
         sheetDetail.creator = playlist?.creator;
-        const { songs } = await getPlaylistTrackAll(id, undefined, undefined, nowTime);
+        const { songs } = await getPlaylistTrackAll(id, undefined, undefined, now);
         delSong.value = useSong(songs);
         for (let i = 0; i < delSong.value.length; i += 50) {
             sheetDetail.sheetList.push(delSong.value.slice(i, i + 50))
