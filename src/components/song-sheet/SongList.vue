@@ -64,14 +64,6 @@ const playSong = (index: number, id: number) => {
     }
 }
 
-// const judgeNan = (num: number, index: number) => {
-//     const n = Number((num + 1).toString().padStart(2, '0'));
-//     if (isNaN(n)) {
-//         return index + 1;
-//     }
-//     return n;
-// }
-
 </script>
 
 <style lang='scss' scoped>

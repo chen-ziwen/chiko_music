@@ -3,7 +3,7 @@
     <div class="ran-list">
         <div class="module-gap">
             <ListModule head="官方特色榜" gapColor="red">
-                <RankShow :rank-sheet="sheet.mainSheetRank" @sheetid="playSong"></RankShow>
+                <RankShow :rank-sheet="sheet.mainSheetRank" :loading="loading" @sheetid="playSong"></RankShow>
             </ListModule>
         </div>
         <div class="module-gap">
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import { getToplist, getPlaylistTrackAll } from '@/api/http/api';
 import { RecommendList } from '@/models/detail';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
@@ -29,6 +29,7 @@ const sheet = reactive({
     otherSheetRank: [] as RecommendList[],
 })
 const play = usePlay();
+const loading = ref(true);
 
 async function getToplistMsg() {
     try {
@@ -45,6 +46,7 @@ async function getToplistMsg() {
             const rankShow = result[i].slice(0, 5);
             sheet.mainSheetRank[i].songList = useSong(rankShow);
         }
+        loading.value = false;
     } catch (e) {
         console.log(e, 'request fail =====>');
     }
@@ -52,10 +54,7 @@ async function getToplistMsg() {
 
 const playSong = async (index: number, order: number) => {
     const songList = sheet.mainSheetRank[index].songList;
-    play.$patch({
-        currentindex: order,
-        playList: songList,
-    })
+    play.$patch({ currentindex: order, playList: songList });
 }
 
 onMounted(getToplistMsg);

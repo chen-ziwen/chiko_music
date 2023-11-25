@@ -31,8 +31,10 @@
                         <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
                             <span class="tags-hight-light">{{ item.name }}</span>
                             <ul class="tags-common-type">
-                                <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)" @click="tagsList(data.name)">
-                                    <span>{{ data.name }}<sup :style="{ fontSize: '10px' }">{{ data.hot ? "hot" : "" }}</sup></span>
+                                <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)"
+                                    @click="tagsList(data.name)">
+                                    <span>{{ data.name }}<sup :style="{ fontSize: '10px' }">{{ data.hot ? "hot" : ""
+                                    }}</sup></span>
                                 </li>
                             </ul>
                         </div>
@@ -41,7 +43,9 @@
             </div>
             <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
             <div v-if="sheetList.playlists.length">
-                <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0" :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage" :hide-on-single-page="true" />
+                <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0"
+                    :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage"
+                    :hide-on-single-page="true" />
             </div>
         </div>
     </div>
@@ -381,18 +385,5 @@ onMounted(async () => {
     color: #F84E4E;
 }
 
-.pagination {
-    width: 100%;
-    @include _flex(center, center);
-    margin-top: 15px;
-}
 
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
-    background-color: pink !important; //修改默认的背景色
-    cursor: pointer;
-}
-
-:deep(.el-pagination) {
-    --el-pagination-hover-color: pink !important;
-}
 </style>

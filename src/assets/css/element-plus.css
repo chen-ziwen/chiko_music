@@ -14,3 +14,13 @@
 .el-dropdown-menu__item .el-icon-user {
     margin-right: 2px;
 }
+
+/* 分页 */
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+    background-color: pink !important;
+    cursor: pointer;
+}
+
+.el-pagination {
+    --el-pagination-hover-color: pink !important;
+}

@@ -4,6 +4,7 @@
 
 :root {
     --main-margin: 10px 15px;
+    --max-width:1240px;
 }
 * {
     margin: 0px;
@@ -53,7 +54,7 @@ body {
 
 /* 子模块的盒子全部用这个样式 */
 .container {
-    width: 1240px;
+    width: var(--max-width);
     height: auto;
     margin: 0 auto;
 }

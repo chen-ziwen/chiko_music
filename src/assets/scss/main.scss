@@ -23,6 +23,16 @@ $margin_I: 25px 0px 25px 15px;
   font-size: $size;
 }
 
+@mixin bannerSlot($w, $ow, $oh) {
+  height: calc($w * $oh / $ow);
+}
+
+.pagination {
+  width: 100%;
+  @include _flex(center, center);
+  margin-top: 15px;
+}
+
 @keyframes rotate {
   0% {
     transform: rotateZ(-360deg)

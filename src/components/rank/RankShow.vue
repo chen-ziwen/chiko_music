@@ -1,30 +1,43 @@
 <template>
-    <ul class="ranks">
-        <li class="rank-list" v-for="(item, index) in rankSheet" :key="item.id">
-            <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=400y400'" fit="fill" @click="turnPage(item.id)">
-                <template #placeholder>
-                    <div class="image-slot">
-                        <el-icon>
-                            <icon-picture />
-                        </el-icon>
-                    </div>
-                </template>
-            </el-image>
-            <div class="play-count">
-                <i class="iconfont icon-bofang1"></i>
-                <span class="count-num">{{ changeNum(item.playCount) }}</span>
+    <el-skeleton :loading="loading" animated :count="4">
+        <template #template>
+            <div class="ske-item">
+                <el-skeleton-item class="el-skl-img" variant="image" />
+                <div class="el-skl-txt">
+                    <el-skeleton-item class="el-skl-txt-item" v-for="i in 5" :key="i" />
+                </div>
             </div>
-            <ul class="songs" v-loading="!item.songList">
-                <li class="song-list" v-for="(data, order) in item.songList" @click="choseSong(index, order)">
-                    <div class="song-msg">
-                        <span class="song-index">{{ data.idx }}</span>
-                        <span class="song-name" :class="checked(index, data.idx, data.id)">{{ data.name }}</span>
+        </template>
+        <template #default>
+            <ul class="ranks">
+                <li class="rank-list" v-for="(item, index) in rankSheet" :key="item.id">
+                    <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=400y400'" fit="fill"
+                        @click="turnPage(item.id)">
+                        <template #placeholder>
+                            <div class="image-slot">
+                                <el-icon>
+                                    <icon-picture />
+                                </el-icon>
+                            </div>
+                        </template>
+                    </el-image>
+                    <div class="play-count">
+                        <i class="iconfont icon-bofang1"></i>
+                        <span class="count-num">{{ changeNum(item.playCount) }}</span>
                     </div>
-                    <span class="singer-name">{{ data.singer }}</span>
+                    <ul class="songs">
+                        <li class="song-list" v-for="(data, order) in item.songList" @click="choseSong(index, order)">
+                            <div class="song-msg">
+                                <span class="song-index">{{ data.idx }}</span>
+                                <span class="song-name" :class="checked(index, data.idx, data.id)">{{ data.name }}</span>
+                            </div>
+                            <span class="singer-name">{{ data.singer }}</span>
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </li>
-    </ul>
+        </template>
+    </el-skeleton>
 </template>
 
 <script lang="ts" setup>
@@ -36,9 +49,12 @@ import { changeNum } from '@/util';
 
 interface RanShow {
     rankSheet: RecommendList[]
+    loading: boolean;
 }
 
-const props = defineProps<RanShow>();
+withDefaults(defineProps<RanShow>(), {
+    loading: true,
+});
 const emits = defineEmits(['sheetid']);
 const play = usePlay();
 const router = useRouter();
@@ -134,5 +150,31 @@ const turnPage = (id: number) => {
 .checked {
     color: rgb(255, 145, 0) !important;
     font-weight: 600;
+}
+
+.el-skeleton {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .ske-item {
+        display: flex;
+        margin: 15px 15px 40px 15px;
+
+        .el-skl-img {
+            flex-shrink: 0;
+            width: 180px;
+            height: 180px;
+            margin-right: 40px;
+        }
+
+        .el-skl-txt {
+            width: 100%;
+
+            .el-skl-txt-item {
+                padding: 10px 0;
+            }
+        }
+    }
 }
 </style>

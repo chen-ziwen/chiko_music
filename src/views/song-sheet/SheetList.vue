@@ -2,35 +2,50 @@
     <div class="music-singer">
         <div class="music-singer-left">
             <div class="music-singer-left-head">
-                <div class="music-player">
-                    <img :src="imgurl(sheetDetail.detail.coverImgUrl, '500')" />
-                </div>
-                <div class="content-box">
-                    <ul class="content-box-ul">
-                        <li>
-                            <h1 v-html="sheetDetail.detail.name"></h1>
-                        </li>
-                        <li>
-                            <img :src="imgurl(sheetDetail.creator.avatarUrl)" />
-                            <span>{{ sheetDetail.creator.nickname }}</span>
-                            <span>创建于&nbsp;{{ dayjs(sheetDetail.detail.createTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
-                        </li>
-                        <li>
-                            <span v-show="sheetDetail.detail.tags.length">标签&nbsp;:</span>
-                            <span v-for="(tag, index) of sheetDetail.detail.tags" :key="index" @click="commonSheet(tag)">{{
-                                tag }}</span>
-                        </li>
-                        <li>
-                            <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
-                            <el-dialog v-model="centerDialog" :title="sheetDetail.detail.name" width="30%" center>
-                                <span v-html="sheetDetail.detail.description"></span>
-                            </el-dialog>
-                        </li>
-                        <li>
-                            <span @click="playAll">播放全部</span>
-                        </li>
-                    </ul>
-                </div>
+                <el-skeleton :loading="loading" animated>
+                    <template #template>
+                        <div class="ske-item">
+                            <el-skeleton-item class="el-skl-img" variant="image" />
+                            <div class="el-skl-txt">
+                                <el-skeleton-item v-for="i in 5" :class="'el-skl-txt-item el-skl-txt-item-' + i" :key="i"
+                                    variant="text" />
+                            </div>
+                        </div>
+                    </template>
+                    <template #default>
+                        <div class="music-player">
+                            <img :src="imgurl(sheetDetail.detail.coverImgUrl, '500')" />
+                        </div>
+                        <div class="content-box">
+                            <ul class="content-box-ul">
+                                <li>
+                                    <h1 v-html="sheetDetail.detail.name"></h1>
+                                </li>
+                                <li>
+                                    <img :src="imgurl(sheetDetail.creator.avatarUrl)" />
+                                    <span>{{ sheetDetail.creator.nickname }}</span>
+                                    <span>创建于&nbsp;{{ dayjs(sheetDetail.detail.createTime).format('YYYY-MM-DD HH:mm:ss')
+                                    }}</span>
+                                </li>
+                                <li>
+                                    <span v-show="sheetDetail.detail.tags.length">标签&nbsp;:</span>
+                                    <span v-for="(tag, index) of sheetDetail.detail.tags" :key="index"
+                                        @click="commonSheet(tag)">{{
+                                            tag }}</span>
+                                </li>
+                                <li>
+                                    <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
+                                    <el-dialog v-model="centerDialog" :title="sheetDetail.detail.name" width="30%" center>
+                                        <span v-html="sheetDetail.detail.description"></span>
+                                    </el-dialog>
+                                </li>
+                                <li>
+                                    <span @click="playAll">播放全部</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </el-skeleton>
             </div>
             <template v-if="sheetDetail.partsheet.length">
                 <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
@@ -100,6 +115,7 @@ const scroll = new ScrollTop().scroll;
 const centerDialog = ref(false);
 const play = usePlay();
 const page = ref<number>(1);
+const loading = ref(true);
 const sheetAbout = reactive<sheetAbout>({
     subscribers: [],
     aboutList: [],
@@ -124,6 +140,7 @@ async function playlistDetail(id: number) {
         }
         sheetDetail.detail = playlist;
         sheetDetail.creator = playlist?.creator;
+        loading.value = false; // 歌单上的简介信息
         const { songs } = await getPlaylistTrackAll(id, undefined, undefined, now);
         delSong.value = useSong(songs);
         for (let i = 0; i < delSong.value.length; i += 50) {
@@ -216,12 +233,6 @@ watch(() => route.query.sheetid, (id) => {
         overflow: hidden;
         background-color: white;
         border-radius: 10px;
-
-        .pagination {
-            width: 100%;
-            @include _flex(center, center);
-            margin-top: 15px;
-        }
 
         .music-player {
             position: relative;
@@ -413,13 +424,50 @@ watch(() => route.query.sheetid, (id) => {
     }
 }
 
-//分页标签的颜色
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
-    background-color: pink !important; //修改默认的背景色
-    cursor: pointer;
-}
+.el-skeleton {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-:deep(.el-pagination) {
-    --el-pagination-hover-color: pink !important;
+    .ske-item {
+        display: flex;
+        margin: 15px 15px 40px 15px;
+
+        .el-skl-img {
+            flex-shrink: 0;
+            width: 180px;
+            height: 180px;
+            margin-right: 40px;
+        }
+
+        .el-skl-txt {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            &-item {
+                height: 18px;
+                margin: 10px 0;
+
+                &-1,
+                &-2 {
+                    width: 80%;
+                }
+
+                &-3 {
+                    width: 40%;
+                }
+
+                &-4 {
+                    width: 60%;
+                }
+
+                &-5 {
+                    align-self: flex-end;
+                    width: 20%;
+                }
+            }
+        }
+    }
 }
 </style>

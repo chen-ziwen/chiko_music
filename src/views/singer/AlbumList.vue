@@ -196,12 +196,6 @@ watch(() => route.query.albumid, (id) => {
         background-color: white;
         border-radius: 10px;
 
-        .pagination {
-            width: 100%;
-            @include _flex(center, center);
-            margin-top: 15px;
-        }
-
         .music-player {
             position: relative;
             width: 200px;
@@ -420,15 +414,5 @@ watch(() => route.query.albumid, (id) => {
             margin-bottom: 15px;
         }
     }
-}
-
-//分页标签的颜色
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
-    background-color: pink !important; //修改默认的背景色
-    cursor: pointer;
-}
-
-:deep(.el-pagination) {
-    --el-pagination-hover-color: pink !important;
 }
 </style>

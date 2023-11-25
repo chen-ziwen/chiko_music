@@ -212,18 +212,4 @@ watch(() => route.query, (val) => {
     background-color: #f9d4d4;
     transition: all 0.25s ease-in-out;
 }
-
-.pagination {
-    width: 100%;
-    @include _flex(center, center);
-}
-
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
-    background-color: pink !important; //修改默认的背景色
-    cursor: pointer;
-}
-
-:deep(.el-pagination) {
-    --el-pagination-hover-color: pink !important;
-}
 </style>
