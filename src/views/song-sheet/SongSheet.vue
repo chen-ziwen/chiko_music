@@ -55,7 +55,12 @@
                     </div>
                 </Transition>
             </div>
-            <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
+            <div class="sheet-content">
+                <template v-if="sheetList.playlists">
+                    <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
+                </template>
+                <Loading v-else :min-height="200"></Loading>
+            </div>
             <div v-if="sheetList.playlists.length">
                 <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0"
                     :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage"
@@ -68,6 +73,7 @@
 <script lang="ts" setup>
 import { getPlaylistHot, getTopPlaylistDetail, getPlaylistCatlist, getHighquality, getHighQualityTags } from '@/api/http/api';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import { ArrowDown } from '@element-plus/icons-vue';
 import { onMounted, reactive, ref, watch, toRef, onActivated } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -183,11 +189,7 @@ const currentChange = async (page: number) => {
     scroll(5);
 }
 
-const boutique = () => {
-    router.push({
-        name: 'boutiquesongsheet', query: { name: nameKey.value }
-    });
-}
+const boutique = () => router.push({ name: 'boutiquesongsheet', query: { name: nameKey.value } });
 
 // tag变化 重新请求
 watch(() => route.query.name, (name) => {
@@ -199,11 +201,10 @@ onMounted(async () => {
     try {
         await getAllTags(); // 全部标签
         await getTopTags(); // 精品标签
-        await getTags();// tagsList和getTags不能并行 getTags必须先请求
-        await tagsList(route.query.name as string || hotTags.value[0]); // 如果namekey为空，就拿第一项初始化
+        await getTags();
+        await tagsList(route.query.name as string || hotTags.value[0]);
         loading.value = false;
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e, "初始化歌单失败");
     }
 })
@@ -211,7 +212,6 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .song-sheet {
-    // width: 100%;
     height: 100%;
     margin: 20px 0;
 

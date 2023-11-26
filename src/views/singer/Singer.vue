@@ -4,7 +4,8 @@
             <div class="tag-all">
                 <i class="tag-text">语种 : </i>
                 <ul class="langs">
-                    <li v-for="(tag, index) of langs" :key="index" :class="checkHigh('langs', tag.value as number).langs" @click="checkTags('langs', tag.value as number)">
+                    <li v-for="(tag, index) of langs" :key="index" :class="checkHigh('langs', tag.value as number).langs"
+                        @click="checkTags('langs', tag.value as number)">
                         {{ tag.label }}
                     </li>
                 </ul>
@@ -12,7 +13,8 @@
             <div class="tag-all">
                 <i class="tag-text">分类 : </i>
                 <ul class="singer">
-                    <li v-for="(tag, index) of singer" :key="index" :class="checkHigh('singer', tag.value as number).singer" @click="checkTags('singer', tag.value as number)">
+                    <li v-for="(tag, index) of singer" :key="index" :class="checkHigh('singer', tag.value as number).singer"
+                        @click="checkTags('singer', tag.value as number)">
                         {{ tag.label }}
                     </li>
                 </ul>
@@ -20,14 +22,19 @@
             <div class="tag-all">
                 <i class="tag-text">筛选 : </i>
                 <ul class="ens">
-                    <li v-for="(tag, index) of ens" :key="index" :class="checkHigh('ens', tag.value as number).ens" @click="checkTags('ens', tag.value as number)">
+                    <li v-for="(tag, index) of ens" :key="index" :class="checkHigh('ens', tag.value as number).ens"
+                        @click="checkTags('ens', tag.value as number)">
                         {{ tag.label }}
                     </li>
                 </ul>
             </div>
         </div>
         <LoadScroll @load-scorll="loadScroll" :distance="100">
-            <SingerSheet :singer-list="singerList" type="square"></SingerSheet>
+            <template v-if="singerList.length">
+                <SingerSheet :singer-list="singerList" type="square"></SingerSheet>
+                <Loading v-if="more" :min-height="80"></Loading>
+            </template>
+            <Loading v-else></Loading>
         </LoadScroll>
     </div>
 </template>
@@ -38,6 +45,7 @@ import { getArtistAList } from '@/api/http/api';
 import type { SingerListType } from '@/models';
 import LoadScroll from '@/components/common/LoadScroll.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import { useRoute } from 'vue-router';
 
 interface TagType {
@@ -79,7 +87,7 @@ const params: Params = reactive({
 })
 
 const singerList = ref<SingerListType[]>([]);
-let singerMore = false;
+const more = ref(true);
 
 // 获得26个大写字母
 const createEns = () => {
@@ -102,20 +110,14 @@ const createEns = () => {
     return ens;
 }
 createEns() // 必须在mounted之前执行
-const { langs, singer, ens } = tagType // 三个歌手类别
+const { langs, singer, ens } = tagType;
 
 // 选中不同标签时，更新param请求参数
 const checkTags = (name: string, tag: number) => {
     switch (name) {
-        case 'langs':
-            params.area = tag;
-            break;
-        case 'singer':
-            params.type = tag;
-            break;
-        case 'ens':
-            params.initial = tag;
-            break;
+        case 'langs': params.area = tag; break;
+        case 'singer': params.type = tag; break;
+        case 'ens': params.initial = tag; break;
     }
     alongSingerList(params);
 }
@@ -144,32 +146,27 @@ const alongSingerList = async (parm: Params) => {
     }
 }
 
-// 根据标签获取歌手列表 滚动请求
+// 根据标签获取歌手列表
 const getSingerList = async (parm: Params) => {
-    try {
-        const { artists, more } = await getArtistAList(parm);
-        singerList.value = singerList.value.concat(artists);
-        singerMore = more;
-        if (singerMore) {
-            params.offset += 40; // 滚动一次 增加40条数据
+    if (more.value) {
+        try {
+            const { artists, more: singerMore } = await getArtistAList(parm);
+            singerList.value = singerList.value.concat(artists);
+            more.value = singerMore;
+            params.offset += 40;
+        } catch (e) {
+            console.log(e, '歌手列表请求失败');
         }
-    } catch (e) {
-        console.log(e, '歌手列表请求失败');
     }
 }
 
-// 滚动条到底 触发请求api
+// 滚动条到底 请求歌手
 const loadScroll = () => {
-    if (route.name == 'singer') {
-        if (singerMore) {
-            getSingerList(params);
-        }
-    }
+    if (route.name !== "singer") return;
+    getSingerList(params);
 }
 
-onMounted(() => {
-    alongSingerList(params); // 初始化请求
-})
+onMounted(() => alongSingerList(params)); // 初始化请求)
 
 </script>
 

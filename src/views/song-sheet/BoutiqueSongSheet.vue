@@ -2,19 +2,22 @@
     <div class="boutique-song-list">
         <div class="module-gap">
             <ContentBox title="精品歌单" back="#ffffff">
-                <span class="high-tags" @click.stop="pop = !pop">
-                    <i class="iconfont icon-xiangxia" :style="{ marginRight: '3px' }"></i>
-                    {{ nameKey }}
+                <span class="high-tags" @click.stop="showPop = !showPop">
+                    <i class="iconfont icon-xiangxia" :style="{ marginRight: '3px' }"></i>{{ nameId }}
                 </span>
                 <Transition name="pop">
-                    <ul class="boutique-list" v-if="pop" v-close-outside="() => pop = false">
-                        <li class="boutique-tag" v-for="(name, index) of boutique" :key="index + name" @click="turnSheet(name)">
-                            <span class="checked-tag" :class="hightlight(name)">{{ name }}</span>
+                    <ul class="boutique-list" v-if="showPop" v-close-outside="() => showPop = false">
+                        <li class="boutique-tag" v-for="name of boutique" :key="name" @click="tSheet(name)">
+                            <span class="checked-tag" :class="light(name)">{{ name }}</span>
                         </li>
                     </ul>
                 </Transition>
                 <LoadScroll @load-scorll="loadScroll" :distance="100">
-                    <BoutiqueSongSheetCard ref="scroll" :sheet="boSheet.playlists" :back-show="false" :item="3"></BoutiqueSongSheetCard>
+                    <template v-if="sheetList.playlists">
+                        <BoutiqueSongSheetCard ref="scroll" :sheet="sheetList.playlists" :back-show="false" :item="3" />
+                        <Loading v-if="sheetList.more" :min-height="80"></Loading>
+                    </template>
+                    <Loading v-else></Loading>
                 </LoadScroll>
             </ContentBox>
         </div>
@@ -22,11 +25,13 @@
 </template>
 <script lang='ts' setup>
 import { onMounted, reactive, ref, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { LocationQueryValue, useRoute } from 'vue-router';
 import { getHighquality, getHighQualityTags } from '@/api/http/api'
 import ContentBox from '@/components/common/ContentBox.vue';
 import LoadScroll from '@/components/common/LoadScroll.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import BoutiqueSongSheetCard from '@/components/song-sheet/BoutiqueSongSheetCard.vue';
+
 interface BoutiqueTags {
     id: number;
     name: string;
@@ -37,69 +42,57 @@ interface BoutiqueTags {
 
 const route = useRoute();
 const boutique = ref<string[]>([]) // 精品歌单标签
-const nameKey = ref<string>('');
-const pop = ref<boolean>(false);
+const nameId = ref<string>('');
+const showPop = ref<boolean>(false);
 const scroll = ref<any>(null);
-const boSheet = reactive({
-    playlists: [] as any[],
-    total: 0,
-    lasttime: 0,
-    more: false,
+const sheetList = reactive<{ playlists: any[], more: boolean }>({
+    playlists: [],
+    more: true,
 })
 
-const hightlight = (name: string) => {
-    if (!nameKey.value) return;
-    if (name == nameKey.value) {
-        return 'hight-light';
-    }
-    return;
-}
+const light = (name: string) => name == nameId.value ? 'hight-light' : "";
 
 const boutiqueTags = async () => {
     try {
         const { tags } = await getHighQualityTags();
         boutique.value = tags.map((x: BoutiqueTags) => x.name);
     } catch (e) {
-        console.log(e, '精品标签请求失败')
+        console.log(e, 'tags fail =====>')
     }
 }
 
-const turnSheet = async (name: string) => {
+const tSheet = async (name: string) => {
     try {
-        const { lasttime, more, playlists, total } = await getHighquality(name, 30);
-        boSheet.playlists = playlists;
-        boSheet.lasttime = lasttime;
-        boSheet.more = more;
-        boSheet.total = total;
-        nameKey.value = name; // 选中高亮
-        scroll.value.topWay() // 精品歌单置顶
-        pop.value = false; // 关闭弹窗
-    }
-    catch (e) {
-        console.log(e, '精歌单请求失败')
+        const { more, playlists } = await getHighquality(name, 30);
+        sheetList.playlists = playlists;
+        sheetList.more = more;
+        nameId.value = name;
+        showPop.value = false;
+    } catch (e) {
+        console.log(e, 'song list fail =====>')
     }
 }
 
 const loadScroll = async () => {
-    const updatetime = boSheet.playlists[boSheet.playlists.length - 1]?.updateTime || 0;
-    try {
-        const { playlists } = await getHighquality(nameKey.value, 30, updatetime);
-        boSheet.playlists.push(...playlists); // 滚动条到指定位置时，便将新请求到的数据推入到当前类别的数组中
-    }
-    catch (e) {
-        console.log(e, '精歌单请求失败')
+    const updatetime = sheetList.playlists[sheetList.playlists.length - 1]?.updateTime || 0;
+    if (sheetList.more) {
+        try {
+            const { playlists, more } = await getHighquality(nameId.value, 30, updatetime);
+            sheetList.playlists.push(...playlists);
+            sheetList.more = more;
+        } catch (e) {
+            console.log(e, 'song list fail =====>')
+        }
     }
 }
 
 watch(() => route.query.name, async (name) => {
     if (!name) return;
-    await turnSheet(name as string);
-    nameKey.value = name as string;
+    await tSheet(<string>name);
+    nameId.value = <string>name;
 }, { immediate: true })
 
-onMounted(() => {
-    boutiqueTags();
-})
+onMounted(boutiqueTags);
 
 </script>
 <style lang='scss' scoped>

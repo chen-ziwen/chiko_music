@@ -3,7 +3,7 @@
         <li class="song-sheet-card-list" :class="'item-' + props.item" v-for="(item, index) in props.sheet"
             :key="item.id + index" @click="sheetid(item.id)">
             <div class="sheet-pic-box">
-                <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=300y300'" fit="fill">
+                <el-image class="sheet-pic" :src="item.picUrl || item.coverImgUrl + '?param=200y200'" fit="fill">
                     <template #placeholder>
                         <div class="image-slot">
                             <el-icon>

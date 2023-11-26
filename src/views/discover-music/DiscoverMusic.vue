@@ -7,33 +7,29 @@
         <!-- 歌曲 -->
         <div class="song">
             <ContentBox title="新歌首发" back="#ffffff">
-                <template v-if="delSong && delSong.length > 0">
-                    <NewSongSheet :new-sheet="delSong"></NewSongSheet>
-                </template>
+                <NewSongSheet :new-sheet="delSong" v-if="delSong.length"></NewSongSheet>
+                <Loading v-else></Loading>
             </ContentBox>
         </div>
         <!-- 歌单 -->
         <div class="sheet" v-if="sheetlist">
             <ContentBox title="推荐歌单" back="#ffffff">
-                <template v-if="sheetlist && sheetlist.length > 0">
-                    <SongSheetCard :sheet="sheetlist" :backShow="false" :item="8"></SongSheetCard>
-                </template>
+                <SongSheetCard :sheet="sheetlist" :backShow="false" :item="8" v-if="sheetlist.length"></SongSheetCard>
+                <Loading v-else></Loading>
             </ContentBox>
         </div>
         <!-- 歌手 -->
         <div class="singer">
             <ContentBox title="推荐歌手" back="#ffffff">
-                <template v-if="artist && artist.length > 0">
-                    <SingerSheet :singer-list="artist"></SingerSheet>
-                </template>
+                <SingerSheet :singer-list="artist" v-if="artist.length"></SingerSheet>
+                <Loading v-else></Loading>
             </ContentBox>
         </div>
         <!-- MV -->
         <div class="mv">
             <ContentBox title="推荐MV" back="#ffffff">
-                <template v-if="recommendMv && recommendMv.length > 0">
-                    <MvSheet :mv-sheet="recommendMv"></MvSheet>
-                </template>
+                <MvSheet :mv-sheet="recommendMv" v-if="recommendMv.length"></MvSheet>
+                <Loading v-else></Loading>
             </ContentBox>
         </div>
     </div>
@@ -50,11 +46,12 @@ import MvSheet from "@/components/mv/MvSheet.vue";
 import { getRecommendList, getSongDetail, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
 import type { RecommendList, SingerListType, SongList } from "@/models";
 import { useSong } from "@/util";
+import Loading from "@/components/common/loading/Loading.vue";
 
-const sheetlist = ref<RecommendList[]>();
-const artist = ref<SingerListType[]>();
-const delSong = ref<SongList[]>();
-const recommendMv = ref<any>();
+const sheetlist = ref<RecommendList[]>([]);
+const artist = ref<SingerListType[]>([]);
+const delSong = ref<SongList[]>([]);
+const recommendMv = ref<any[]>([]);
 
 async function getRecommend() {
     let { result } = await getRecommendList(32);
@@ -85,6 +82,8 @@ const SongDetail = (ids: string) => {
 
 async function PersonalizedMv() {
     let { result } = await getPersonalizedMv();
+    console.log('result', result);
+
     recommendMv.value = result;
 }
 

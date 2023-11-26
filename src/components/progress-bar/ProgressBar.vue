@@ -94,12 +94,9 @@ const muted = computed(() => isMuted.value ? "icon-jingyin" : "icon-shengyin");
 const pattern = computed(() => {
     switch (play.playType) {
         case 0:
-        default:
-            return { icon: 'icon-liebiaoxunhuan', name: '列表循环' };
-        case 1:
-            return { icon: 'icon-danquxunhuan', name: '单曲循环' };
-        case 2:
-            return { icon: 'icon-suiji', name: '随机播放' };
+        default: return { icon: 'icon-liebiaoxunhuan', name: '列表循环' };
+        case 1: return { icon: 'icon-danquxunhuan', name: '单曲循环' };
+        case 2: return { icon: 'icon-suiji', name: '随机播放' };
     }
 })
 // 切换歌曲播放状态
@@ -109,12 +106,7 @@ const changeState = () => {
     });
 }
 
-const randomStyle = computed(() => {
-    if (play.playType == 2) {
-        return 'random';
-    }
-    return '';
-})
+const randomStyle = computed(() =>play.playType == 2? 'random':"");
 
 // 歌曲能播放的处理
 const audioReady = () => {

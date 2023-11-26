@@ -35,10 +35,9 @@ const getScrollHeight = () => {
     return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight)
 };
 
-// 触发自定义函数
 const triggerFun = () => {
     if (getClientHeight() + getScrollTop() + props.distance >= getScrollHeight()) {
-        emits('load-scorll'); // 触发自定义
+        emits('load-scorll');
     }
 }
 const throttle = new Throttle().use(triggerFun, 1200, true); // 使用节流函数 防止连续触发

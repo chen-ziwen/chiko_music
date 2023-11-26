@@ -3,12 +3,15 @@
     <div class="ran-list">
         <div class="module-gap">
             <ListModule head="官方特色榜" gapColor="red">
-                <RankShow :rank-sheet="sheet.mainSheetRank" :loading="loading" @sheetid="playSong"></RankShow>
+                <RankShow :rank-sheet="sheet.mainSheetRank" :loading="loading" @sheetid="playSong" />
             </ListModule>
         </div>
         <div class="module-gap">
             <ListModule head="全球媒体榜" gapColor="blue">
-                <SongSheetCard :sheet="sheet.otherSheetRank" textdir="center" :item="7" :back-show="false"></SongSheetCard>
+                <template v-if="sheet.otherSheetRank.length">
+                    <SongSheetCard :sheet="sheet.otherSheetRank" textdir="center" :item="7" :back-show="false" />
+                </template>
+                <Loading v-else></Loading>
             </ListModule>
         </div>
     </div>
@@ -21,6 +24,7 @@ import { RecommendList } from '@/models/detail';
 import SongSheetCard from '@/components/song-sheet/SongSheetCard.vue';
 import ListModule from '@/components/common/ListModule.vue';
 import RankShow from '@/components/rank/RankShow.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import { usePlay } from '@/store/play';
 import { useSong } from "@/util";
 

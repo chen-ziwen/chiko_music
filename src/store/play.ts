@@ -30,7 +30,6 @@ export const usePlay = defineStore({
             playList: [] as SongList[],
             // 当前播放歌曲在列表中的索引值
             currentindex: -1,
-            // 歌曲插件是否显示
         }
     },
     // action类似于methods action可以传递参数，去修改state的值，同时可以进行异步的操作
@@ -47,7 +46,7 @@ export const usePlay = defineStore({
             this.$state.playType = playState.listloop;
         }
     },
-    // getters类似于计算属性，不能从外部传递参数，默认带state，除非返回一个函数
+    // getters类似于computed，不能从外部传递参数，默认带state，除非返回一个函数
     getters: {
         currentPlay(state) {
             return state.playList[state.currentindex] || {}; // 拿到当前索引值的歌曲

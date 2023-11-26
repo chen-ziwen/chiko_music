@@ -2,17 +2,20 @@
     <div class="mv">
         <div class="module-gap">
             <ListModule head="最新MV" gap-color="red" head-style="head-point" @turn="turnMvSort('frist')">
-                <MvList :list="mvFristList" @mvid="turnMvDetail"></MvList>
+                <MvList :list="mvFristList" @mvid="turnMvDetail" v-if="mvFristList.length" />
+                <Loading v-else :min-height="200"></Loading>
             </ListModule>
         </div>
         <div class="module-gap">
             <ListModule head="最热MV" gap-color="blue" head-style="head-point" @turn="turnMvSort('hot')">
-                <MvList :list="mvHotList" @mvid="turnMvDetail"></MvList>
+                <MvList :list="mvHotList" @mvid="turnMvDetail" v-if="mvHotList.length"></MvList>
+                <Loading v-else :min-height="200"></Loading>
             </ListModule>
         </div>
         <div class="module-gap">
             <ListModule head="网易云出品MV" gap-color="green" head-style="head-point" @turn="turnMvSort('yun')">
-                <MvList :list="mvYun" @mvid="turnMvDetail"></MvList>
+                <MvList :list="mvYun" @mvid="turnMvDetail" v-if="mvYun.length"></MvList>
+                <Loading v-else :min-height="200"></Loading>
             </ListModule>
         </div>
     </div>
@@ -24,6 +27,7 @@ import ListModule from '@/components/common/ListModule.vue';
 import { getMvAllUp, getMvFirst, getMvExclusive } from '@/api';
 import { MvType, useMv } from '@/util';
 import { useRouter } from 'vue-router';
+import Loading from '@/components/common/loading/Loading.vue';
 import MvList from '@/components/mv/MvList.vue';
 
 interface Params {

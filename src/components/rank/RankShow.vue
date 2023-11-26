@@ -62,17 +62,16 @@ let checkedIdx = 0; // 选中排行哪一模块
 
 const checked = (index: number, idx: number, id: number) => {
     if (index == checkedIdx && idx - 1 === play.currentindex && id === play.currentPlay.id && idx <= 5) {
-        return 'checked'
+        return 'checked';
     }
+    return "";
 }
 
 const choseSong = (index: number, order: number) => {
     checkedIdx = index;
     emits("sheetid", index, order)
 }
-const turnPage = (id: number) => {
-    router.push({ name: 'sheetlist', query: { sheetid: id } })
-}
+const turnPage = (id: number) => router.push({ name: 'sheetlist', query: { sheetid: id } });
 </script>
 
 <style lang="scss" scoped>

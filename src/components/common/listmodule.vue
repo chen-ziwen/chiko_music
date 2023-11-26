@@ -23,19 +23,9 @@ const props = withDefaults(defineProps<ListModule>(), {
     gapHeight: "22px"
 });
 const emits = defineEmits(['turn']);
+const outStyle = computed(() => props.outStyle ? props.outStyle : "");
+const triggerFun = () => emits('turn');
 
-// 生成类名,可以在外部添加样式
-const outStyle = computed(() => {
-    if (props.outStyle) {
-        return props.outStyle;
-    } else {
-        return;
-    }
-})
-
-function triggerFun() {
-    emits('turn')
-}
 </script>
 <style lang='scss' scoped>
 .list-module {

@@ -19,16 +19,8 @@ const props = withDefaults(defineProps<SvgProps>(), {
     height: 16
 });
 
-const svgName = computed(() => {
-    return "#icon-" + props.iconName;
-})
-
-const svgStyle = computed(() => {
-    if (props.iconName) {
-        return `svg-icon icon-${props.iconName}`;
-    }
-    return `svg-icon`;
-})
+const svgName = computed(() => "#icon-" + props.iconName);
+const svgStyle = computed(() => props.iconName ? `svg-icon icon-${props.iconName}` : `svg-icon`);
 
 </script>
 <style lang='scss' scoped>

@@ -47,34 +47,47 @@
                     </template>
                 </el-skeleton>
             </div>
-            <template v-if="sheetDetail.partsheet.length">
-                <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
-            </template>
+            <div class="music-singer-left-content">
+                <template v-if="sheetDetail.partsheet.length">
+                    <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
+                </template>
+                <Loading v-else></Loading>
+            </div>
             <div v-if="sheetDetail.partsheet.length" class="pagination">
                 <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
                     :page-size="50" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
             </div>
         </div>
         <div class="music-singer-right">
-            <div class="common-style" v-show="sheetAbout.aboutList.length > 0">
+            <div class="common-style">
                 <ListModule head="歌单推荐" gap-color="red">
-                    <div class="sheet-commond" v-for="item in sheetAbout.aboutList" :key="item.id"
-                        @click="turnSheet(item.id)">
-                        <img class="sheet-img" :src="item.coverImgUrl">
-                        <span class="sheet-name">{{ item.name }}</span>
-                    </div>
+                    <template v-if="sheetAbout.aboutList.length > 0">
+                        <div class="sheet-commond" v-for="item in sheetAbout.aboutList" :key="item.id"
+                            @click="turnSheet(item.id)">
+                            <img class="sheet-img" :src="item.coverImgUrl">
+                            <span class="sheet-name">{{ item.name }}</span>
+                        </div>
+                    </template>
+                    <Loading v-else></Loading>
                 </ListModule>
             </div>
-            <div class="common-style" v-show="sheetAbout.subscribers.length > 0">
+            <div class="common-style">
                 <ListModule head="歌单收藏者" gap-color="blue">
-                    <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId" :title="item.nickname">
-                        <img class="user-avatar" :src="item.avatarUrl">
-                    </div>
+                    <template v-if="sheetAbout.subscribers.length > 0">
+                        <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId"
+                            :title="item.nickname">
+                            <img class="user-avatar" :src="item.avatarUrl">
+                        </div>
+                    </template>
+                    <Loading v-else></Loading>
                 </ListModule>
             </div>
-            <div class="common-style" v-show="sheetAbout.comments.length > 0">
+            <div class="common-style">
                 <ListModule head="精彩评论" gap-color="green">
-                    <TalkList :data="sheetAbout.comments"></TalkList>
+                    <template v-if="sheetAbout.comments.length > 0">
+                        <TalkList :data="sheetAbout.comments"></TalkList>
+                    </template>
+                    <Loading v-else></Loading>
                 </ListModule>
             </div>
         </div>
@@ -96,6 +109,7 @@ import SongList from '@/components/song-sheet/SongList.vue';
 import dayjs from 'dayjs';
 import ListModule from '@/components/common/ListModule.vue';
 import TalkList from '@/components/common/TalkList.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import { usePlay, playState } from '@/store/play';
 
 interface sheetAbout {
@@ -199,9 +213,6 @@ const playIdx = (idx: number) => {
 const playAll = () => {
     const songArr = JSON.parse(JSON.stringify(delSong.value));
     play.playAll(songArr);
-    if (!play.playing) {
-        play.playing = !play.playing;
-    }
 }
 
 watch(() => route.query.sheetid, (id) => {
@@ -226,6 +237,7 @@ watch(() => route.query.sheetid, (id) => {
         overflow: hidden;
         background-color: white;
         border-radius: 10px;
+        align-items: center;
 
         .music-player {
             position: relative;
@@ -256,7 +268,6 @@ watch(() => route.query.sheetid, (id) => {
         &-head {
             margin-bottom: 20px;
             @include _flex(center, center);
-            // background-color: #fcfcfc;
 
             .content-box {
                 flex: 1;
@@ -366,6 +377,10 @@ watch(() => route.query.sheetid, (id) => {
                     }
                 }
             }
+        }
+
+        &-content {
+            align-self: center;
         }
     }
 

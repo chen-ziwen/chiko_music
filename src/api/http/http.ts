@@ -7,7 +7,7 @@ interface API {
     post<T>(url: string, params?: any): Promise<T>
 }
 
-const baseURl = isDev ? 'http://127.0.0.1:3000/' : 'http://114.116.47.111:3000/';
+const baseURl = isDev ? 'http://127.0.0.1:3000/' : '部署的服务器地址';
 
 const instance = axios.create({
     baseURL: baseURl,  //'https://chiko-music.vercel.app', //默认地址

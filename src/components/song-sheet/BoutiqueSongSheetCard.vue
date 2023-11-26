@@ -61,7 +61,7 @@ const topWay = () => {
         scrollTop.value.scrollTop = 0;
     })
 }
-defineExpose({ topWay }) // 向父组件暴露方法
+defineExpose({ topWay })
 
 </script>
 

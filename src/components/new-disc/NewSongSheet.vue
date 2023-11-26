@@ -31,7 +31,7 @@
 import { formatSecondTime } from '@/util';
 import type { SongList } from '@/models/detail';
 import { usePlay } from '@/store/play';
-import { Picture as IconPicture } from '@element-plus/icons-vue'
+import { Picture as IconPicture } from '@element-plus/icons-vue';
 
 interface NewSongSheet {
     newSheet: SongList[];
