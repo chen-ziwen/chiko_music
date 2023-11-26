@@ -158,13 +158,13 @@ function turnSheet(id: number) {
 // 将当前歌单列表和当前索引值保存到pinia中
 const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(delSong.value));
-    play.$patch({ currentindex: index, playList: songArr });
+    play.selectPlay(songArr, index);
 }
 
 // 播放全部
 const playAll = () => {
     const songArr = JSON.parse(JSON.stringify(delSong.value));
-    play.$patch({ currentindex: 0, playList: songArr, playType: playState.listloop });
+    play.playAll(songArr);
 }
 
 // 初始化界面

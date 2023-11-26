@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="sheet-list" v-for="item,  in props.sheetList" :key="item.idx"
+                <tr class="sheet-list" v-for="item in props.sheetList" :key="item.idx"
                     :class="checked(item.idx - 1, item.id)" @click="playSong(item.idx - 1, item.id)">
                     <td>
                         <span class="sheet-index">{{ item.idx }}</span>

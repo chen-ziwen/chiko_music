@@ -117,7 +117,7 @@ const useGetSearchHotDetail = async () => {
         const { data } = await getSearchHotDetail();
         hotSearchList.value = data;
     } catch (e) {
-        console.log(e, '热搜列表请求失败');
+        console.log(e, 'hot search fail =====>');
     }
 };
 

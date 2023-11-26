@@ -54,7 +54,7 @@ async function getToplistMsg() {
 
 const playSong = async (index: number, order: number) => {
     const songList = sheet.mainSheetRank[index].songList;
-    play.$patch({ currentindex: order, playList: songList });
+    play.selectPlay(songList, order);
 }
 
 onMounted(getToplistMsg);

@@ -284,7 +284,7 @@ function lyricHandle({ lineNum, txt }: { lineNum: number, txt: string }) {
 watch(() => currentPlay.value.id, () => {
     if (!currentPlay.value.id || !currentPlay.value.url) return;
     songReady.value = false; // 当前歌曲能播放时 再去切换为true
-    play.playing = true; // 每次切换歌曲 都会变为播放状态
+    // play.playing = true; // 每次切换歌曲 都会变为播放状态
     if (currentLyric.value) {
         currentLyric.value.stop();
         currentLyric.value = null;

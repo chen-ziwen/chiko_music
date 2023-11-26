@@ -29,6 +29,7 @@ import { usePlay } from '@/store/play';
 import { getSearchSong, getSongDetail } from '@/api';
 import { useSong, useMv, MvType } from '@/util';
 import type { SongList as SongListType, SingerAlbumType, RecommendList, SingerListType, TagSearch } from '@/models'
+import { TabsPaneContext } from 'element-plus';
 import SongList from '@/components/song-sheet/SongList.vue';
 import SingerAlbum from '@/components/singer/SingerAlbum.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
@@ -59,15 +60,14 @@ const singerList = ref<SingerListType[]>();
 const sheetList = ref<RecommendList[]>();
 const artMv = ref<MvType[]>([]);
 
-const search = (pane: { paneName: string }) => {
+const search = (pane: Partial<TabsPaneContext>) => {
     const type = searchType[pane.paneName as keyof TagSearch<number>];
     params.type = type;
     getSearchSong(params).then(res => {
         if (res.code == 200) {
             switch (type) {
                 case 1:
-                    const songs = res.result.songs;
-                    const keys = songs.map((item: { id: string }) => item.id);
+                    const keys = res.result.songs.map((item: { id: string }) => item.id);
                     getSong(keys);
                     break;
                 case 10:
@@ -98,7 +98,7 @@ const getSong = async (keys: string[]) => {
 
 const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(songsList.value));
-    play.$patch({ currentindex: index, playList: songArr });
+    play.selectPlay(songArr, index);
 };
 
 const turnMvDetail = (id: number) => {

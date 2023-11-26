@@ -1,6 +1,5 @@
 <template>
     <div class="music-singer">
-        <!-- 我是歌手页面 -->
         <div class="singer-tags">
             <div class="tag-all">
                 <i class="tag-text">语种 : </i>
@@ -169,7 +168,7 @@ const loadScroll = () => {
 }
 
 onMounted(() => {
-    alongSingerList(params) // 初始化请求
+    alongSingerList(params); // 初始化请求
 })
 
 </script>

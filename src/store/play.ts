@@ -35,14 +35,12 @@ export const usePlay = defineStore({
     },
     // action类似于methods action可以传递参数，去修改state的值，同时可以进行异步的操作
     actions: {
-
         // 根据索引播放对应歌曲
         selectPlay(list: SongList[], idx: number) {
             this.$state.playList = list;
             this.$state.currentindex = idx;
             this.$state.playing = true;
         },
-
         // 播放全部
         playAll(list: SongList[]) {
             this.selectPlay(list, 0);

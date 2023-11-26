@@ -42,8 +42,9 @@ const play = usePlay();
 const tSheet = (index: number, id: number) => {
     if (index == play.currentindex && id == play.currentPlay.id) {
         play.playing = !play.playing;
+    } else {
+        play.selectPlay(props.newSheet, index);
     }
-    play.$patch({ currentindex: index, playList: props.newSheet });
 }
 
 const playing = (index: number, id: number) => (index === play.currentindex && play.playing && id == play.currentPlay.id) ? "icon-zanting1" : "icon-bofang1";

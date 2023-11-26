@@ -192,20 +192,13 @@ function originContent(id: number) {
 
 const playIdx = (idx: number) => {
     const songArr = JSON.parse(JSON.stringify(delSong.value));
-    play.$patch({
-        currentindex: idx,
-        playList: songArr,
-    })
+    play.selectPlay(songArr, idx);
 }
 
 // 播放全部
 const playAll = () => {
     const songArr = JSON.parse(JSON.stringify(delSong.value));
-    play.$patch({
-        currentindex: 0, // 从第一首开始放
-        playList: songArr,
-        playType: playState.listloop, // 列表循环
-    });
+    play.playAll(songArr);
     if (!play.playing) {
         play.playing = !play.playing;
     }

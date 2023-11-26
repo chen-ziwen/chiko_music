@@ -34,36 +34,27 @@ const router = useRouter();
 const mvFristList = ref<MvType[]>([]);
 const mvHotList = ref<MvType[]>([]);
 const mvYun = ref<MvType[]>([]);
-let params: Params = {}
+const params: Params = {
+    area: '全部',
+    type: '全部',
+    order: '最新',
+    limit: 32,
+    offset: 0
+}
 
 function turnMvSort(key: string) {
     switch (key) {
         case 'frist':
-            params = {
-                area: '全部',
-                type: '全部',
-                order: '最新',
-                limit: 32,
-                offset: 0
-            }
+            params.type = "全部";
+            params.order = "最新";
             break;
         case 'hot':
-            params = {
-                area: '全部',
-                type: '全部',
-                order: '最热',
-                limit: 32,
-                offset: 0
-            }
+            params.type = "全部";
+            params.order = "最热";
             break;
         case 'yun':
-            params = {
-                area: '全部',
-                type: '网易出品',
-                order: '最热',
-                limit: 32,
-                offset: 0
-            }
+            params.type = "网易出品";
+            params.order = "最热";
             break;
     }
     router.push({ name: 'mvsort', query: params })
@@ -74,7 +65,7 @@ async function mvFrist() {
         const { data } = await getMvFirst(12);
         mvFristList.value = useMv(data);
     } catch (e) {
-        console.log(e, '最新mv请求失败');
+        console.log(e, 'new mv fail ======>');
     }
 }
 
@@ -90,7 +81,7 @@ async function mvHot() {
         const { data } = await getMvAllUp(mvListType);
         mvHotList.value = useMv(data);
     } catch (e) {
-        console.log(e, '最热mv请求失败');
+        console.log(e, 'hot mv fail ======>');
     }
 }
 
@@ -99,7 +90,7 @@ async function mvWangYiYun() {
         const { data } = await getMvExclusive(12);
         mvYun.value = useMv(data);
     } catch (e) {
-        console.log(e, '网易云出品mv请求失败');
+        console.log(e, 'wangyi yun fail ======>');
     }
 }
 

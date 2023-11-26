@@ -55,6 +55,7 @@ import SingerAlbum from '@/components/singer/SingerAlbum.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
 import LoadScroll from '@/components/common/LoadScroll.vue';
 import MvList from '@/components/mv/MvList.vue';
+import { TabsPaneContext } from 'element-plus';
 
 const route = useRoute();
 const router = useRouter();
@@ -83,7 +84,7 @@ let albumOffset = 0;
 let albumMore = false;
 
 // 判断时候登录 如果未登录 相似歌手无法读取
-const checkedClick = (pane: { paneName: string }) => {
+const checkedClick = (pane: TabsPaneContext) => {
     if (pane.paneName == 'like' && !play.loginStatu) {
         router.push({ name: 'login' })
     }
@@ -171,10 +172,7 @@ const loadScroll = () => {
 
 const playIdx = (index: number) => {
     const songArr = JSON.parse(JSON.stringify(delSong.value));
-    play.$patch({
-        currentindex: index,
-        playList: songArr,
-    })
+    play.selectPlay(songArr, index);
 }
 
 const resetAlbun = () => {

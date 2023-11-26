@@ -1,18 +1,32 @@
 <template>
-    <div class="song-sheet" v-loading="!loading" element-loading-background="rgba(254,236,239, 1)">
-        <div class="boutique" @click="boutique" v-if="!page?.none && loading">
-            <div class="page-img-back" :style="{ backgroundImage: `url(${page.coverImgUrl})` }"></div>
-            <div class="content-box">
-                <img class="page-img" :src="page.coverImgUrl" />
-                <div class="sheet-box">
-                    <span class="sheet-type">
-                        <i class="iconfont icon-huangguan"></i>
-                        精品歌单</span>
-                    <span class="sheet-desc">{{ page.name }}</span>
-                    <span class="copy-writer">{{ page.copywriter }}</span>
+    <div class="song-sheet">
+        <el-skeleton :loading="loading" animated v-if="!page?.none">
+            <template #template>
+                <div class="ske-item">
+                    <el-skeleton-item class="el-skl-img" variant="image" />
+                    <div class="el-skl-txt">
+                        <el-skeleton-item v-for="i in 2" :class="'el-skl-txt-item el-skl-txt-item-' + i" :key="i"
+                            variant="text" />
+                    </div>
                 </div>
-            </div>
-        </div>
+            </template>
+            <template #default>
+                <div class="boutique" @click="boutique">
+                    <div class="page-img-back" :style="{ backgroundImage: `url(${page.coverImgUrl})` }"></div>
+                    <div class="content-box">
+                        <img class="page-img" :src="page.coverImgUrl" />
+                        <div class="sheet-box">
+                            <span class="sheet-type">
+                                <i class="iconfont icon-huangguan"></i>
+                                精品歌单</span>
+                            <span class="sheet-desc">{{ page.name }}</span>
+                            <span class="copy-writer">{{ page.copywriter }}</span>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </el-skeleton>
+
         <div class="sheet-module">
             <div class="sheet-tags-all">
                 <div class="choose-key" @click.stop="pop = !pop">
@@ -84,7 +98,7 @@ interface HightPage {
 const hotTags = ref<string[]>([]); // 热门标签
 const TopTags = ref<string[]>([]); //精品标签
 const allTags = ref<AllTags[]>([]); // 全部标签
-const loading = ref<boolean>(false);
+const loading = ref(true);
 const route = useRoute();
 const router = useRouter();
 const scroll = scrollTop();
@@ -143,7 +157,7 @@ async function getAllTags() {
     }
 }
 
-// 全部标签选中
+// 标签选中
 const tagsList = async (name: string) => {
     const { playlists, total } = await getTopPlaylistDetail(name, 64, 0);
     if (TopTags.value.includes(name)) {
@@ -187,7 +201,7 @@ onMounted(async () => {
         await getTopTags(); // 精品标签
         await getTags();// tagsList和getTags不能并行 getTags必须先请求
         await tagsList(route.query.name as string || hotTags.value[0]); // 如果namekey为空，就拿第一项初始化
-        loading.value = true;
+        loading.value = false;
     }
     catch (e) {
         console.log(e, "初始化歌单失败");
@@ -385,5 +399,43 @@ onMounted(async () => {
     color: #F84E4E;
 }
 
+.el-skeleton {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
+    .ske-item {
+        display: flex;
+        height: 240px;
+        margin-bottom: 25px;
+        background-color: #FFFFFF;
+
+        .el-skl-img {
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+        }
+
+        .el-skl-txt {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            &-item {
+                height: 30px;
+                margin: 20px 10px;
+
+                &-1 {
+                    margin-top: 60px;
+                    width: 20%;
+                }
+
+                &-2 {
+                    width: 40%;
+                }
+            }
+        }
+    }
+}
 </style>
