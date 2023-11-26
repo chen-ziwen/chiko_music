@@ -1,10 +1,10 @@
 <template>
   <div class="main-music">
-    <Nav></Nav>
-    <Main></Main>
-    <Footer></Footer>
+    <Nav />
+    <Main />
+    <Footer />
     <Transition name="pop">
-      <ProgressBar v-if="!$route.meta.isLogin"></ProgressBar>
+      <ProgressBar v-if="!$route.meta.isLogin" />
     </Transition>
   </div>
 </template>
@@ -20,5 +20,4 @@ import ProgressBar from '@/components/progress-bar/ProgressBar.vue';
 .main-music {
   background-color: $color;
 }
-
 </style>

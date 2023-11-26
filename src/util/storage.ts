@@ -13,7 +13,6 @@ export class useStorage {
             window.localStorage.setItem(name, cloneData);
         };
         this.get = (name) => {
-            // ?? 判断符只会判断null和undefined,左边不等于这两个返回左边，否则返回右边
             const data = window.localStorage.getItem(name);
             if (data) {
                 return JSON.parse(data);

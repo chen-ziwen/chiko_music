@@ -11,7 +11,7 @@
                 <template v-if="sheet.otherSheetRank.length">
                     <SongSheetCard :sheet="sheet.otherSheetRank" textdir="center" :item="7" :back-show="false" />
                 </template>
-                <Loading v-else></Loading>
+                <Loading v-else />
             </ListModule>
         </div>
     </div>

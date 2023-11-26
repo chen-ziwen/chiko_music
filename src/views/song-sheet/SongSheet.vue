@@ -26,46 +26,42 @@
                 </div>
             </template>
         </el-skeleton>
-
         <div class="sheet-module">
-            <div class="sheet-tags-all">
-                <div class="choose-key" @click.stop="pop = !pop">
-                    {{ nameKey }}
-                    <el-icon>
-                        <ArrowDown />
-                    </el-icon>
-                </div>
-                <ul class="sheet-list-tag">
-                    <li class="sheet-hot-tag" v-for="name of hotTags" :class="hightlight(name)" @click="tagsList(name)">
-                        {{ name }}
-                    </li>
-                </ul>
-                <Transition name="pop">
-                    <div class="tags-position" v-if="pop" v-close-outside="() => pop = false">
-                        <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
-                            <span class="tags-hight-light">{{ item.name }}</span>
-                            <ul class="tags-common-type">
-                                <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)"
-                                    @click="tagsList(data.name)">
-                                    <span>{{ data.name }}<sup :style="{ fontSize: '10px' }">{{ data.hot ? "hot" : ""
-                                    }}</sup></span>
-                                </li>
-                            </ul>
-                        </div>
+            <template v-if="sheetList.playlists.length">
+                <div class="sheet-tags-all">
+                    <div class="choose-key" @click.stop="pop = !pop">{{ nameKey }}
+                        <el-icon>
+                            <ArrowDown />
+                        </el-icon>
                     </div>
-                </Transition>
-            </div>
-            <div class="sheet-content">
-                <template v-if="sheetList.playlists">
-                    <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false"></SongSheetCard>
-                </template>
-                <Loading v-else :min-height="200"></Loading>
-            </div>
-            <div v-if="sheetList.playlists.length">
-                <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0"
-                    :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage"
-                    :hide-on-single-page="true" />
-            </div>
+                    <ul class="sheet-list-tag">
+                        <li class="sheet-hot-tag" v-for="name of hotTags" :class="hightlight(name)" @click="tagsList(name)">
+                            {{ name }}
+                        </li>
+                    </ul>
+                </div>
+                <SongSheetCard :sheet="sheetList.playlists" :item="8" :back-show="false" />
+                <div v-if="sheetList.playlists.length">
+                    <el-pagination class="pagination" layout="prev, pager, next" background :total="sheetList.total || 0"
+                        :page-size="64" @current-change="currentChange" v-model:currentPage="currentPage"
+                        :hide-on-single-page="true" />
+                </div>
+            </template>
+            <Loading v-else :min-height="200" />
+            <Transition name="pop">
+                <div class="tags-position" v-if="pop" v-close-outside="() => pop = false">
+                    <div class="tags-type" v-for="(item, index) in allTags" :key="item.name + index">
+                        <span class="tags-hight-light">{{ item.name }}</span>
+                        <ul class="tags-common-type">
+                            <li class="tags" v-for="data in item.list" :key="data.name" :class="hightlight(data.name)"
+                                @click="tagsList(data.name)">
+                                <span>{{ data.name }}<sup :style="{ fontSize: '10px' }">{{ data.hot ? "hot" : ""
+                                }}</sup></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </Transition>
         </div>
     </div>
 </template>
@@ -298,66 +294,18 @@ onMounted(async () => {
     }
 
     .sheet-module {
+        position: relative;
         padding: 10px 15px;
         border-radius: 15px;
         background-color: #ffffff;
 
         .sheet-tags-all {
-            position: relative;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 5px 10px 12px 10px;
             box-sizing: border-box;
             color: #373737;
-
-            .tags-position {
-                width: 600px;
-                height: 400px;
-                position: absolute;
-                left: 0;
-                top: 40px;
-                z-index: 99;
-                background: #ffffff;
-                box-shadow: 0 0 5px #4f4f4f;
-                border-radius: 10px;
-                overflow: auto;
-
-                &::-webkit-scrollbar {
-                    width: 0;
-                }
-
-                .tags-type {
-                    margin-top: 10px;
-
-                    .tags-hight-light {
-                        font-weight: 700;
-                        padding-left: 10px;
-                    }
-                }
-
-                .tags-common-type {
-                    .tags {
-                        display: inline-block;
-                        padding: 0 10px;
-                        margin: 10px 5px;
-                        cursor: pointer;
-
-                        span {
-                            display: inline-block;
-                            margin-bottom: 6px;
-
-                            sup {
-                                color: #F84E4E;
-                            }
-                        }
-
-                        &:hover {
-                            color: #F84E4E;
-                        }
-                    }
-                }
-            }
 
             .choose-key {
                 display: flex;
@@ -389,6 +337,58 @@ onMounted(async () => {
                     cursor: pointer;
                 }
             }
+        }
+
+        .tags-position {
+            width: 600px;
+            height: 400px;
+            position: absolute;
+            left: 20px;
+            top: 60px;
+            z-index: 99;
+            background: #ffffff;
+            box-shadow: 0 0 5px #4f4f4f;
+            border-radius: 10px;
+            overflow: auto;
+
+            &::-webkit-scrollbar {
+                width: 0;
+            }
+
+            .tags-type {
+                margin-top: 10px;
+
+                .tags-hight-light {
+                    font-weight: 700;
+                    padding-left: 10px;
+                }
+            }
+
+            .tags-common-type {
+                .tags {
+                    display: inline-block;
+                    padding: 0 10px;
+                    margin: 10px 5px;
+                    cursor: pointer;
+
+                    span {
+                        display: inline-block;
+                        margin-bottom: 6px;
+
+                        sup {
+                            color: #F84E4E;
+                        }
+                    }
+
+                    &:hover {
+                        color: #F84E4E;
+                    }
+                }
+            }
+        }
+
+        .sheet-content {
+            height: 100%;
         }
     }
 }

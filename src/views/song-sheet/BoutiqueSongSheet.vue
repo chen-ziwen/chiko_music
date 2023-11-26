@@ -15,9 +15,9 @@
                 <LoadScroll @load-scorll="loadScroll" :distance="100">
                     <template v-if="sheetList.playlists">
                         <BoutiqueSongSheetCard ref="scroll" :sheet="sheetList.playlists" :back-show="false" :item="3" />
-                        <Loading v-if="sheetList.more" :min-height="80"></Loading>
+                        <Loading v-if="sheetList.more" :min-height="80" />
                     </template>
-                    <Loading v-else></Loading>
+                    <Loading v-else />
                 </LoadScroll>
             </ContentBox>
         </div>

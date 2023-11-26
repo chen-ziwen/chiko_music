@@ -4,8 +4,7 @@
             @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
-                <el-image class="picture" :src="currentPlay.image" fit="fill">
-                </el-image>
+                <el-image class="picture" :src="currentPlay.image" fit="fill" />
                 <div class="song-msg flex-column">
                     <span class="song-name text-hidden">{{ currentPlay.name }}</span>
                     <span class="singer-name text-hidden">{{ currentPlay.singer }}</span>
@@ -21,13 +20,13 @@
                 </div>
                 <div class="play-bar el-style flex-center flex-row">
                     <span class="start-time">{{ formatSecondTime(currentTime) }}</span>
-                    <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress"></el-slider>
+                    <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress"/>
                     <span class="end-time">{{ formatSecondTime(currentPlay.duration) }}</span>
                 </div>
             </div>
             <div class="right-box el-style flex-grow-1 flex-jcenter">
                 <i class="iconfont audio noshake" :class="muted" @click="changeMuted"></i>
-                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"></el-slider>
+                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"/>
             </div>
         </div>
         <transition name="slide-fade">
@@ -63,19 +62,16 @@ import CLyric from "@/components/lyric/Lyric.vue";
 
 const play = usePlay();
 const currentPlay = computed(() => play.currentPlay);
+const audio = shallowRef<HTMLAudioElement>();
 const lyricRef = ref<InstanceType<typeof CLyric> | null>(null);
 const currentLyric = ref<any>(null);
 const currentLyricNum = ref<number>(0);
 const isPureMusic = ref<boolean>(false);
 const playingLyric = ref<string>('');
-const audio = shallowRef<HTMLAudioElement>();
 const currentTime = ref<number>(0);
 const percent = ref<number>(0);
 const isMuted = ref<boolean>(false);
-const mutedAll = reactive({
-    percent: 0.3,
-    volume: 30,
-});
+const mutedAll = reactive({ percent: 0.3, volume: 50 });
 const songReady = ref<boolean>(false);
 const showLyric = ref<boolean>(false);
 let timeout: number;
@@ -101,12 +97,10 @@ const pattern = computed(() => {
 })
 // 切换歌曲播放状态
 const changeState = () => {
-    play.$patch((state) => {
-        state.playType = (state.playType + 1) % 3;
-    });
+    play.$patch((state) => { state.playType = (state.playType + 1) % 3 });
 }
 
-const randomStyle = computed(() =>play.playType == 2? 'random':"");
+const randomStyle = computed(() => play.playType == 2 ? 'random' : "");
 
 // 歌曲能播放的处理
 const audioReady = () => {
@@ -311,19 +305,19 @@ watch(() => play.playing, (isPlaying) => {
     width: 100%;
     height: 80px;
     min-width: $width;
-    background-color: whitesmoke;
-    opacity: .95;
     z-index: 999;
+    background-color: whitesmoke;
 
     .player-page {
         width: 100%;
-        height: 100vh;
-        z-index: 9998;
-        background: rgba(255, 255, 255, 1);
+        height: calc(100vh - 80px);
+        z-index: 1000;
         position: fixed;
         top: 0;
         left: 0;
         padding-top: 150px;
+        box-sizing: border-box;
+        background: $color;
 
         .container {
             display: flex;
@@ -403,10 +397,11 @@ watch(() => play.playing, (isPlaying) => {
 
     .info {
         position: relative;
-        z-index: 9999;
+        z-index: 2000;
         display: flex;
-        width: 85%;
+        width: calc($width + 200px);
         margin: 0 auto;
+
 
         .play-btn {
             padding: 6px 6px 10px 6px;

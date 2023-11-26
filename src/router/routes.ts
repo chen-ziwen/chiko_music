@@ -124,15 +124,15 @@ const mainRouter = [
                 },
                 component: () => import('@/views/mv/MvSort.vue')
             },
-            {
-                path: 'newdisc',
-                name: 'newdisc',
-                meta: {
-                    title: '新碟',
-                    keepAlive: false
-                },
-                component: () => import('@/views/new-disc/NewDisc.vue')
-            },
+            // {
+            //     path: 'newdisc',
+            //     name: 'newdisc',
+            //     meta: {
+            //         title: '新碟',
+            //         keepAlive: false
+            //     },
+            //     component: () => import('@/views/new-disc/NewDisc.vue')
+            // },
             {
                 path: 'searchpage',
                 name: 'searchpage',

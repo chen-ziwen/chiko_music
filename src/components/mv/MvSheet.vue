@@ -3,8 +3,7 @@
         <li class="mv-sheet-li" v-for="(data, index) in mvSheet" :key="index">
             <div class="newsong" @click="turnMvDetail(data.id)">
                 <div class="img-box">
-                    <el-image class="mv-img" style="min-width: 120px; min-height: 120px;"
-                        :src="data?.picUrl + '?param=120y120'" fit="fill">
+                    <el-image class="mv-img" :src="data?.picUrl + '?param=120y120'" fit="fill">
                         <template #placeholder>
                             <div class="image-slot">
                                 <el-icon>
@@ -69,6 +68,11 @@ const turnMvDetail = (id: number) => {
 
             .img-box {
                 position: relative;
+
+                .mv-img {
+                    min-width: 120px;
+                    min-height: 120px;
+                }
 
                 .play {
                     top: 50%;

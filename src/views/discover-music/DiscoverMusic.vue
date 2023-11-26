@@ -2,34 +2,34 @@
     <div class="discover-music">
         <!-- banner 轮播图 -->
         <div class="scroll">
-            <Carousel></Carousel>
+            <Carousel />
         </div>
         <!-- 歌曲 -->
         <div class="song">
             <ContentBox title="新歌首发" back="#ffffff">
-                <NewSongSheet :new-sheet="delSong" v-if="delSong.length"></NewSongSheet>
-                <Loading v-else></Loading>
+                <NewSongSheet :new-sheet="delSong" v-if="delSong.length" />
+                <Loading v-else />
             </ContentBox>
         </div>
         <!-- 歌单 -->
         <div class="sheet" v-if="sheetlist">
             <ContentBox title="推荐歌单" back="#ffffff">
-                <SongSheetCard :sheet="sheetlist" :backShow="false" :item="8" v-if="sheetlist.length"></SongSheetCard>
-                <Loading v-else></Loading>
+                <SongSheetCard :sheet="sheetlist" :backShow="false" :item="8" v-if="sheetlist.length" />
+                <Loading v-else />
             </ContentBox>
         </div>
         <!-- 歌手 -->
         <div class="singer">
             <ContentBox title="推荐歌手" back="#ffffff">
-                <SingerSheet :singer-list="artist" v-if="artist.length"></SingerSheet>
-                <Loading v-else></Loading>
+                <SingerSheet :singer-list="artist" v-if="artist.length" />
+                <Loading v-else />
             </ContentBox>
         </div>
         <!-- MV -->
         <div class="mv">
             <ContentBox title="推荐MV" back="#ffffff">
-                <MvSheet :mv-sheet="recommendMv" v-if="recommendMv.length"></MvSheet>
-                <Loading v-else></Loading>
+                <MvSheet :mv-sheet="recommendMv" v-if="recommendMv.length" />
+                <Loading v-else />
             </ContentBox>
         </div>
     </div>

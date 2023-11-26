@@ -1,6 +1,6 @@
 <template>
     <div class="loading">
-        <LoadingIcon class="loading-icon"></LoadingIcon>
+        <LoadingIcon class="loading-icon" />
     </div>
 </template>
 <script lang='ts' setup>

@@ -31,7 +31,7 @@
                     </li>
                 </ul>
                 <div class="nav-right">
-                    <SearchMusic></SearchMusic>
+                    <SearchMusic/>
                 </div>
                 <span class="nav-login" @click="login">登陆</span>
             </div>

@@ -7,11 +7,11 @@ interface API {
     post<T>(url: string, params?: any): Promise<T>
 }
 
-const baseURl = isDev ? 'http://127.0.0.1:3000/' : '部署的服务器地址';
+const baseURl = isDev ? 'http://127.0.0.1:3000/' : 'http://114.116.47.111:3000/';
 
 const instance = axios.create({
     baseURL: baseURl,  //'https://chiko-music.vercel.app', //默认地址
-    timeout: 5000, //请求超时五秒
+    timeout: 8000, //请求超时八秒
     withCredentials: true, // 让cookie可以跨域请求
     // params: { realIP: "58.23.138.35" }, // 添加公共的参数,就是每个接口都需要的参数
 });

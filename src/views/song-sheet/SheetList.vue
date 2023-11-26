@@ -49,45 +49,44 @@
             </div>
             <div class="music-singer-left-content">
                 <template v-if="sheetDetail.partsheet.length">
-                    <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
+                    <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx" />
+                    <div class="pagination">
+                        <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
+                    </div>
                 </template>
-                <Loading v-else></Loading>
-            </div>
-            <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
-                    :page-size="50" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
+                <Loading v-else />
             </div>
         </div>
         <div class="music-singer-right">
             <div class="common-style">
                 <ListModule head="歌单推荐" gap-color="red">
-                    <template v-if="sheetAbout.aboutList.length > 0">
+                    <template v-if="sheetAbout.aboutList.length">
                         <div class="sheet-commond" v-for="item in sheetAbout.aboutList" :key="item.id"
                             @click="turnSheet(item.id)">
                             <img class="sheet-img" :src="item.coverImgUrl">
                             <span class="sheet-name">{{ item.name }}</span>
                         </div>
                     </template>
-                    <Loading v-else></Loading>
+                    <Loading v-else />
                 </ListModule>
             </div>
             <div class="common-style">
                 <ListModule head="歌单收藏者" gap-color="blue">
-                    <template v-if="sheetAbout.subscribers.length > 0">
+                    <template v-if="sheetAbout.subscribers.length">
                         <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId"
                             :title="item.nickname">
                             <img class="user-avatar" :src="item.avatarUrl">
                         </div>
                     </template>
-                    <Loading v-else></Loading>
+                    <Loading v-else />
                 </ListModule>
             </div>
             <div class="common-style">
                 <ListModule head="精彩评论" gap-color="green">
-                    <template v-if="sheetAbout.comments.length > 0">
-                        <TalkList :data="sheetAbout.comments"></TalkList>
+                    <template v-if="sheetAbout.comments.length">
+                        <TalkList :data="sheetAbout.comments" />
                     </template>
-                    <Loading v-else></Loading>
+                    <Loading v-else />
                 </ListModule>
             </div>
         </div>
@@ -110,7 +109,7 @@ import dayjs from 'dayjs';
 import ListModule from '@/components/common/ListModule.vue';
 import TalkList from '@/components/common/TalkList.vue';
 import Loading from '@/components/common/loading/Loading.vue';
-import { usePlay, playState } from '@/store/play';
+import { usePlay } from '@/store/play';
 
 interface sheetAbout {
     subscribers: any[];
@@ -154,7 +153,7 @@ async function playlistDetail(id: number) {
         }
         sheetDetail.detail = playlist;
         sheetDetail.creator = playlist?.creator;
-        loading.value = false; // 歌单上的简介信息
+        loading.value = false;
         const { songs } = await getPlaylistTrackAll(id, undefined, undefined, now);
         delSong.value = useSong(songs);
         for (let i = 0; i < delSong.value.length; i += 50) {
@@ -174,7 +173,7 @@ async function startSheet(id: number) {
         const { comments, hotComments } = await getCommentPlaylist(id, 10);
         sheetAbout.subscribers = subscribers;  // 歌单收藏
         sheetAbout.aboutList = playlists;  //相关歌单
-        if (hotComments.length > 0) {
+        if (hotComments.length) {
             sheetAbout.comments = hotComments;
         } else {
             sheetAbout.comments = comments;

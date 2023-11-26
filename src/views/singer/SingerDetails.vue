@@ -1,7 +1,7 @@
 <template>
     <div class="singer-details">
         <div class="singer-details-msg">
-            <el-image class="singer-img" :src="artDil?.cover + '?param=400y400'"></el-image>
+            <el-image class="singer-img" :src="artDil?.cover + '?param=400y400'" />
             <div class="singer-msg">
                 <span class="artist-name">{{ artDil.name }}</span>
                 <div class="music-size">
@@ -15,27 +15,25 @@
         <div class="module-checked">
             <el-tabs v-model="checkedname" type="card" class="demo-tabs" @tab-click="checkedClick">
                 <el-tab-pane label="热门歌曲" name="hot">
-                    <SongList v-if="delSong.length" :sheetList="delSong" @playIdx="playIdx"></SongList>
+                    <SongList v-if="delSong.length" :sheetList="delSong" @playIdx="playIdx" />
                     <p v-else>暂无热门歌曲</p>
                 </el-tab-pane>
                 <el-tab-pane label="专辑" name="album">
                     <LoadScroll :distance="100" @load-scorll="loadScroll">
-                        <SingerAlbum v-if="artAlbum.length" :data="artAlbum"></SingerAlbum>
+                        <SingerAlbum v-if="artAlbum.length" :data="artAlbum" />
                         <p v-else>暂无专辑</p>
                     </LoadScroll>
                 </el-tab-pane>
                 <el-tab-pane label="热门MV" name="mv">
-                    <MvList v-if="artMv.length" :list="artMv" @mvid="turnMvDetail"></MvList>
+                    <MvList v-if="artMv.length" :list="artMv" @mvid="turnMvDetail" />
                     <p v-else>暂无热门MV</p>
                 </el-tab-pane>
                 <el-tab-pane label="歌手详情" name="detail">
-                    <SingerMsg v-if="artDesc.intro.length" :data="artDesc.intro" :text="artDesc.brief"></SingerMsg>
+                    <SingerMsg v-if="artDesc.intro.length" :data="artDesc.intro" :text="artDesc.brief" />
                     <p v-else>暂无歌手详情</p>
                 </el-tab-pane>
                 <el-tab-pane label="相似歌手" name="like">
-                    <template v-if="singerList && singerList.length > 0">
-                        <SingerSheet :singer-list="singerList"></SingerSheet>
-                    </template>
+                    <SingerSheet :singer-list="singerList" v-if="singerList.length" />
                     <p v-else>暂无相似歌手</p>
                 </el-tab-pane>
             </el-tabs>
@@ -55,16 +53,15 @@ import SingerAlbum from '@/components/singer/SingerAlbum.vue';
 import SingerSheet from '@/components/singer/SingerSheet.vue';
 import LoadScroll from '@/components/common/LoadScroll.vue';
 import MvList from '@/components/mv/MvList.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import { TabsPaneContext } from 'element-plus';
 
 const route = useRoute();
 const router = useRouter();
 const play = usePlay();
-// tabs选择
 const checkedname = ref<string>('hot');
 const singerId = ref<number>(0);
 const delSong = ref<SongListType[]>([]);
-// 歌手详情  (歌曲数、专辑数)
 const artDesc: { intro: [], brief: string } = reactive({ intro: [], brief: '暂无数据' });
 //歌手描述 
 const artDil = ref<SingerDetail>({
@@ -78,10 +75,10 @@ const artDil = ref<SingerDetail>({
 });
 // 歌手专辑
 const artAlbum = ref<SingerAlbumType[]>([]);
-const singerList = ref<SingerListType[]>();
+const singerList = ref<SingerListType[]>([]);
 const artMv = ref<MvType[]>([]);
+const albumMore = ref(true);
 let albumOffset = 0;
-let albumMore = false;
 
 // 判断时候登录 如果未登录 相似歌手无法读取
 const checkedClick = (pane: TabsPaneContext) => {
@@ -149,25 +146,20 @@ const singerMv = async (id: number) => {
 
 // 歌手专辑 
 const ArtistAlbum = async (id: number) => {
-    try {
-        const { hotAlbums, more } = await getArtistAlbum(id, 30, albumOffset);
-        artAlbum.value = artAlbum.value.concat(hotAlbums);
-        albumMore = more;
-        if (albumMore) {
+    if (albumMore.value) {
+        try {
+            const { hotAlbums, more } = await getArtistAlbum(id, 30, albumOffset);
+            artAlbum.value = artAlbum.value.concat(hotAlbums);
+            albumMore.value = more;
             albumOffset += 30;
-        } else {
-            albumOffset = 0;
+        } catch (e) {
+            console.log(e, 'artist album fail =====>');
         }
-    }
-    catch (e) {
-        console.log(e, 'artist album fail =====>');
     }
 }
 const loadScroll = () => {
-    // 限制在专辑中触发
-    if (albumMore && checkedname.value == 'album') {
-        ArtistAlbum(singerId.value)
-    }
+    if (checkedname.value !== 'album') return;
+    ArtistAlbum(singerId.value);
 }
 
 const playIdx = (index: number) => {

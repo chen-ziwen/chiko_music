@@ -5,7 +5,8 @@
                 <i class="tag-text">地区 : </i>
                 <ul class="area">
                     <li class="area-li" v-for="(tag, index) of area" :key="index">
-                        <span class="tag-label" :class="checkHigh('area', tag.value).area" @click="checkTags('area', tag.value)">{{ tag.label }}</span>
+                        <span class="tag-label" :class="checkHigh('area', tag.value).area"
+                            @click="checkTags('area', tag.value)">{{ tag.label }}</span>
                     </li>
                 </ul>
             </div>
@@ -13,7 +14,8 @@
                 <i class="tag-text">分类 : </i>
                 <ul class="type">
                     <li class="type-li" v-for="(tag, index) of type" :key="index">
-                        <span class="tag-label" :class="checkHigh('type', tag.value).type" @click="checkTags('type', tag.value)">{{ tag.label }}</span>
+                        <span class="tag-label" :class="checkHigh('type', tag.value).type"
+                            @click="checkTags('type', tag.value)">{{ tag.label }}</span>
                     </li>
                 </ul>
             </div>
@@ -21,14 +23,17 @@
                 <i class="tag-text">排序 : </i>
                 <ul class="order">
                     <li class="order-li" v-for="(tag, index) of order" :key="index">
-                        <span class="tag-label" :class="checkHigh('order', tag.value).order" @click="checkTags('order', tag.value)">{{ tag.label }}</span>
+                        <span class="tag-label" :class="checkHigh('order', tag.value).order"
+                            @click="checkTags('order', tag.value)">{{ tag.label }}</span>
                     </li>
                 </ul>
             </div>
         </div>
-        <MvList :list="mvContnet" @mvid="turnMvDetail"></MvList>
+        <MvList :list="mvContnet" @mvid="turnMvDetail" v-if="mvContnet.length" />
+        <Loading v-else />
         <div v-if="mvContnet.length">
-            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage" :page-size="32" :total="mvCount" @current-change="currentChange" :hide-on-single-page="true" />
+            <el-pagination class="pagination" layout="prev, pager, next" background v-model:currentPage="currentPage"
+                :page-size="32" :total="mvCount" @current-change="currentChange" :hide-on-single-page="true" />
         </div>
     </div>
 </template>
@@ -38,6 +43,7 @@ import { useRoute } from 'vue-router';
 import { getMvAllUp } from '@/api';
 import { MvType, useMv, scrollTop } from '@/util';
 import MvList from '@/components/mv/MvList.vue';
+import Loading from '@/components/common/loading/Loading.vue';
 import router from '@/router';
 
 interface TagType {
@@ -81,7 +87,6 @@ const tagType: TagType = {
 
 const { area, type, order } = tagType;
 
-// 初始的请求参数 // 其实应该靠后续传进来
 const params = ref<Params>({
     area: '',
     type: '',
@@ -104,7 +109,7 @@ const checkTags = (name: string, tag: string) => {
 const checkHigh = (name: string, tag: string) => {
     const high: { [key: string]: string } = { area: '', type: '', order: '' }
     if (params.value[name] == tag) {
-        high[name] = "high"
+        high[name] = "high";
     }
     return high;
 }
@@ -116,7 +121,7 @@ const currentChange = async (page: number) => {
         mvContnet.value = useMv(data);
         scroll(5);
     } catch (e) {
-        console.log(e, 'mv页数切换失败');
+        console.log(e, 'mv page change fail =====>');
     }
 }
 // 处理获取到的mv数据
@@ -128,7 +133,7 @@ async function getMvTagContent(param: Params) {
         mvContnet.value = useMv(data);
         mvCount.value = count;
     } catch (e) {
-        console.log(e, 'mv请求失败');
+        console.log(e, 'mv request fail =====>');
     }
 }
 

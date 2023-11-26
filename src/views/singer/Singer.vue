@@ -29,13 +29,13 @@
                 </ul>
             </div>
         </div>
-        <LoadScroll @load-scorll="loadScroll" :distance="100">
-            <template v-if="singerList.length">
-                <SingerSheet :singer-list="singerList" type="square"></SingerSheet>
-                <Loading v-if="more" :min-height="80"></Loading>
-            </template>
-            <Loading v-else></Loading>
-        </LoadScroll>
+        <template v-if="singerList.length">
+            <LoadScroll @load-scorll="loadScroll" :distance="100">
+                <SingerSheet :singer-list="singerList" type="square" />
+                <Loading v-if="more" :min-height="80" />
+            </LoadScroll>
+        </template>
+        <Loading v-else />
     </div>
 </template>
 

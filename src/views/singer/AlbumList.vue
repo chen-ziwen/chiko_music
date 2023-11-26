@@ -2,67 +2,93 @@
     <div class="music-singer">
         <div class="music-singer-left">
             <div class="music-singer-left-head">
-                <div class="music-player">
-                    <img :src="imgurl(sheetDetail.detail.picUrl, '500')" />
-                </div>
-                <div class="content-box">
-                    <ul class="content-box-ul">
-                        <li>
-                            <h1 v-html="sheetDetail.detail.name"></h1>
-                        </li>
-                        <li>
-                            <img :src="imgurl(sheetDetail.creator.picUrl)" />
-                            <span>{{ sheetDetail.creator.name }}</span>
-                            <span>创建于&nbsp;{{ dayjs(sheetDetail.detail.createTime).format('YYYY-MM-DD HH:mm:ss') }}</span>
-                        </li>
-                        <li><span>发行公司：</span>{{ sheetDetail.detail.company }}</li>
-                        <li>
-                            <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
-                            <el-dialog v-model="centerDialog" :title="sheetDetail.detail.name" width="30%" center>
-                                <span v-html="sheetDetail.detail.description"></span>
-                            </el-dialog>
-                        </li>
-                        <li>
-                            <span @click="playAll">播放全部</span>
-                        </li>
-                    </ul>
-                </div>
+                <el-skeleton :loading="loading" animated>
+                    <template #template>
+                        <div class="ske-item">
+                            <el-skeleton-item class="el-skl-img" variant="image" />
+                            <div class="el-skl-txt">
+                                <el-skeleton-item v-for="i in 5" :class="'el-skl-txt-item el-skl-txt-item-' + i" :key="i"
+                                    variant="text" />
+                            </div>
+                        </div>
+                    </template>
+                    <template #default>
+                        <div class="music-player">
+                            <img :src="imgurl(sheetDetail.detail.picUrl, '500')" />
+                        </div>
+                        <div class="content-box">
+                            <ul class="content-box-ul">
+                                <li>
+                                    <h1 v-html="sheetDetail.detail.name"></h1>
+                                </li>
+                                <li>
+                                    <img :src="imgurl(sheetDetail.creator.picUrl)" />
+                                    <span>{{ sheetDetail.creator.name }}</span>
+                                    <span>创建于&nbsp;{{ dayjs(sheetDetail.detail.createTime).format('YYYY-MM-DD HH:mm:ss')
+                                    }}</span>
+                                </li>
+                                <li><span>发行公司：</span>{{ sheetDetail.detail.company }}</li>
+                                <li>
+                                    <span v-html="sheetDetail.detail.description" @click="centerDialog = true"></span>
+                                    <el-dialog v-model="centerDialog" :title="sheetDetail.detail.name" width="30%" center>
+                                        <span v-html="sheetDetail.detail.description"></span>
+                                    </el-dialog>
+                                </li>
+                                <li>
+                                    <span @click="playAll">播放全部</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </el-skeleton>
             </div>
-            <template v-if="sheetDetail.partsheet.length">
-                <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx"></SongList>
-            </template>
-            <div v-if="sheetDetail.partsheet.length" class="pagination">
-                <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
-                    :page-size="30" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
+            <div class="music-singer-left-content">
+                <template v-if="sheetDetail.partsheet.length">
+                    <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx" />
+                    <div class="pagination">
+                        <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="30" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
+                    </div>
+                </template>
+                <Loading v-else />
             </div>
         </div>
         <div class="music-singer-right">
-            <div class="common-style" v-show="sheetAbout.hotAlbums.length > 0">
+            <div class="common-style">
                 <ListModule head="热门专辑" gap-color="red">
-                    <div class="sheet-commond" v-for="item in sheetAbout.hotAlbums" :key="item.id"
-                        @click="turnSheet(item.id)">
-                        <img class="sheet-img" :src="item.picUrl + '?param=150y150'" :title="item.name">
-                        <span class="sheet-name">{{ item.name }}</span>
-                    </div>
-                </ListModule>
-            </div>
-            <div class="common-style" v-show="sheetAbout.subscribers.length > 0">
-                <ListModule head="歌单收藏者" gap-color="blue">
-                    <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId" :title="item.nickname">
-                        <img class="user-avatar" :src="item.avatarUrl">
-                    </div>
-                </ListModule>
-            </div>
-            <div class="common-style" v-show="sheetAbout.comments.length > 0">
-                <ListModule head="精彩评论" gap-color="green">
-                    <div class="talk-box-list" v-for="item in sheetAbout.comments" :key="item.commentId">
-                        <div class="user-box">
-                            <img class="talk-user-avatar" :src="item.user.avatarUrl" :title="item.user.nickname" />
-                            <span class="talk-user-name">{{ item.user.nickname }}</span>
-                            <span class="talk-time">{{ item.timeStr }}</span>
+                    <template v-if="sheetAbout.hotAlbums.length">
+                        <div class="sheet-commond" v-for="item in sheetAbout.hotAlbums" :key="item.id"
+                            @click="turnSheet(item.id)">
+                            <img class="sheet-img" :src="item.picUrl + '?param=150y150'" :title="item.name">
+                            <span class="sheet-name">{{ item.name }}</span>
                         </div>
-                        <p class="talk-list">{{ item.content }}</p>
-                    </div>
+                    </template>
+                    <Loading v-else />
+                </ListModule>
+            </div>
+            <div class="common-style">
+                <ListModule head="歌单收藏者" gap-color="blue">
+                    <template v-if="sheetAbout.subscribers.length">
+                        <div class="box-list" v-for="item in sheetAbout.subscribers" :key="item.userId"
+                            :title="item.nickname">
+                            <img class="user-avatar" :src="item.avatarUrl">
+                        </div>
+                    </template>
+                    <Loading v-else />
+                </ListModule>
+            </div>
+            <div class="common-style">
+                <ListModule head="精彩评论" gap-color="green">
+                    <template v-if="sheetAbout.comments.length">
+                        <div class="talk-box-list" v-for="item in sheetAbout.comments" :key="item.commentId">
+                            <div class="user-box">
+                                <img class="talk-user-avatar" :src="item.user.avatarUrl" :title="item.user.nickname" />
+                                <span class="talk-user-name">{{ item.user.nickname }}</span>
+                                <span class="talk-time">{{ item.timeStr }}</span>
+                            </div>
+                            <p class="talk-list">{{ item.content }}</p>
+                        </div>
+                    </template>
+                    <Loading v-else />
                 </ListModule>
             </div>
         </div>
@@ -77,7 +103,8 @@ import { useRoute, useRouter } from 'vue-router';
 import dayjs from 'dayjs';
 import SongList from '@/components/song-sheet/SongList.vue';
 import ListModule from '@/components/common/ListModule.vue';
-import { usePlay, playState } from '@/store/play';
+import Loading from '@/components/common/loading/Loading.vue';
+import { usePlay } from '@/store/play';
 
 type Whole = Record<string, any>;
 interface sheetAbout {
@@ -97,6 +124,7 @@ const scroll = new ScrollTop().scroll;
 const centerDialog = ref(false);
 const play = usePlay();
 const page = ref<number>(1);
+const loading = ref(true);
 const sheetAbout = reactive<sheetAbout>({
     subscribers: [],
     hotAlbums: [],
@@ -118,6 +146,7 @@ async function playlistDetail(id: number) {
         sheetDetail.detail = album;
         sheetDetail.creator = album.artist;
         delSong.value = useSong(songs);
+        loading.value = false;
         for (let i = 0; i < delSong.value.length; i += 30) {
             sheetDetail.sheetList.push(delSong.value.slice(i, i + 30));
         }
@@ -133,7 +162,7 @@ async function startSheet(id: number) {
         const { hotAlbums } = await getArtistAlbum(sheetDetail.creator.id, 5, 0);
         sheetAbout.hotAlbums = hotAlbums;  //相关歌单
         const { comments, hotComments } = await getCommentAlbum(id, 30, 0);
-        if (hotComments.length > 0) {
+        if (hotComments.length) {
             sheetAbout.comments = hotComments;
         } else {
             sheetAbout.comments = comments;
@@ -412,6 +441,53 @@ watch(() => route.query.albumid, (id) => {
 
         .common-style {
             margin-bottom: 15px;
+        }
+    }
+}
+
+.el-skeleton {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .ske-item {
+        display: flex;
+        margin: 15px 15px 40px 15px;
+
+        .el-skl-img {
+            flex-shrink: 0;
+            width: 180px;
+            height: 180px;
+            margin-right: 40px;
+        }
+
+        .el-skl-txt {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            &-item {
+                height: 18px;
+                margin: 10px 0;
+
+                &-1,
+                &-2 {
+                    width: 80%;
+                }
+
+                &-3 {
+                    width: 40%;
+                }
+
+                &-4 {
+                    width: 60%;
+                }
+
+                &-5 {
+                    align-self: flex-end;
+                    width: 20%;
+                }
+            }
         }
     }
 }

@@ -11,24 +11,20 @@ export class Debounce {
         this.timeout = null;
     }
     use(fun: Function, delay: number, immediate = false): Function {
-        // ...args 相当于解构 arguments类数组，表示的就是传入的多个参数
-        // 因为有的时候delay需要动态改变 所以需要写在这
         return (...args: any) => {
             if (this.timeout) {
-                clearTimeout(this.timeout); // 清除定时器后，timeout仍然为数字
+                clearTimeout(this.timeout);
             }
-            // immdiate为true时，立即执行，并把定时器设置为null
+
             if (immediate) {
                 if (!this.timeout) {
-                    // 一轮结束后，将timout设置为null，定时器便能继续立即执行
-                    fun.apply(this, args)  // 这边的args是类数组，而apply刚好接收数组，同时它也会解构数组将它转为多个参数
+                    fun.apply(this, args)
                 }
                 this.timeout = window.setTimeout(() => {
                     this.timeout = null;
                 }, delay);
                 return;
             }
-            // immdiate为false时，正常执行
             this.timeout = window.setTimeout(() => {
                 fun.apply(this, args);
                 this.timeout = null;
@@ -39,22 +35,9 @@ export class Debounce {
         if (this.timeout) {
             clearTimeout(this.timeout)
         }
-        this.timeout = null; // 释放内存
+        this.timeout = null;
     }
 }
-// 防抖可以这么简写
-export class Debounce2 {
-    public use = (fun: Function, delay: number): Function => {
-        let tiemout: NodeJS.Timeout | undefined = undefined;
-        return (...args: any) => {
-            clearTimeout(tiemout as NodeJS.Timeout);
-            tiemout = setTimeout(() => {
-                fun.apply(this, args);
-            }, delay)
-        }
-    }
-}
-
 /**
  * @class 节流，每间隔一段时间执行一次
  * @param {Function} fun  传入一个需要节流的函数
