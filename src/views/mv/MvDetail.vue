@@ -127,9 +127,8 @@ const useGetMvUrl = async (mid: number) => {
     try {
         const { data } = await getMvUrl(mid);
         mvUrl.value = data.url;
-    }
-    catch (e) {
-        console.log(e, 'mv的url请求失败');
+    } catch (e) {
+        console.error(e, 'mv url fail =====>');
     }
 }
 
@@ -144,7 +143,7 @@ const useGetMvDetail = async (mid: number) => {
         })
         mvDetail.value = data;
     } catch (e) {
-        console.log(e, 'mv详情请求失败');
+        console.error(e, 'mv detail fail =====>');
     }
 }
 
@@ -157,7 +156,7 @@ const useGetMvDetailInfo = async (mvid: number) => {
         videoInfo.shareCount = shareCount;
         videoInfo.commentCount = commentCount;
     } catch (e) {
-        console.log(e, '获取点赞评论转发数失败');
+        console.error(e, 'get like fail =====>');
     }
 }
 
@@ -180,7 +179,7 @@ const useGetCommentMv = async (id: number) => {
         }
         newComments.value = comments;
     } catch (e) {
-        console.log(e, 'MV评论请求失败');
+        console.error(e, 'mv comments fail =====>');
     }
 }
 
@@ -190,7 +189,7 @@ const useGetSimiMv = async (id: number) => {
         const { mvs } = await getSimiMv(id);
         relatedMv.value = mvs;
     } catch (e) {
-        console.log(e, '相关mv请求失败');
+        console.error(e, 'relat mv fail =====>');
     }
 }
 

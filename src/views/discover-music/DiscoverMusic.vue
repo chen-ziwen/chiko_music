@@ -82,8 +82,6 @@ const SongDetail = (ids: string) => {
 
 async function PersonalizedMv() {
     let { result } = await getPersonalizedMv();
-    console.log('result', result);
-
     recommendMv.value = result;
 }
 

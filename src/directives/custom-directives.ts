@@ -1,4 +1,4 @@
-// import { Directive } from "vue-demi";
+import { Directive } from "vue-demi";
 export default {
     // 当点击的元素不在绑定元素内部时 触发回调函数
     'closeOutside': {
@@ -26,4 +26,4 @@ export default {
             el.style.background = binding.value;
         },
     }
-} as Record<string, any>;
+} as Record<string, Directive>;

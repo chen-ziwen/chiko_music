@@ -39,12 +39,11 @@
 </template>
 <script lang='ts' setup>
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { getMvAllUp } from '@/api';
 import { MvType, useMv, scrollTop } from '@/util';
 import MvList from '@/components/mv/MvList.vue';
 import Loading from '@/components/common/loading/Loading.vue';
-import router from '@/router';
 
 interface TagType {
     area: Record<string, string>[],
@@ -56,6 +55,7 @@ interface Params {
 }
 
 const route = useRoute();
+const router = useRouter();
 const currentPage = ref<number>(1);
 const scroll = scrollTop();
 
