@@ -2,19 +2,19 @@
     <div class="login">
         <div class="land-module">
             <span class="login-tips">打开手机网易云APP 扫码登录</span>
-            <img :src="qrSrc" alt="二维码丢失啦">
+            <img :src="qrSrc">
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { phoneGet, loginKey, loginQrCheck, loginQrCreate } from '@/api';
-import { onBeforeMount, onMounted, onUnmounted, ref } from 'vue';
+import { loginKey, loginQrCheck, loginQrCreate } from '@/api';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useStorage } from '@/util';
 
 const router = useRouter();
-const qrSrc = ref<string>('');
+const qrSrc = ref<string>("/src/assets/image/login_m.png");
 let timer: number | undefined;
 const storage = new useStorage();
 
@@ -23,7 +23,7 @@ async function qrLogin() {
     const { data } = await loginKey(time);
     const { data: qrData } = await loginQrCreate(data.unikey, true, time);
     qrSrc.value = qrData.qrimg;
-    qrCheck(data.unikey)
+    qrCheck(data.unikey);
 }
 
 async function qrCheck(key: string) {
@@ -31,17 +31,17 @@ async function qrCheck(key: string) {
     timer = window.setInterval(() => {
         const time = Date.now();
         loginQrCheck(key, time).then(res => {
-            console.log('我是登录界面', res);
+            console.log(res, 'is login layout =====>');
             if (res.code == 803) {
-                storage.set('cookie', res.cookie)
+                storage.set('cookie', res.cookie);
                 storage.set('loginStatu', true);
-                router.replace({ name: 'discover' })
+                router.replace({ name: 'discover' });
                 clearInterval(timer);
             }
         }).catch((e) => {
-            console.log('登陆失败', e);
+            console.error(e, 'login fail =====>');
         })
-    }, 2500)
+    }, 2500);
 }
 
 
@@ -49,8 +49,8 @@ onMounted(async () => {
     await qrLogin();
 })
 onUnmounted(() => {
-    clearInterval(timer)
-})
+    clearInterval(timer);
+});
 
 </script>
 

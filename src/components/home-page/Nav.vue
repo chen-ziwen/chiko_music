@@ -4,7 +4,7 @@
             <div class="container flex-start">
                 <div class="music-logo">
                     <a href="#javascript">
-                        <img src="@/assets/image/logo2.png" class="music-logo-i" />
+                        <img src="@/assets/image/logo.png" class="music-logo-i" />
                     </a>
                 </div>
                 <ul class="music-nav-ul">
@@ -31,7 +31,7 @@
                     </li>
                 </ul>
                 <div class="nav-right">
-                    <SearchMusic/>
+                    <SearchMusic />
                 </div>
                 <span class="nav-login" @click="login">登陆</span>
             </div>
