@@ -20,17 +20,17 @@
                 </div>
                 <div class="play-bar el-style flex-center flex-row">
                     <span class="start-time">{{ formatSecondTime(currentTime) }}</span>
-                    <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress"/>
+                    <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress" />
                     <span class="end-time">{{ formatSecondTime(currentPlay.duration) }}</span>
                 </div>
             </div>
             <div class="right-box el-style flex-grow-1 flex-jcenter">
                 <i class="iconfont audio noshake" :class="muted" @click="changeMuted"></i>
-                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small"/>
+                <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small" />
             </div>
         </div>
-        <transition name="slide-fade">
-            <div class="player-page" v-if="showLyric">
+        <transition name="slide-fade" @wheel.stop.prevent>
+            <div class="player-page" v-show="showLyric">
                 <div class="container">
                     <div class="page-left">
                         <div class="cover-image" :class="play.playing ? 'playing' : ''">
@@ -40,7 +40,7 @@
                     <div class="page-right">
                         <h3 class="name flex-between">
                             {{ currentPlay.name }}
-                            <i @click="openLyric" class="iconfont"></i>
+                            <i @click="openLyric" class="iconfont icon-cuowu" title="关闭歌词"></i>
                         </h3>
                         <p>{{ currentPlay.singer }} - {{ currentPlay.album }}</p>
                         <div class="lyric-wrap">
@@ -66,8 +66,6 @@ const audio = shallowRef<HTMLAudioElement>();
 const lyricRef = ref<InstanceType<typeof CLyric> | null>(null);
 const currentLyric = ref<any>(null);
 const currentLyricNum = ref<number>(0);
-const isPureMusic = ref<boolean>(false);
-const playingLyric = ref<string>('');
 const currentTime = ref<number>(0);
 const percent = ref<number>(0);
 const isMuted = ref<boolean>(false);
@@ -79,7 +77,7 @@ let timeout: number;
 // 获取当前播放的进度，计算出进度条的百分比
 const timeupdate = (e: any) => {
     currentTime.value = e.target.currentTime;
-    percent.value = Math.ceil(e.target.currentTime / currentPlay.value.duration * 100);
+    percent.value = Math.round(e.target.currentTime / currentPlay.value.duration * 100);
 }
 
 // 切换播放和暂停图标
@@ -100,16 +98,15 @@ const changeState = () => {
     play.$patch((state) => { state.playType = (state.playType + 1) % 3 });
 }
 
+// 控制按钮的大小
 const randomStyle = computed(() => play.playType == 2 ? 'random' : "");
-
 // 歌曲能播放的处理
 const audioReady = () => {
     timeout && clearTimeout(timeout);
     songReady.value = true;
-    if (currentLyric.value && !isPureMusic.value) {
-        currentLyric.value.seek(currentTime.value * 1000);
-    }
+    currentLyric.value?.seek(currentTime.value * 1000);
 }
+
 // 歌曲不能播放时候的处理
 const audioError = () => {
     timeout && clearTimeout(timeout);
@@ -119,9 +116,7 @@ const audioError = () => {
 // 当暂停的时候，将播放状态设置为false
 const audioPaused = () => {
     play.playing = false;
-    if (currentLyric.value) {
-        currentLyric.value.stop();
-    }
+    currentLyric.value?.stop();
 }
 
 // 上一首歌
@@ -153,9 +148,7 @@ const loop = () => {
     if (!audio.value) return;
     audio.value.currentTime = 0; // 时间归0
     play.playing = true;
-    if (currentLyric.value) {
-        currentLyric.value.seek(0);
-    }
+    currentLyric.value?.seek(0);
 }
 
 // 歌曲完成时，对当前的音乐状态进行判断
@@ -175,9 +168,7 @@ const audioEnded = () => {
 const togglePlay = () => {
     if (!songReady.value) return;
     play.playing = !play.playing;
-    if (currentLyric.value) {
-        currentLyric.value.togglePlay();
-    }
+    currentLyric.value?.togglePlay();
 }
 
 // 拖动进度条触发
@@ -186,9 +177,7 @@ const drapProgress = (val: number) => {
     const currentTime = (val / 100) * currentPlay.value.duration;
     audio.value.currentTime = currentTime;
     percent.value = val;
-    if (currentLyric.value) {
-        currentLyric.value.seek(currentTime * 1000);
-    }
+    currentLyric.value?.seek(currentTime * 1000);
 }
 
 // 修改声音大小
@@ -205,11 +194,7 @@ const changeMuted = () => {
 // 拖动声音进度条
 const changeVolume = (num: number) => {
     if (!audio.value) return;
-    if (num === 0) {
-        isMuted.value = true;
-    } else {
-        isMuted.value = false;
-    }
+    isMuted.value = num === 0;
     mutedAll.percent = num / 100;
     audio.value.volume = num / 100;
 }
@@ -220,6 +205,12 @@ onMounted(() => {
 
 function openLyric() {
     showLyric.value = !showLyric.value;
+    if (showLyric.value) {
+        setTimeout(() => {
+            lyricRef.value?.lyricList?.refresh();
+            
+        }, 100);
+    }
 }
 
 async function getLyricInfo(id: number) {
@@ -228,70 +219,53 @@ async function getLyricInfo(id: number) {
         if (res.code === 200) {
             const lyric = res.lrc.lyric;
             currentLyric.value = new Lyric(lyric, lyricHandle);
-            if (isPureMusic.value) {
-                playingLyric.value = currentLyric.value.lrc.replace(
-                    /\[(\d{2}):(\d{2}):(\d{2})\]/g,
-                    ''
-                )
-            } else {
-                if (play.playing) {
-                    currentLyric.value.seek(currentTime.value * 1000);
-                }
+            if (play.playing) {
+                currentLyric.value.seek(currentTime.value * 1000);
             }
         }
     } catch (e) {
         currentLyric.value = null;
-        playingLyric.value = '';
         currentLyricNum.value = 0;
     }
 }
 
-function lyricHandle({ lineNum, txt }: { lineNum: number, txt: string }) {
+function lyricHandle({ lineNum }: { lineNum: number }) {
     if (!lyricRef.value) return;
     currentLyricNum.value = lineNum;
-    playingLyric.value = txt;
     if (lineNum > 10) {
         const lineEl = lyricRef.value?.lyricLine[lineNum - 10];
         if (lyricRef.value.lyricList) {
-            nextTick(() => {
-                lyricRef.value?.lyricList!.scrollToElement(lineEl, 1000);
-            })
+            nextTick(() => lyricRef.value?.lyricList!.scrollToElement(lineEl, 1000));
         }
     } else {
         if (lyricRef.value.lyricList) {
-            nextTick(() => {
-                lyricRef.value?.lyricList?.scrollTo(0, 0, 1000);
-            })
+            nextTick(() => lyricRef.value?.lyricList!.scrollTo(0, 0, 1000));
         }
     }
 }
 
-// 监听播放的歌曲是否变化 用于外面的播放项
 watch(() => currentPlay.value.id, () => {
     if (!currentPlay.value.id || !currentPlay.value.url) return;
-    songReady.value = false; // 当前歌曲能播放时 再去切换为true
-    // play.playing = true; // 每次切换歌曲 都会变为播放状态
+    songReady.value = false;
     if (currentLyric.value) {
         currentLyric.value.stop();
         currentLyric.value = null;
         currentTime.value = 0;
-        playingLyric.value = '';
         currentLyricNum.value = 0;
     };
     nextTick(() => {
         if (!audio.value) return;
         audio.value.src = currentPlay.value?.url;
-        audio.value.volume = mutedAll.volume / 100;
         audio.value.play();
     });
+    getLyricInfo(currentPlay.value.id);
+
     clearTimeout(timeout);
     timeout = window.setTimeout(() => {
         songReady.value = true;
     }, 5000);
-    getLyricInfo(currentPlay.value.id);
 });
 
-// 监听播放状态 用于自我切换
 watch(() => play.playing, (isPlaying) => {
     if (!songReady.value || !audio.value) return;
     isPlaying ? audio.value.play() : audio.value.pause();
@@ -375,19 +349,18 @@ watch(() => play.playing, (isPlaying) => {
                     margin-bottom: 10px;
 
                     .iconfont {
-                        font-size: 35px;
+                        font-size: 15px;
                         color: #888;
-                        cursor: pointer;
-                        transform: rotate(90deg);
+                        text-align: end !important;
                     }
                 }
 
                 .lyric-wrap {
                     width: 100%;
                     height: 480px;
-                    border-radius: 4px;
+                    border-radius: 10px;
                     padding: 30px;
-                    overflow: hidden;
+                    box-sizing: border-box;
                     background: #f8f9ff;
                     margin-top: 30px;
                 }

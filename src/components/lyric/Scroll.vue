@@ -4,8 +4,11 @@
     </div>
 </template>
 <script lang='ts' setup>
-import { watch, onMounted, ref, toRef, nextTick } from "vue";
+import { watch, onMounted, ref, toRef } from "vue";
 import BetterScroll from "@better-scroll/core";
+import BetterWheel from "@better-scroll/mouse-wheel";
+
+BetterScroll.use(BetterWheel);
 
 interface BetterScrollProps {
     probeType?: number;
@@ -43,7 +46,7 @@ function initScroll() {
     if (!wrapper.value) return;
     scroll = new BetterScroll(wrapper.value, {
         probeType: props.probeType,
-        click: props.click,
+        // click: props.click,
         mouseWheel: true,
         eventPassthrough: props.direction === DIRECTION_V ? DIRECTION_H : DIRECTION_V
     });
@@ -85,10 +88,13 @@ function scrollToElement(...args: any) {
     scroll && scroll.scrollToElement.apply(scroll, args)
 };
 
+watch(data, () => setTimeout(() => {
+    refresh();
+}, props.refrehDelay));
 
-watch(data, () => nextTick(refresh));
-
-onMounted(() => nextTick(initScroll));
+onMounted(() => setTimeout(() => {
+    initScroll();
+}, 20));
 
 defineExpose({
     disable,
