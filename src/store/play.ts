@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import type { SongList } from "@/models/detail";
+import { storage } from "@/util";
+
 
 export const playState = {
     listloop: 0,
@@ -15,11 +17,11 @@ export const usePlay = defineStore({
             barShow: false,
             songUrl: '',
             // 是否登陆
-            loginStatu: false,
+            isLogin: false,
             // 歌单id
             sheetId: 0,
             // 用户信息
-            userInfo: null,
+            userInfo: null as (null | {}),
             // 歌手信息
             singer: {},
             // 是否播放
@@ -50,6 +52,14 @@ export const usePlay = defineStore({
     getters: {
         currentPlay(state) {
             return state.playList[state.currentindex] || {}; // 拿到当前索引值的歌曲
+        },
+
+        getIsLogin(state): boolean {
+            return state.isLogin || storage.get("isLogin");
+        },
+
+        getUserInfo(state) {
+            return state.userInfo || (storage.get("loginInfo") || {});
         }
     },
 

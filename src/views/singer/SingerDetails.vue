@@ -82,7 +82,7 @@ let albumOffset = 0;
 
 // 判断时候登录 如果未登录 相似歌手无法读取
 const checkedClick = (pane: TabsPaneContext) => {
-    if (pane.paneName == 'like' && !play.loginStatu) {
+    if (pane.paneName == 'like' && !play.getIsLogin) {
         router.push({ name: 'login' })
     }
 }

@@ -33,17 +33,50 @@
                 <div class="nav-right">
                     <SearchMusic />
                 </div>
-                <span class="nav-login" @click="login">登陆</span>
+                <div :class="loginStatus">
+                    <div class="nav-login logined" v-if="play.getIsLogin">
+                        <el-image class="avatar" :src="userInfo.avatarUrl">
+
+                        </el-image>
+                        <span class="nickname">{{ userInfo.nickname }}</span>
+                        <span @click="outLogin">退出</span>
+                    </div>
+                    <span class="nav-login" @click="login" v-else>登陆</span>
+                </div>
             </div>
         </div>
     </nav>
 </template>
 
 <script lang="ts" setup>
+import { computed } from "vue";
 import { useRouter } from 'vue-router';
 import SearchMusic from '@/components/search/SearchMusic.vue';
+import { usePlay } from '@/store/play';
+import { storage } from "@/util";
+import { loginOut } from "@/api";
+
+const play = usePlay();
 const router = useRouter();
+
+const loginStatus = computed(() => play.getIsLogin ? "user-avatar" : "login");
+const userInfo = computed(() => play.getUserInfo);
 const login = () => router.push('/login');
+
+async function outLogin() {
+    try {
+        const res = await loginOut();
+        if (res.code == 200) {
+            storage.remove("cookie");
+            storage.remove("loginInfo");
+            storage.remove("isLogin");
+            play.$patch({ userInfo: null, isLogin: false });
+            router.push("/discover"); // 退出登陆并返回首页
+        }
+    } catch (e) {
+        console.error(e, "login out fai =====>");
+    }
+}
 
 </script>
 
@@ -108,6 +141,53 @@ const login = () => router.push('/login');
         margin: 0px 25px 2px 15px;
         cursor: pointer;
         color: #ffffff;
+    }
+}
+
+.user-avatar {
+    padding: 5px 0 5px 20px;
+    text-align: center;
+
+    .avatar {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: 100%;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .logined {
+        display: flex;
+        align-items: center;
+
+        span {
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+            font-weight: 300;
+            padding: 0 10px;
+            cursor: pointer;
+        }
+
+        .iconfont {
+            color: var(--color-text-main);
+            vertical-align: top;
+        }
+    }
+}
+
+.logined {
+    display: flex;
+    align-items: center;
+
+    span {
+        display: inline-block;
+        height: 24px;
+        line-height: 24px;
+        font-weight: 300;
+        padding: 0 10px;
+        cursor: pointer;
     }
 }
 </style>

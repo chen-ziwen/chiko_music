@@ -3,11 +3,12 @@
 export class useStorage {
     public readonly set: (name: string, data: any) => void;
     public readonly get: (name: string) => any;
-    public readonly clear: (name: string) => void;
+    public readonly remove: (name: string) => void;
+    public readonly clear: () => void;
     constructor() {
         this.set = (name, data) => {
             let cloneData = data;
-            if (typeof data !== 'string') {
+            if (typeof data === "object" && data !== null) {
                 cloneData = JSON.stringify(cloneData);
             }
             window.localStorage.setItem(name, cloneData);
@@ -19,9 +20,15 @@ export class useStorage {
             }
             return data;
         };
-        this.clear = (name) => {
+        this.remove = (name) => {
             window.localStorage.removeItem(name);
+        }
+        this.clear = () => {
+            window.localStorage.clear();
         }
     }
 }
+
+const storage = new useStorage();
+export { storage };
 

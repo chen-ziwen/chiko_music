@@ -51,6 +51,10 @@ export function loginQrCheck(key: string, timestamp: number) {
 
 // 登录状态
 
-export function loginStatus() {
-    return http.get<any>('/login/status')
+export function isLogins() {
+    return http.get<any>('/login/status');
+}
+
+export function loginOut() {
+    return http.get<any>('/logout');
 }

@@ -155,7 +155,7 @@ async function getAllTags() {
         }
         allTags.value = tagList;
     } catch (e) {
-        console.log(e, '获取全部标签失败');
+        console.error(e, 'get all tags fail =====>');
     }
 }
 
@@ -179,7 +179,7 @@ const tagsList = async (name: string) => {
 
 // 全部标签 跳转页面时，进行请求
 const currentChange = async (page: number) => {
-    const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 64, (page - 1) * 64); // offset n-1*64
+    const { playlists, total } = await getTopPlaylistDetail(nameKey.value, 64, (page - 1) * 64);
     sheetList.playlists = playlists;
     sheetList.total = total;
     scroll(5);
@@ -187,7 +187,6 @@ const currentChange = async (page: number) => {
 
 const boutique = () => router.push({ name: 'boutiquesongsheet', query: { name: nameKey.value } });
 
-// tag变化 重新请求
 watch(() => route.query.name, (name) => {
     if (!name) return;
     tagsList(name as string);
@@ -201,7 +200,7 @@ onMounted(async () => {
         await tagsList(route.query.name as string || hotTags.value[0]);
         loading.value = false;
     } catch (e) {
-        console.log(e, "初始化歌单失败");
+        console.error(e, "init song sheet fail =====>");
     }
 })
 </script>

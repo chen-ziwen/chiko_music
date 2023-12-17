@@ -1,6 +1,7 @@
 <template>
     <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => { searchContent = false }">
-        <input class="input" type="text" @click="getSearchContent" @keydown.enter="turnSearchPage(inputValue)" v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
+        <input class="input" type="text" @click="getSearchContent" @keydown.enter="turnSearchPage(inputValue)"
+            v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
         <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = !searchBox, searchContent = false"></i>
         <div class="search-content-box" v-show="searchBox && searchContent">
             <div class="history-search-box" v-if="searchSuggestStatus">
@@ -15,12 +16,14 @@
                 </ul>
                 <ul class="search-music">
                     <li class="tag-title">热搜榜</li>
-                    <li class="search-list" v-for="data, index in hotSearchList" :key="index" :class="judgeChange(index)" @click="turnSearchPage(data.searchWord)">
+                    <li class="search-list" v-for="data, index in hotSearchList" :key="index" :class="judgeChange(index)"
+                        @click="turnSearchPage(data.searchWord)">
                         <span class="order">{{ index + 1 }}</span>
                         <div class="message-box">
                             <div class="message-title">
                                 <span class="searchword text-hidden">{{ data.searchWord }}</span>
-                                <img class="hot-icon" v-if="data.iconUrl" :src="data.iconUrl" alt="logo" @error="() => data.iconUrl = ''">
+                                <img class="hot-icon" v-if="data.iconUrl" :src="data.iconUrl" alt="logo"
+                                    @error="() => data.iconUrl = ''">
                                 <span class="score">{{ data.score }}</span>
                             </div>
                             <p class="message-content text-hidden" v-if="data.content">{{ data.content }}</p>
@@ -98,7 +101,7 @@ const deleteHistorySearch = (searchWord: string) => {
 
 // 清空搜索历史
 const clearHistorySearch = () => {
-    storage.clear('searchHistory');
+    storage.remove('searchHistory');
     storage.set('searchHistory', []);
     searchHistory.value = storage.get('searchHistory');
 }
@@ -142,7 +145,7 @@ const useGetSearchSuggest = async (key: string) => {
         }
     } catch (e) {
         searchSuggestStatus.value = true;
-        console.log(e, '搜索建议请求失败');
+        console.log(e, 'search suggest request fail =====>');
     }
 };
 const debounceSearchSuggest = debounce.use(useGetSearchSuggest, 300); // 对搜索限制 300ms 最多触发一次

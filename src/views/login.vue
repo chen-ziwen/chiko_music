@@ -11,12 +11,13 @@
 import { useRouter } from 'vue-router';
 import { loginKey, loginQrCheck, loginQrCreate } from '@/api';
 import { onMounted, onUnmounted, ref } from 'vue';
-import { useStorage } from '@/util';
+import { storage } from '@/util';
+import { usePlay } from '@/store/play';
 
 const router = useRouter();
 const qrSrc = ref<string>("/src/assets/image/login_m.png");
+const play = usePlay();
 let timer: number | undefined;
-const storage = new useStorage();
 
 async function qrLogin() {
     const time = Date.now();
@@ -27,16 +28,21 @@ async function qrLogin() {
 }
 
 async function qrCheck(key: string) {
-    clearInterval(timer);
+    timer && clearInterval(timer);
     timer = window.setInterval(() => {
         const time = Date.now();
         loginQrCheck(key, time).then(res => {
-            console.log(res, 'is login layout =====>');
+            if (res.code == 802) {
+                const userInfo = { avatarUrl: res.avatarUrl, nickname: res.nickname };
+                storage.set("loginInfo", userInfo);
+                play.$patch({ userInfo: userInfo });
+            }
             if (res.code == 803) {
                 storage.set('cookie', res.cookie);
-                storage.set('loginStatu', true);
+                storage.set('isLogin', true);
                 router.replace({ name: 'discover' });
-                clearInterval(timer);
+                play.$patch({ isLogin: true });
+                timer && clearInterval(timer);
             }
         }).catch((e) => {
             console.error(e, 'login fail =====>');
@@ -44,12 +50,11 @@ async function qrCheck(key: string) {
     }, 2500);
 }
 
-
 onMounted(async () => {
     await qrLogin();
 })
 onUnmounted(() => {
-    clearInterval(timer);
+    timer && clearInterval(timer);
 });
 
 </script>
