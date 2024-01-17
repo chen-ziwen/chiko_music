@@ -13,7 +13,6 @@ const loginRouter = {
 }
 
 const mainRouter = [
-    // 路由的最佳写法
     {
         path: '/',
         name: 'home',
@@ -124,15 +123,6 @@ const mainRouter = [
                 },
                 component: () => import('@/views/mv/MvSort.vue')
             },
-            // {
-            //     path: 'newdisc',
-            //     name: 'newdisc',
-            //     meta: {
-            //         title: '新碟',
-            //         keepAlive: false
-            //     },
-            //     component: () => import('@/views/new-disc/NewDisc.vue')
-            // },
             {
                 path: 'searchpage',
                 name: 'searchpage',
@@ -142,15 +132,6 @@ const mainRouter = [
                 },
                 component: () => import('@/views/search/SearchPage.vue')
             },
-            // {
-            //     path: 'test',
-            //     name: 'test',
-            //     meta: {
-            //         title: '测试',
-            //         keepAlive: true
-            //     },
-            //     component: () => import('@/views/test/Test.vue')
-            // },
         ]
     },
 

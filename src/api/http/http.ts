@@ -7,7 +7,7 @@ interface API {
     post<T>(url: string, params?: any): Promise<T>
 }
 
-const baseURl = isDev ? 'http://127.0.0.1:3000/' : 'http://114.116.47.111:3000/';
+const baseURl = isDev ? 'http://127.0.0.1:3000/' : 'http://api.music.chiko.website';
 
 const instance = axios.create({
     baseURL: baseURl,  //'https://chiko-music.vercel.app', //默认地址
@@ -18,6 +18,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     function (config: AxiosRequestConfig) {
+        // request拦截器 可以拿到请求报文，然后给请求标头设置Authorization(授权)为token值，这样每次请求都会带上这个token用于服务器验证身份。
         // config.headers.Authorization = window.sessionStorage.getItem('token'); // 将token加入到请求头
         // return config
         return config;
