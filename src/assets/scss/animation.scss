@@ -28,3 +28,18 @@
 .pop-leave-to {
     transform: translateY(80px);
 }
+
+// 进入离开
+.slide-fade-enter-active {
+    transition: all 0.5s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.3s cubic-bezier(0.5, 0.3, 0.2, 0.5);
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+}

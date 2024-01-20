@@ -24,11 +24,11 @@
                 </div>
             </div>
             <ContentBox title="精彩评论" :font-size="18" :gap="-5" color="#4C4949" v-if="hotComments.length">
-                <TalkList :data="hotComments" v-if="hotComments.length" />
+                <TalkList :data="hotComments" show-reply v-if="hotComments.length" />
                 <Loading v-else />
             </ContentBox>
             <ContentBox title="最新评论" :font-size="18" :gap="-5" color="#4C4949" v-if="newComments.length">
-                <TalkList :data="newComments" v-if="newComments.length" />
+                <TalkList :data="newComments" show-reply v-if="newComments.length" />
                 <Loading v-else />
             </ContentBox>
             <div v-if="videoInfo.commentTotal">

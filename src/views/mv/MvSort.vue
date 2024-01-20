@@ -96,16 +96,14 @@ const params = ref<Params>({
 })
 
 const mvContnet = ref<MvType[]>([]);
-const mvCount = ref<number>(0); // 给初始值 不然会报错
+const mvCount = ref<number>(0); 
 
-// 选中不同标签时，更新param请求参数
 const checkTags = (name: string, tag: string) => {
     params.value[name] = tag;
     getMvTagContent(params.value);
     scroll(5);
 }
 
-// 选中高亮
 const checkHigh = (name: string, tag: string) => {
     const high: { [key: string]: string } = { area: '', type: '', order: '' }
     if (params.value[name] == tag) {
@@ -121,7 +119,7 @@ const currentChange = async (page: number) => {
         mvContnet.value = useMv(data);
         scroll(5);
     } catch (e) {
-        console.log(e, 'mv page change fail =====>');
+        console.error(e, 'mv page change fail =====>');
     }
 }
 // 处理获取到的mv数据
@@ -133,7 +131,7 @@ async function getMvTagContent(param: Params) {
         mvContnet.value = useMv(data);
         mvCount.value = count;
     } catch (e) {
-        console.log(e, 'mv request fail =====>');
+        console.error(e, 'mv request fail =====>');
     }
 }
 

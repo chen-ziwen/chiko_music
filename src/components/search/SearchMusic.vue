@@ -1,23 +1,23 @@
 <template>
-    <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => { searchContent = false }">
-        <input class="input" type="text" @click="getSearchContent" @keydown.enter="turnSearchPage(inputValue)"
-            v-model="inputValue" placeholder="搜索：音乐/专辑/歌手/歌单/MV">
-        <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = !searchBox, searchContent = false"></i>
-        <div class="search-content-box" v-show="searchBox && searchContent">
-            <div class="history-search-box" v-if="searchSuggestStatus">
-                <ul class="history-search" v-if="searchHistory.length">
+    <div class="input-box" :class="{ 'search-box': searchBox }" v-close-outside="() => { content = false }">
+        <input type="text" @click="getSearchContent" @keydown.enter="jumpPage(inputValue)" v-model="inputValue"
+            placeholder="搜索：音乐/专辑/歌手/歌单/MV">
+        <i class="iconfont icon-sousuo" title="搜索" @click="searchBox = !searchBox, content = false" />
+        <div class="search-content-box" v-show="searchBox && content">
+            <div class="history-search-box" v-if="suggestStatus">
+                <ul class="history-search" v-if="history.length">
                     <li class="tag-title">搜索历史
-                        <i class="iconfont icon-lajitong" title="清空搜索记录" @click.stop="clearHistorySearch"></i>
+                        <i class="iconfont icon-lajitong" title="清空搜索记录" @click.stop="clearHistory" />
                     </li>
-                    <li class="history-list" v-for="item of searchHistory" :key="item" @click="turnSearchPage(item)">
+                    <li class="history-list" v-for="item of history" :key="item" @click="jumpPage(item)">
                         <span class="keyword">{{ item }}</span>
-                        <i class="iconfont icon-cuowu" @click.stop="deleteHistorySearch(item)" title="删除记录"></i>
+                        <i class="iconfont icon-cuowu" @click.stop="delHistory(item)" title="删除记录" />
                     </li>
                 </ul>
                 <ul class="search-music">
                     <li class="tag-title">热搜榜</li>
-                    <li class="search-list" v-for="data, index in hotSearchList" :key="index" :class="judgeChange(index)"
-                        @click="turnSearchPage(data.searchWord)">
+                    <li class="search-list" v-for="data, index in hotList" :class="light(index)"
+                        @click="jumpPage(data.searchWord)">
                         <span class="order">{{ index + 1 }}</span>
                         <div class="message-box">
                             <div class="message-title">
@@ -32,12 +32,12 @@
                 </ul>
             </div>
             <div class="suggest-search" v-else>
-                <div class="info-type" v-for="item, index in searchSuggest">
-                    <i class="iconfont" :class="fontIcon[index].icon"></i>
-                    {{ fontIcon[index].name }}
-                    <p class="keyword-info" v-for="i in item" @click="turnSearchPage(i.name)">
-                        {{ i.name }}
-                    </p>
+                <div class="info-type" v-for="item, index in suggest">
+                    <span class="icon-box">
+                        <i class="iconfont" :class="fontIcon[index].icon" />
+                        {{ fontIcon[index].name }}
+                    </span>
+                    <p class="keyword-info" v-for="i in item" @click="jumpPage(i.name)">{{ i.name }}</p>
                 </div>
             </div>
         </div>
@@ -53,63 +53,44 @@ import { Debounce } from '@/util';
 const router = useRouter();
 const inputValue = ref('');
 const searchBox = ref<boolean>(false);
-const searchContent = ref<boolean>(false);
-const hotSearchList = ref<SearchHotDetailType[]>([]);
-const searchSuggest = ref<SearchSuggestType>({});
-const searchSuggestStatus = ref<boolean>(true); // 搜索状态
+const content = ref<boolean>(false);
+const hotList = ref<SearchHotDetailType[]>([]);
+const suggest = ref<SearchSuggestType>({});
+const suggestStatus = ref<boolean>(true);
 const debounce = new Debounce();
-const searchHistory = ref<string[]>([]);
+const history = ref<string[]>([]);
 
 const fontIcon = {
-    albums: {
-        icon: 'icon-zhuanji',
-        name: '专辑',
-    },
-    artists: {
-        icon: 'icon-User',
-        name: '歌手',
-    },
-    playlists: {
-        icon: 'icon-gedan1',
-        name: '歌单'
-    },
-    songs: {
-        icon: 'icon-music_play',
-        name: '歌曲'
-    },
+    albums: { icon: 'icon-zhuanji', name: '专辑' },
+    artists: { icon: 'icon-User', name: '歌手' },
+    playlists: { icon: 'icon-gedan1', name: '歌单' },
+    songs: { icon: 'icon-music_play', name: '歌曲' }
 }
 
-// 排行前三首样式
-const judgeChange = (index: number) => {
-    if (index <= 2) {
-        return 'judge-change';
-    }
-    return '';
-}
+const light = (index: number) => index <= 2 ? "judge-change" : "";
 
 // 添加搜索历史
-const getHistorySearch = (searchWord?: string) => {
+const keepHistory = (searchWord?: string) => {
     storage.addSingleSearch('searchHistory', searchWord);
-    searchHistory.value = storage.get('searchHistory');
+    history.value = storage.get('searchHistory');
 }
 
 // 删除某一条搜索历史
-const deleteHistorySearch = (searchWord: string) => {
+const delHistory = (searchWord: string) => {
     storage.deleteSingleSearch('searchHistory', searchWord);
-    searchHistory.value = storage.get('searchHistory');
+    history.value = storage.get('searchHistory');
 }
 
 // 清空搜索历史
-const clearHistorySearch = () => {
+const clearHistory = () => {
     storage.remove('searchHistory');
     storage.set('searchHistory', []);
-    searchHistory.value = storage.get('searchHistory');
+    history.value = storage.get('searchHistory');
 }
 
 const getSearchContent = () => {
-    searchContent.value = true;
-    // 如果热搜列表长度为0的时候请求，不做重复请求
-    if (!hotSearchList.value.length) {
+    content.value = true;
+    if (!hotList.value.length) {
         useGetSearchHotDetail();
     }
 };
@@ -118,9 +99,9 @@ const getSearchContent = () => {
 const useGetSearchHotDetail = async () => {
     try {
         const { data } = await getSearchHotDetail();
-        hotSearchList.value = data;
+        hotList.value = data;
     } catch (e) {
-        console.log(e, 'hot search fail =====>');
+        console.error(e, 'hot search fail =====>');
     }
 };
 
@@ -128,77 +109,63 @@ const useGetSearchHotDetail = async () => {
 const useGetSearchSuggest = async (key: string) => {
     try {
         const { result } = await getSearchSuggest(key);
-        if (Object.keys(result).length > 0) {
-            searchSuggest.value = {};
-            // 对获取的信息进行排序
+        if (Object.keys(result).length) {
+            suggest.value = {};
             for (let item of result.order) {
-                searchSuggest.value[item as keyof SearchSuggestType] = result[item];
+                suggest.value[item as keyof SearchSuggestType] = result[item];
             }
-            // 如果有搜索内容，显示搜索结果，否则显示推荐列表
             if (inputValue.value) {
-                searchSuggestStatus.value = false;
+                suggestStatus.value = false;
             }
         } else {
-            // 没有请求到数据的时候不显示搜索建议
-            // 当搜索框为空时不显示搜索建议
-            searchSuggestStatus.value = true;
+            suggestStatus.value = true;
         }
     } catch (e) {
-        searchSuggestStatus.value = true;
-        console.log(e, 'search suggest request fail =====>');
+        suggestStatus.value = true;
+        console.error(e, 'search suggest request fail =====>');
     }
 };
 const debounceSearchSuggest = debounce.use(useGetSearchSuggest, 300); // 对搜索限制 300ms 最多触发一次
 
-const turnSearchPage = (searchWord: string) => {
+const jumpPage = (searchWord: string) => {
     if (searchWord) {
-        router.push({
-            name: 'searchpage',
-            query: {
-                searchWord
-            }
-        });
-        inputValue.value = searchWord; // 点击搜索时 将搜索值赋值给input
-        getHistorySearch(searchWord); // 保存搜索值
-        setTimeout(() => {
-            searchContent.value = false // 延时关闭弹窗
-        }, 150);
+        router.push({ name: 'searchpage', query: { searchWord } });
+        inputValue.value = searchWord;
+        keepHistory(searchWord);
+        setTimeout(() => content.value = false, 150);
     }
 };
 
 // 当搜索框文字更新时触发
 watch(inputValue, (val) => {
-    searchContent.value = true;
+    content.value = true;
     if (val) {
         debounceSearchSuggest(val);
     } else {
-        searchSuggestStatus.value = true;
+        suggestStatus.value = true;
     }
 })
 
-onMounted(() => {
-    getHistorySearch(); // 初始化请求搜索历史
-})
+onMounted(keepHistory);
 
 </script>
 <style lang='scss' scoped>
 .input-box {
     position: relative;
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     transition: all .2s ease-out;
 
-    .input {
+    input {
         width: 100%;
         height: 100%;
         outline: none;
         border: none;
-        padding-left: 35px;
-        padding-right: 10px;
+        padding: 0 10px 0 35px;
+        visibility: hidden;
         box-sizing: border-box;
         border-radius: 15px;
         background-color: #080F31;
-
     }
 
     .icon-sousuo {
@@ -208,24 +175,22 @@ onMounted(() => {
         font-size: 22px;
         cursor: pointer;
         color: #ffffff;
-        transform: translate(10px, -50%);
+        transform: translateY(-50%);
 
         &:hover {
             color: #ff0000;
         }
     }
 
-
     .search-content-box {
         position: absolute;
         left: 0;
         top: 35px;
-        min-width: 10rem;
-        max-height: 20rem; // 真正使用的时候需要
+        min-width: 15rem;
+        max-height: 20rem;
         border-radius: 5px;
         background-color: #ffffff;
         overflow: hidden scroll;
-        transition: all 0.5s; // 宽度变化动画
 
         &::-webkit-scrollbar {
             width: 6px;
@@ -348,10 +313,10 @@ onMounted(() => {
 
                     &:hover {
                         background-color: #f2f2f2;
-                    }
 
-                    &:hover .icon-cuowu {
-                        display: inline-block;
+                        .icon-cuowu {
+                            display: inline-block;
+                        }
                     }
 
                     .keyword {
@@ -359,16 +324,15 @@ onMounted(() => {
                     }
 
                     .icon-cuowu {
+                        display: none;
                         position: absolute;
                         right: 5px;
                         top: 50%;
                         font-size: 12px;
-                        display: none;
                         transform: translateY(-50%) scale(0.8);
                     }
                 }
             }
-
         }
 
         .suggest-search {
@@ -381,6 +345,15 @@ onMounted(() => {
 
             .info-type {
                 margin-bottom: 12px;
+
+                .icon-box {
+                    display: flex;
+                    align-items: center;
+
+                    .iconfont {
+                        padding-right: 5px;
+                    }
+                }
 
                 .keyword-info {
                     margin: 5px;
@@ -405,12 +378,14 @@ onMounted(() => {
     width: 15rem !important;
     height: 2rem !important;
 
-    .input {
+    input {
         background: #ffffff !important;
+        visibility: visible !important;
     }
 
     .icon-sousuo {
         color: #080F31 !important;
+        margin-left: 10px;
     }
 }
 </style>

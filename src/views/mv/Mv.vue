@@ -69,7 +69,7 @@ async function mvFrist() {
         const { data } = await getMvFirst(12);
         mvFristList.value = useMv(data);
     } catch (e) {
-        console.log(e, 'new mv fail ======>');
+        console.error(e, 'new mv fail ======>');
     }
 }
 
@@ -85,7 +85,7 @@ async function mvHot() {
         const { data } = await getMvAllUp(mvListType);
         mvHotList.value = useMv(data);
     } catch (e) {
-        console.log(e, 'hot mv fail ======>');
+        console.error(e, 'hot mv fail ======>');
     }
 }
 
@@ -94,7 +94,7 @@ async function mvWangYiYun() {
         const { data } = await getMvExclusive(12);
         mvYun.value = useMv(data);
     } catch (e) {
-        console.log(e, 'wangyi yun fail ======>');
+        console.error(e, 'wangyi yun fail ======>');
     }
 }
 

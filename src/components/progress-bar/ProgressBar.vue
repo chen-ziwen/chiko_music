@@ -4,7 +4,7 @@
             @error="audioError" @ended="audioEnded" @timeupdate="timeupdate" :muted="isMuted"></audio>
         <div class="info">
             <div class="left-box flex-row flex-grow-1">
-                <el-image class="picture" :src="currentPlay.image" fit="fill" />
+                <el-avatar class="picture" shape="square" :size="55" :src="imgurl(currentPlay.image, '55')" fit="fill" />
                 <div class="song-msg flex-column">
                     <span class="song-name text-hidden">{{ currentPlay.name }}</span>
                     <span class="singer-name text-hidden">{{ currentPlay.singer }}</span>
@@ -18,13 +18,13 @@
                     <i class="iconfont icon-xiayiji" @click="nextSong"></i>
                     <i class="iconfont icon-geciweidianji" @click="openLyric"></i>
                 </div>
-                <div class="play-bar el-style flex-center flex-row">
+                <div class="play-bar flex-center flex-row">
                     <span class="start-time">{{ formatSecondTime(currentTime) }}</span>
                     <el-slider v-model="percent" :show-tooltip="false" size="small" @change="drapProgress" />
                     <span class="end-time">{{ formatSecondTime(currentPlay.duration) }}</span>
                 </div>
             </div>
-            <div class="right-box el-style flex-grow-1 flex-jcenter">
+            <div class="right-box flex-grow-1 flex-jcenter">
                 <i class="iconfont audio noshake" :class="muted" @click="changeMuted"></i>
                 <el-slider v-model="mutedAll.volume" @change="changeVolume" :show-tooltip="false" size="small" />
             </div>
@@ -54,8 +54,9 @@
 </template>
 <script lang='ts' setup>
 import { ref, shallowRef, watch, computed, nextTick, reactive, onMounted } from 'vue';
+import { Headset } from '@element-plus/icons-vue';
 import { usePlay, playState } from '@/store/play';
-import { formatSecondTime, randomNum } from '@/util';
+import { formatSecondTime, randomNum, imgurl } from '@/util';
 import { getLyric } from '@/api';
 import Lyric from "lyric-parser";
 import CLyric from "@/components/lyric/Lyric.vue";
@@ -146,7 +147,7 @@ const nextSong = () => {
 // 单曲循环
 const loop = () => {
     if (!audio.value) return;
-    audio.value.currentTime = 0; // 时间归0
+    audio.value.currentTime = 0;
     play.playing = true;
     currentLyric.value?.seek(0);
 }
@@ -155,9 +156,9 @@ const loop = () => {
 const audioEnded = () => {
     const type = play.playType;
     if (type === playState.loop) {
-        loop(); // 单曲循环直接从头开始播
+        loop();
     } else if (type === playState.listloop) {
-        nextSong(); // 列表循环直接放下一首
+        nextSong();
     } else if (type === playState.random) {
         play.currentindex = randomNum(0, play.playList.length);
         play.playing = true;
@@ -208,7 +209,7 @@ function openLyric() {
     if (showLyric.value) {
         setTimeout(() => {
             lyricRef.value?.lyricList?.refresh();
-            
+
         }, 100);
     }
 }
@@ -398,8 +399,7 @@ watch(() => play.playing, (isPlaying) => {
 
             .picture {
                 flex-shrink: 0;
-                width: 55px;
-                height: 55px;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
             }
 
             .song-msg {
@@ -456,31 +456,5 @@ watch(() => play.playing, (isPlaying) => {
 
 .play {
     font-size: 40px;
-}
-
-.el-style {
-    :deep(.el-slider__bar) {
-        background-color: #F08080 !important;
-    }
-
-    :deep(.el-slider__button) {
-        border: 2px solid #F08080 !important;
-        width: 17px;
-        height: 17px;
-    }
-}
-
-.slide-fade-enter-active {
-    transition: all 0.5s ease;
-}
-
-.slide-fade-leave-active {
-    transition: all 0.3s cubic-bezier(0.5, 0.3, 0.2, 0.5);
-}
-
-.slide-fade-enter,
-.slide-fade-leave-to {
-    opacity: 0;
-    transform: translateY(30px);
 }
 </style>

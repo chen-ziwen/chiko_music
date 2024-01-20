@@ -18,7 +18,9 @@
                         <i class="iconfont icon-show" :class="playing(item.idx - 1, item.id)"></i>
                     </td>
                     <td>
-                        <img :src="imgurl(item.image, '35')">
+                        <el-avatar style="margin-right: 10px;" :size="35" shape="square" :src="imgurl(item.image, '35')">
+                            <img src="@/assets/image/cd.png">
+                        </el-avatar>
                         <span>{{ item.name }}</span>
                     </td>
                     <td>{{ item.singer }}</td>
@@ -210,6 +212,10 @@ const playSong = (index: number, id: number) => {
         }
     }
 
+    .place-img {
+        width: 35px;
+        height: 35px;
+    }
 }
 
 .checked {

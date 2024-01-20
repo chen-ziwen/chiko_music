@@ -92,7 +92,7 @@ const getSong = async (keys: string[]) => {
         const { songs } = await getSongDetail(keys.join(','), Date.now());
         songsList.value = useSong(songs)
     } catch (e) {
-        console.log(e, 'song detail fail =====>');
+        console.error(e, 'song detail fail =====>');
     }
 };
 

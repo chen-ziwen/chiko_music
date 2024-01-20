@@ -14,7 +14,6 @@ interface SongList {
     idx: number;
 }
 
-
 export const useSong = (songList: any[]) => {
     const newSongList: SongList[] = [];
     for (let i = 0; i < songList.length; i++) {

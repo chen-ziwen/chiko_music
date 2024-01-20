@@ -52,7 +52,7 @@ async function getToplistMsg() {
         }
         loading.value = false;
     } catch (e) {
-        console.log(e, 'request fail =====>');
+        console.error(e, 'request fail =====>');
     }
 }
 

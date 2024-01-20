@@ -38,7 +38,7 @@ async function banners() {
         myBanner.value = banners;
         loading.value = false;
     } catch (e) {
-        console.log(e, 'banner get fail =====>');
+        console.error(e, 'banner get fail =====>');
     }
 }
 onMounted(async () => {

@@ -15,7 +15,7 @@ import { storage } from '@/util';
 import { usePlay } from '@/store/play';
 
 const router = useRouter();
-const qrSrc = ref<string>("/src/assets/image/login_m.png");
+const qrSrc = ref<string>("@/assets/image/login_m.png");
 const play = usePlay();
 let timer: number | undefined;
 

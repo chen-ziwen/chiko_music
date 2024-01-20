@@ -142,7 +142,7 @@ const alongSingerList = async (parm: Params) => {
         singerList.value.splice(0, singerList.value.length);
         getSingerList(parm);
     } catch (e) {
-        console.log(e, 'singer list fail =====>');
+        console.error(e, 'singer list fail =====>');
     }
 }
 
@@ -155,7 +155,7 @@ const getSingerList = async (parm: Params) => {
             more.value = singerMore;
             params.offset += 40;
         } catch (e) {
-            console.log(e, 'singer list fail =====>');
+            console.error(e, 'singer list fail =====>');
         }
     }
 }

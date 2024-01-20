@@ -3,43 +3,30 @@
         <div class="music-nav">
             <div class="container flex-start">
                 <div class="music-logo">
-                    <a href="#javascript">
-                        <img src="@/assets/image/logo.png" class="music-logo-i" />
-                    </a>
+                    <a href="#javascript"><img src="@/assets/image/logo.png" class="music-logo-i" /></a>
                 </div>
                 <ul class="music-nav-ul">
-                    <li>
-                        <router-link :to="{ name: 'discover' }" active-class="router-style">发现音乐</router-link>
+                    <li v-for="link of routers" :key="link.to.name">
+                        <router-link :to="link.to" active-class="router-style">{{ link.title }}</router-link>
                     </li>
-
-                    <li>
-                        <router-link :to="{ name: 'ranklist' }" active-class="router-style">排行榜</router-link>
-                    </li>
-
-                    <li>
-                        <router-link :to="{ name: 'songsheet' }" active-class="router-style">歌单</router-link>
-                    </li>
-
-                    <li>
-                        <router-link :to="{ name: 'singer' }" active-class="router-style">歌手</router-link>
-                    </li>
-                    <li>
-                        <router-link :to="{ name: 'mv' }" active-class="router-style">MV</router-link>
-                    </li>
-                    <li>
-                        <a href="https://github.com/chen-ziwen/chiko_music" target="_blank">GitHub</a>
-                    </li>
+                    <li><a href="https://github.com/chen-ziwen/chiko_music" target="_blank">GitHub</a></li>
                 </ul>
                 <div class="nav-right">
                     <SearchMusic />
                 </div>
                 <div :class="loginStatus">
                     <div class="nav-login logined" v-if="play.getIsLogin">
-                        <el-image class="avatar" :src="userInfo.avatarUrl">
-
-                        </el-image>
-                        <span class="nickname">{{ userInfo.nickname }}</span>
-                        <span @click="outLogin">退出</span>
+                        <el-dropdown :teleported="false">
+                            <span class="el-dropdown-link">
+                                <el-image class="avatar" :src="userInfo.avatarUrl" />
+                                <span class="nickname">{{ userInfo.nickname }}</span>
+                            </span>
+                            <template #dropdown>
+                                <el-dropdown-menu>
+                                    <el-dropdown-item @click="outLogin">退出登陆</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
                     </div>
                     <span class="nav-login" @click="login" v-else>登陆</span>
                 </div>
@@ -63,6 +50,14 @@ const loginStatus = computed(() => play.getIsLogin ? "user-avatar" : "login");
 const userInfo = computed(() => play.getUserInfo);
 const login = () => router.push('/login');
 
+const routers = [
+    { title: "发现音乐", to: { name: "discover" } },
+    { title: "排行榜", to: { name: "ranklist" } },
+    { title: "歌单", to: { name: "songsheet" } },
+    { title: "歌手", to: { name: "singer" } },
+    { title: "MV", to: { name: "mv" } }
+];
+
 async function outLogin() {
     try {
         const res = await loginOut();
@@ -81,80 +76,100 @@ async function outLogin() {
 </script>
 
 <style lang="scss" scoped>
-.music-logo {
-    height: 80px;
-    @include _flex(center, center);
-
-    &-i {
-        height: 65px;
-    }
-}
-
 .nav {
     width: 100%;
     height: 80px;
-}
 
-.music-nav {
-    z-index: 2001;
-    position: fixed;
-    top: 0px;
-    background-color: rgb(8, 15, 49);
-    width: 100%; // div宽度占满整个窗口;
-    height: 80px;
-    min-width: $width; //div的最小宽度要和里面的内容一样大，因为content的宽度就是1024px;
-
-    &-ul {
-        flex-grow: 1;
-        @include _flex(flex-start, center);
+    .music-nav {
+        z-index: 2001;
+        position: fixed;
+        top: 0px;
+        background-color: rgb(8, 15, 49);
+        width: 100%;
         height: 80px;
+        min-width: $width;
 
-        >li {
+        &-ul {
+            flex-grow: 1;
+            @include _flex(flex-start, center);
             height: 80px;
-            display: inline-block;
 
-            &:nth-of-type(1) {
-                margin-left: 30px;
-            }
-
-            >a {
-                display: inline-block;
-                padding: 0 20px;
+            >li {
                 height: 80px;
-                line-height: 80px;
-                color: white;
-                cursor: pointer;
+                display: inline-block;
 
-                &:hover {
-                    color: pink !important;
+                &:nth-of-type(1) {
+                    margin-left: 30px;
+                }
+
+                >a {
+                    display: inline-block;
+                    padding: 0 20px;
+                    height: 80px;
+                    line-height: 80px;
+                    color: white;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: pink !important;
+                    }
+                }
+            }
+        }
+
+        .nav-right {
+            position: relative;
+            @include _flex(center, center);
+        }
+
+        .nav-login {
+            margin: 0px 25px 2px 15px;
+            cursor: pointer;
+            color: #ffffff;
+
+            .el-dropdown-link {
+                display: flex;
+                align-items: center;
+                color: #ffffff;
+
+                .nickname {
+                    font-weight: bold;
                 }
             }
         }
     }
 
-    .nav-right {
-        position: relative;
-        @include _flex(center, center);
-    }
+    .user-avatar {
+        padding: 5px 0 5px 20px;
+        text-align: center;
 
-    .nav-login {
-        margin: 0px 25px 2px 15px;
-        cursor: pointer;
-        color: #ffffff;
-    }
-}
+        .avatar {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border-radius: 100%;
+            overflow: hidden;
+            cursor: pointer;
+        }
 
-.user-avatar {
-    padding: 5px 0 5px 20px;
-    text-align: center;
+        .logined {
+            display: flex;
+            align-items: center;
 
-    .avatar {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        border-radius: 100%;
-        overflow: hidden;
-        cursor: pointer;
+            span {
+                display: inline-block;
+                height: 24px;
+                line-height: 24px;
+                font-weight: 300;
+                padding: 0 10px;
+                cursor: pointer;
+            }
+
+            .iconfont {
+                color: var(--color-text-main);
+                vertical-align: top;
+            }
+        }
     }
 
     .logined {
@@ -169,25 +184,28 @@ async function outLogin() {
             padding: 0 10px;
             cursor: pointer;
         }
-
-        .iconfont {
-            color: var(--color-text-main);
-            vertical-align: top;
-        }
     }
 }
 
-.logined {
-    display: flex;
-    align-items: center;
+.music-logo {
+    height: 80px;
+    @include _flex(center, center);
 
-    span {
-        display: inline-block;
-        height: 24px;
-        line-height: 24px;
-        font-weight: 300;
-        padding: 0 10px;
-        cursor: pointer;
+    &-i {
+        height: 65px;
+    }
+}
+
+:deep(.el-dropdown-menu__item) {
+    &:not(.is-disabled) {
+        color: rgb(248, 103, 103);
+    }
+}
+
+:deep(.el-dropdown-menu__item) {
+    &:not(.is-disabled):focus {
+        background-color: rgb(254, 236, 239);
+        color: rgb(248, 103, 103);
     }
 }
 </style>

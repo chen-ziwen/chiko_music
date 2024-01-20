@@ -57,7 +57,7 @@ const boutiqueTags = async () => {
         const { tags } = await getHighQualityTags();
         boutique.value = tags.map((x: BoutiqueTags) => x.name);
     } catch (e) {
-        console.log(e, 'tags fail =====>')
+        console.error(e, 'tags fail =====>')
     }
 }
 
@@ -69,7 +69,7 @@ const tSheet = async (name: string) => {
         nameId.value = name;
         showPop.value = false;
     } catch (e) {
-        console.log(e, 'song list fail =====>')
+        console.error(e, 'song list fail =====>')
     }
 }
 
@@ -81,7 +81,7 @@ const loadScroll = async () => {
             sheetList.playlists.push(...playlists);
             sheetList.more = more;
         } catch (e) {
-            console.log(e, 'song list fail =====>')
+            console.error(e, 'song list fail =====>')
         }
     }
 }

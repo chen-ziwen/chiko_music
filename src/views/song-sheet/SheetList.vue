@@ -51,7 +51,9 @@
                 <template v-if="sheetDetail.partsheet.length">
                     <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx" />
                     <div class="pagination">
-                        <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="50" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
+                        <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
+                            :page-size="50" @current-change="choice" v-model:currentPage="page"
+                            :hide-on-single-page="true" />
                     </div>
                 </template>
                 <Loading v-else />
@@ -161,7 +163,7 @@ async function playlistDetail(id: number) {
         }
         sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
     } catch (e) {
-        console.log(e, id, '歌单列表请求错误');
+        console.error(e, "get play list detail fail ===>");
     }
 }
 
@@ -179,7 +181,7 @@ async function startSheet(id: number) {
             sheetAbout.comments = comments;
         }
     } catch (e) {
-        console.error('请求繁忙', e);
+        console.error(e, "get start sheet fail ===>");
     }
 }
 
@@ -216,7 +218,7 @@ const playAll = () => {
 
 watch(() => route.query.sheetid, (id) => {
     if (!id) return;
-    page.value = 1;     // 跳转歌单时，将分页定位到第一页
+    page.value = 1;
     let sheetId = id as unknown as number;
     originContent(sheetId);
 }, { immediate: true })

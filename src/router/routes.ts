@@ -1,4 +1,3 @@
-//登陆路由 和页面到主要路由 ，路由组件全部放在view中
 import home from '@/views/home-page/HomePage.vue';
 
 const loginRouter = {

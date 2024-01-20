@@ -46,7 +46,9 @@
                 <template v-if="sheetDetail.partsheet.length">
                     <SongList :sheetList="sheetDetail.partsheet" @playIdx="playIdx" />
                     <div class="pagination">
-                        <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0" :page-size="30" @current-change="choice" v-model:currentPage="page" :hide-on-single-page="true" />
+                        <el-pagination layout="prev, pager, next" background :total="sheetDetail.detail?.trackCount || 0"
+                            :page-size="30" @current-change="choice" v-model:currentPage="page"
+                            :hide-on-single-page="true" />
                     </div>
                 </template>
                 <Loading v-else />
@@ -152,7 +154,7 @@ async function playlistDetail(id: number) {
         }
         sheetDetail.partsheet = sheetDetail.sheetList[0] || [];
     } catch (e) {
-        console.log(e, 'album fail =====>');
+        console.error(e, 'album fail =====>');
     }
 }
 

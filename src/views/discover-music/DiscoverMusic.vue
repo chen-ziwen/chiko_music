@@ -68,7 +68,7 @@ function Personalized() {
         const ids = res.result.map((x: SongList) => x.id).join(",");
         SongDetail(ids);
     }).catch((e) => {
-        console.log(e, 'new song fail =====>');
+        console.error(e, 'new song fail =====>');
     });
 }
 
@@ -76,7 +76,7 @@ const SongDetail = (ids: string) => {
     getSongDetail(ids).then(res => {
         delSong.value = useSong(res.songs);
     }).catch((e) => {
-        console.log(e, 'song list fail =====>');
+        console.error(e, 'song list fail =====>');
     });
 }
 

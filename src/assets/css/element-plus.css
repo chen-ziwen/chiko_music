@@ -1,4 +1,4 @@
-/*el-loading style*/
+/* el-loading */
 .el-loading-mask {
     background-color: #ffffff;
 }
@@ -15,7 +15,7 @@
     margin-right: 2px;
 }
 
-/* 分页 */
+/* el-pagination */
 .el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
     background-color: pink !important;
     cursor: pointer;
@@ -23,4 +23,25 @@
 
 .el-pagination {
     --el-pagination-hover-color: pink !important;
+}
+
+/* el-dropdown */
+.el-dropdown-menu__item:not(.is-disabled) {
+    color: rgb(248, 103, 103);
+}
+
+.el-dropdown-menu__item:not(.is-disabled):focus {
+    background-color: rgb(254, 236, 239);
+    color: rgb(248, 103, 103);
+}
+
+/* el-slider */
+.el-slider__bar {
+    background-color: #F08080 !important;
+}
+
+.el-slider__button {
+    border: 2px solid #F08080 !important;
+    width: 17px;
+    height: 17px;
 }

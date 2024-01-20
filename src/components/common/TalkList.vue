@@ -1,5 +1,6 @@
 <template>
-    <div class="talk-box-list" v-for="{ user: { nickname, avatarUrl }, commentId, timeStr, content, beReplied } in data" :key="commentId">
+    <div class="talk-box-list" v-for="{ user: { nickname, avatarUrl }, commentId, timeStr, content, beReplied } in data"
+        :key="commentId">
         <div class="user-box">
             <img class="talk-user-avatar" :src="avatarUrl" :title="nickname" />
             <div class="talk-detail">
@@ -10,7 +11,7 @@
         </div>
         <div class="talk-list">
             {{ content }}
-            <template v-if="beReplied?.length">
+            <template v-if="beReplied?.length && showReply">
                 <div class="content" v-for="data of beReplied" :key="data.beRepliedCommentId">
                     <span class="deepColor">@{{ data.user.nickname }}：</span>{{ data.content }}
                 </div>
@@ -29,9 +30,12 @@ interface TalkBoxListProps {
         timeStr: string;
         commentId: number;
         beReplied?: Record<string, any>[];
-    }[]
+    }[],
+    showReply?: boolean;
 }
-defineProps<TalkBoxListProps>();
+withDefaults(defineProps<TalkBoxListProps>(), {
+    showReply: false
+});
 
 </script>
 <style lang='scss' scoped>

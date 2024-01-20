@@ -99,7 +99,7 @@ const artistDesc = async (id: number) => {
         artDesc.intro = introduction;
         artDesc.brief = briefDesc;
     } catch (e) {
-        console.log(e, 'artist desc fail =====>');
+        console.error(e, 'artist desc fail =====>');
     }
 }
 
@@ -109,7 +109,7 @@ const artDetail = async (id: number) => {
         const { data } = await getArtistDetail(id);
         artDil.value = data.artist;
     } catch (e) {
-        console.log(e, 'artist detail fail =====>');
+        console.error(e, 'artist detail fail =====>');
     }
 }
 // 歌手50首热门歌曲
@@ -119,7 +119,7 @@ const singerHotsongs = async (id: number) => {
         const { hotSongs } = await getArtists(id);
         delSong.value = useSong(hotSongs);
     } catch (e) {
-        console.log(e, 'hot artists =====>');
+        console.error(e, 'hot artists =====>');
     }
 }
 
@@ -129,7 +129,7 @@ const simiArtist = async (id: number) => {
         const { artists } = await getSimiArtist(id);
         singerList.value = artists;
     } catch (e) {
-        console.log(e, 'simi artist fail =====>');
+        console.error(e, 'simi artist fail =====>');
     }
 }
 
@@ -140,7 +140,7 @@ const singerMv = async (id: number) => {
         artMv.value = useMv(mvs);
     }
     catch (e) {
-        console.log(e, 'artist mv fail =====>')
+        console.error(e, 'artist mv fail =====>')
     }
 }
 
@@ -153,7 +153,7 @@ const ArtistAlbum = async (id: number) => {
             albumMore.value = more;
             albumOffset += 30;
         } catch (e) {
-            console.log(e, 'artist album fail =====>');
+            console.error(e, 'artist album fail =====>');
         }
     }
 }
