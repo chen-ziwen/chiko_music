@@ -45,3 +45,7 @@
     width: 17px;
     height: 17px;
 }
+
+.el-tooltip__trigger:focus-visible {
+    outline: none;
+}

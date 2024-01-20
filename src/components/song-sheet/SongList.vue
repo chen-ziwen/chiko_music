@@ -18,7 +18,7 @@
                         <i class="iconfont icon-show" :class="playing(item.idx - 1, item.id)"></i>
                     </td>
                     <td>
-                        <el-avatar style="margin-right: 10px;" :size="35" shape="square" :src="imgurl(item.image, '35')">
+                        <el-avatar class="song-icon" :size="35" shape="square" :src="imgurl(item.image, '35')">
                             <img src="@/assets/image/cd.png">
                         </el-avatar>
                         <span>{{ item.name }}</span>
@@ -199,7 +199,6 @@ const playSong = (index: number, id: number) => {
                 }
             }
 
-            // 移入时隐藏数字，显示图标
             .sheet-list {
                 &:hover .sheet-index {
                     display: none;
@@ -207,6 +206,11 @@ const playSong = (index: number, id: number) => {
 
                 &:hover .icon-show {
                     display: inline-block;
+                }
+
+                .song-icon {
+                    flex-shrink: 0;
+                    margin-right: 10px;
                 }
             }
         }

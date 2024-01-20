@@ -54,12 +54,12 @@
 </template>
 <script lang='ts' setup>
 import { ref, shallowRef, watch, computed, nextTick, reactive, onMounted } from 'vue';
-import { Headset } from '@element-plus/icons-vue';
 import { usePlay, playState } from '@/store/play';
 import { formatSecondTime, randomNum, imgurl } from '@/util';
 import { getLyric } from '@/api';
 import Lyric from "lyric-parser";
 import CLyric from "@/components/lyric/Lyric.vue";
+import { Arrayable } from 'element-plus/es/utils';
 
 const play = usePlay();
 const currentPlay = computed(() => play.currentPlay);
@@ -173,12 +173,14 @@ const togglePlay = () => {
 }
 
 // 拖动进度条触发
-const drapProgress = (val: number) => {
+const drapProgress = (val: Arrayable<number>) => {
     if (!audio.value) return;
-    const currentTime = (val / 100) * currentPlay.value.duration;
-    audio.value.currentTime = currentTime;
-    percent.value = val;
-    currentLyric.value?.seek(currentTime * 1000);
+    if (typeof val == "number") {
+        const currentTime = (val / 100) * currentPlay.value.duration;
+        audio.value.currentTime = currentTime;
+        percent.value = val;
+        currentLyric.value?.seek(currentTime * 1000);
+    }
 }
 
 // 修改声音大小
@@ -193,11 +195,13 @@ const changeMuted = () => {
     isMuted.value ? mutedControl(false, 30) : mutedControl(true, 0)
 }
 // 拖动声音进度条
-const changeVolume = (num: number) => {
+const changeVolume = (num: Arrayable<number>) => {
     if (!audio.value) return;
-    isMuted.value = num === 0;
-    mutedAll.percent = num / 100;
-    audio.value.volume = num / 100;
+    if (typeof num == "number") {
+        isMuted.value = num === 0;
+        mutedAll.percent = num / 100;
+        audio.value.volume = num / 100;
+    }
 }
 // 初始化音量
 onMounted(() => {
