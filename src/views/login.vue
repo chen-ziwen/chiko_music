@@ -2,7 +2,7 @@
     <div class="login">
         <div class="land-module">
             <span class="login-tips">打开手机网易云APP 扫码登录</span>
-            <img :src="qrSrc">
+            <img :src="qrSrc || loginm">
         </div>
     </div>
 </template>
@@ -13,9 +13,10 @@ import { loginKey, loginQrCheck, loginQrCreate } from '@/api';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { storage } from '@/util';
 import { usePlay } from '@/store/play';
+import loginm from "@/assets/image/login_m.png";
 
 const router = useRouter();
-const qrSrc = ref<string>("@/assets/image/login_m.png");
+const qrSrc = ref<string>("");
 const play = usePlay();
 let timer: number | undefined;
 

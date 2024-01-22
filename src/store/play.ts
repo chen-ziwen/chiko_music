@@ -45,6 +45,10 @@ export const usePlay = defineStore({
         playAll(list: SongList[]) {
             this.selectPlay(list, 0);
             this.$state.playType = playState.listloop;
+        },
+        loginOut() {
+            this.$state.userInfo = null;
+            this.$state.isLogin = false;
         }
     },
     getters: {

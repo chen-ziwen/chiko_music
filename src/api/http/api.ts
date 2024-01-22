@@ -486,3 +486,9 @@ export function getLyric(id: number) {
     return http.get<any>('/lyric', { id });
 }
 
+/**
+ * @function 获取vip信息
+ */
+export function getVipInfo() {
+    return http.get<any>('/vip/info');
+}

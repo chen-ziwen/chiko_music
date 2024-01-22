@@ -65,8 +65,7 @@ async function outLogin() {
             storage.remove("cookie");
             storage.remove("loginInfo");
             storage.remove("isLogin");
-            play.$patch({ userInfo: null, isLogin: false });
-            router.push("/discover"); // 退出登陆并返回首页
+            play.loginOut();
         }
     } catch (e) {
         console.error(e, "login out fai =====>");

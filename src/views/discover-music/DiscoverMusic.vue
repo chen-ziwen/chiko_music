@@ -43,7 +43,7 @@ import SongSheetCard from "@/components/song-sheet/SongSheetCard.vue";
 import SingerSheet from "@/components/singer/SingerSheet.vue";
 import NewSongSheet from "@/components/new-disc/NewSongSheet.vue";
 import MvSheet from "@/components/mv/MvSheet.vue";
-import { getRecommendList, getSongDetail, getTopArtists, getPersonalizedNewsong, getPersonalizedMv } from '@/api/http/api';
+import { getRecommendList, getSongDetail, getTopArtists, getPersonalizedNewsong, getPersonalizedMv, getVipInfo } from '@/api/http/api';
 import type { RecommendList, SingerListType, SongList } from "@/models";
 import { useSong } from "@/util";
 import Loading from "@/components/common/loading/Loading.vue";
@@ -84,6 +84,10 @@ async function PersonalizedMv() {
     let { result } = await getPersonalizedMv();
     recommendMv.value = result;
 }
+
+getVipInfo().then(data => {
+    console.log('vip info', data);
+})
 
 onMounted(() => {
     getRecommend();
