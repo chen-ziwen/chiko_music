@@ -52,7 +52,7 @@ chiko_music
     │   └── song-sheet
     ├── directives
     ├── models
-    ├── router
+    ├── router                        
     ├── store
     ├── util
     └── views
@@ -66,7 +66,7 @@ chiko_music
 ``` 
 ## 安装运行
 ```git
-$ git clone https://github.com/Binaryify/NeteaseCloudMusicApi
+$ git clone git@github.com:chen-ziwen/NeteaseCloudMusicApi.git
 $ cd NeteaseCloudMusicApi
 $ npm install
 $ node app.js // 运行接口服务器 运行成功才能拿到数据
@@ -74,5 +74,9 @@ $ git clone git@github.com:chen-ziwen/chiko_music.git
 $ cd CHIKO_MUSIC
 $ npm install
 $ npm run dev
+```
+## 打包上线
+```git
+$  npm run build // vue前端编译成dist，将nodejs项目和dist分别部署到自己的服务器上
 ```
 
