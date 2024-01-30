@@ -12,6 +12,11 @@
 ### 歌手
 ![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/a926b99a-b62d-4bcb-ad0a-5468b071dd61)
 ![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/1b33105c-8bd1-45d4-96f1-fd7c0e5844d0)
+### MV
+![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/ebd391df-28d1-435c-bb79-6e057b7d1185)
+![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/98b94415-b884-463f-8679-5bd4c3d3d97d)
+![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/7df66a6c-0360-4424-9c79-5ee204a7c067)
+
 ## 目录结构
 ```plaintext
 chiko_music
