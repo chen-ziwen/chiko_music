@@ -76,9 +76,9 @@ $ cd NeteaseCloudMusicApi
 $ npm install
 $ node app.js // 运行接口服务器 运行成功才能拿到数据
 $ git clone git@github.com:chen-ziwen/chiko_music.git
-$ cd CHIKO_MUSIC
+$ cd chiko_music
 $ npm install
-$ npm run dev
+$ npm start
 ```
 ## 打包上线
 ```git
