@@ -13,6 +13,8 @@
 ![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/a926b99a-b62d-4bcb-ad0a-5468b071dd61)
 ![image](https://github.com/chen-ziwen/chiko_music/assets/85820568/1b33105c-8bd1-45d4-96f1-fd7c0e5844d0)
 ## 目录结构
+<code>
+    
 chiko_music
 ├── dist
 │   └── assets
@@ -62,6 +64,8 @@ chiko_music
         ├── search
         ├── singer
         └── song-sheet
+<code>
+    
 ## 安装运行
 ```git
 $ git clone https://github.com/Binaryify/NeteaseCloudMusicApi
