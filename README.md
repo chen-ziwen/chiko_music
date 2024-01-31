@@ -1,5 +1,5 @@
 ## 数据来源
-[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
+[NeteaseCloudMusicApi](https://github.com/chen-ziwen/NeteaseCloudMusicApi)
 ## 预览地址
 [千子音乐](http://www.music.chiko.website/)
 ## 部分截图展示
